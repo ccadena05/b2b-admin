@@ -6,8 +6,8 @@ const routes: Routes = [
   {
     path: '',
     loadChildren:() => import('./private/private.module').then((m)=> m.PrivateModule),
-    canActivate: [AuthGuard],
-    data: { title: 'Dashboard', breadcrumb: 'DASHBOARD'}
+    // canActivate: [AuthGuard],
+    // data: { title: 'Dashboard', breadcrumb: 'DASHBOARD'}
   },
   {
     path: 'login',

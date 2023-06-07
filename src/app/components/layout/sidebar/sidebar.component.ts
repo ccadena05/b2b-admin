@@ -5,6 +5,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { menu } from "src/app/private/menu";
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { delay, filter } from 'rxjs/operators';
+import { b2b_menu } from 'src/app/private/b2b_menu';
 
 @Component({
    selector: 'app-sidebar',
@@ -15,7 +16,7 @@ import { delay, filter } from 'rxjs/operators';
 export class SidebarComponent implements OnInit {
 
    sideMenu = menu;
-
+   b2b_menu = b2b_menu
    /* @Output() location = new EventEmitter<string>(); */
 
    constructor(

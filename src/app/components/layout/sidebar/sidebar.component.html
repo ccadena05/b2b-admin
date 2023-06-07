@@ -1,22 +1,31 @@
-<div class="w-64 h-full bg-gray-100 dark:bg-transparent p-3 flex flex-col gap-y-2 rounded-r-xl">
-   <a class="rounded-xl p-2 group flex gap-x-2 items-center transition-colors text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-dark-blue-100 duration-300 group"
-      [routerLink]="['/dashboard']"
+<div class="w-64 h-full p-3 flex flex-col gap-y-2 rounded-r-xl">
+   <a *ngFor="let item of b2b_menu" class="rounded-xl p-2 group flex gap-x-2 items-center transition-colors text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-dark-blue-100 duration-300 group"
+      [routerLink]="[item.link]"
       routerLinkActive="bg-white shadow-lg dark:bg-dark-blue-50 hover:bg-white shadow-lg hover:dark:bg-dark-blue-50">
-      <div class="bg-gradient-orange rounded-xl aspect-square w-10 h-10 flex text-white bg-clip-content border-2 border-transparent group-hover:bg-clip-text group-hover:text-transparent group-hover:border-orange-400 duration-300">
-         <mat-icon class="m-auto">pie_chart</mat-icon>
+      <div class="{{item.bg}} rounded-xl aspect-square w-10 h-10 flex text-white bg-clip-content border-2 border-transparent group-hover:bg-clip-text group-hover:text-transparent group-hover:border-b2b-2 duration-300">
+         <mat-icon class="m-auto">{{item.icon}}</mat-icon>
       </div>
-      <div class="ease-soft font-semibold text-size-sm  duration-300">Dashboard</div>
+      <div class="ease-soft font-semibold text-size-sm  duration-300">{{item.label}}</div>
    </a>
 <!-- (click)="sendBreadcrumbs('Dashboard')" -->
+<!--    <a class="rounded-xl p-2 group flex gap-x-2 items-center transition-colors text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-dark-blue-100 duration-300 group"
+      [routerLink]="['/m/alumnos']" [routerLinkActiveOptions]="{exact: true}"
+      routerLinkActive="bg-white shadow-lg dark:bg-dark-blue-50 hover:bg-white shadow-lg hover:dark:bg-dark-blue-50">
+      <div class="bg-gradient-purplelake rounded-xl aspect-square w-10 h-10 flex text-white bg-clip-content border-2 border-transparent group-hover:bg-clip-text group-hover:text-transparent group-hover:border-rose-500 duration-300">
+         <mat-icon class="m-auto">event</mat-icon>
+      </div>
+      <div class="ease-soft font-semibold text-size-sm  duration-300">Eventos</div>
+   </a>
+
    <a class="rounded-xl p-2 group flex gap-x-2 items-center transition-colors text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-dark-blue-100 duration-300 group"
       [routerLink]="['/m/alumnos']" [routerLinkActiveOptions]="{exact: true}"
       routerLinkActive="bg-white shadow-lg dark:bg-dark-blue-50 hover:bg-white shadow-lg hover:dark:bg-dark-blue-50">
       <div class="bg-gradient-purplelake rounded-xl aspect-square w-10 h-10 flex text-white bg-clip-content border-2 border-transparent group-hover:bg-clip-text group-hover:text-transparent group-hover:border-rose-500 duration-300">
-         <mat-icon class="m-auto">how_to_reg</mat-icon>
+         <mat-icon class="m-auto">speaker_notes</mat-icon>
       </div>
-      <div class="ease-soft font-semibold text-size-sm  duration-300">Alumnos</div>
-   </a>
-<!-- (click)="sendBreadcrumbs('Alumnos')" -->
+      <div class="ease-soft font-semibold text-size-sm  duration-300">Blog</div>
+   </a> -->
+<!-- 
    <mat-accordion class="flex flex-col gap-y-1 h-full">
       <mat-expansion-panel #panel mouseEnterLeaveDebounce (debounceMouseEnter)="panel.open()"
          (debounceMouseLeave)="panel.close()" *ngFor="let item of sideMenu"
@@ -34,34 +43,16 @@
                </a>
             </mat-panel-description>
          </mat-expansion-panel-header>
-         <!-- <div *ngFor="let content of item.menu" class="rounded-xl p-2 flex gap-x-2" [routerLink]="content.link" routerLinkActive="bg-white dark:bg-dark-blue-50">
-            <mat-icon routerLinkActive="!text-orange-400">{{content.icon}}</mat-icon>
-            <span>{{content.item}}</span>
-         </div> -->
 
-         <!-- (click)="sendBreadcrumbs(content.item)" -->
          <div *ngFor="let content of item.menu" [routerLink]="content.link"
             class="flex items-center justify-start gap-x-2 ml-2 my-2 rounded-xl text-[95%] px-2 py-1 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-dark-blue-100 duration-300 cursor-pointer"
             routerLinkActive="bg-white dark:bg-dark-blue-50 !bg-white dark:!bg-dark-blue-50 text-slate-400">
             <mat-icon routerLinkActive="!text-orange-400 animate-[spin_16s_linear_infinite]">{{content.icon}}</mat-icon>
             <div>{{content.item}}</div>
          </div>
-         <!-- <button *ngFor="let content of item.menu" class="dark:text-slate-300 hover:text-slate-900 text-slate-700 dark:hover:text-white" routerLinkActive="bg-white dark:bg-dark-blue-50 text-slate-400" #perfil="routerLinkActive" [ngClass]="
-               perfil.isActive
-               ? 'bg-white dark:bg-dark-blue-50 dark:text-slate-400 text-slate-400 shadow-soft-xl'
-               : ' hover:text-slate-900 dark:hover:text-white dark:text-slate-300 text-slate-500'
-            " [routerLink]="[content.link]" mat-button class="menu-button pt-12  w-full ">
-                     <mat-icon [ngClass]="perfil.isActive
-                  ? ' dark:text-orange-400  text-orange-400 animate-[spin_16s_linear_infinite]'
-                  : ' hover:text-slate-500 dark:hover:text-slate-200 dark:text-slate-300'
-               " class="">{{content.icon}}</mat-icon>
-                     <span [ngClass]="perfil.isActive
-               ? ' dark:text-slate-400 text-slate-500'
-               : ' hover:text-slate-500 dark:hover:text-slate-200 dark:text-slate-300'
-            "> {{content.item}}</span>
-         </button> -->
       </mat-expansion-panel>
    </mat-accordion>
+ -->
 </div>
 
 <!-- <div

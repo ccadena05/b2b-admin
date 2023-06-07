@@ -70,13 +70,13 @@ export class PrivateComponent implements OnInit {
             icon: 'dashboard',
          },
       ];
-      this.email = this.jwtAuth.getUser().email;
-      this.displayName = this.jwtAuth.getUser().displayName;
+      this.email = this.jwtAuth.getUser()?.email;
+      this.displayName = this.jwtAuth.getUser()?.displayName;
       this.avatar = this.jwtAuth.getUserPhoto()
          ? this.jwtAuth.getUserPhoto()
          : 'assets/img/avatardefault.png';
       this.avatarPreCarga = 'assets/img/avatardefault.png';
-      this.logoChange =  this.jwtAuth.getColor();
+      this.logoChange = this.jwtAuth.getColor();
 
       this.output.ready.subscribe((data: any) => {
          this.hola = data;
@@ -106,12 +106,14 @@ export class PrivateComponent implements OnInit {
          .observe(['(max-width: 768px)'])
          .pipe(delay(1), untilDestroyed(this))
          .subscribe((res) => {
-            if (res?.matches) {
+            if (res?.matches && this.sidenav != undefined) {
                this.sidenav.mode = 'over';
-               this.sidenav.close();
+               this.sidenav?.close();
             } else {
-               this.sidenav.mode = 'side';
-               this.sidenav.open();
+               if (this.sidenav != undefined) {
+                  this.sidenav.mode = 'side';
+                  this.sidenav?.open();
+               }
             }
          });
 

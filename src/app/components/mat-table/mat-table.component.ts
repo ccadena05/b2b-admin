@@ -1,9 +1,11 @@
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { KeyValuePipe } from '@angular/common';
 import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { Router } from '@angular/router';
 
 @Component({
    selector: 'app-mat-table',
@@ -17,6 +19,7 @@ export class MatTableComponent implements OnInit, OnChanges {
    @ViewChild(MatPaginator) paginator!: MatPaginator;
    @ViewChild(MatSort) sort!: MatSort;
    @Input() dataToDisplay: any = [];
+   @Input() action!: (row: any) => void;
    dataSource: any = [];
    datos: any = [];
    img: any[] = [];
@@ -24,6 +27,8 @@ export class MatTableComponent implements OnInit, OnChanges {
    constructor(
       private _liveAnnouncer: LiveAnnouncer,
       private keyvalue: KeyValuePipe,
+      private router: Router,
+      private dialog: MatDialog
    ) {
    }
 
@@ -31,27 +36,15 @@ export class MatTableComponent implements OnInit, OnChanges {
 
    }
 
-
    ngOnChanges(changes: SimpleChanges) {
       this.columns = this.datos = [];
-      if(!changes['dataToDisplay'].firstChange && changes['dataToDisplay'].currentValue){
-         this.datos = changes['dataToDisplay']?.currentValue != false ? changes['dataToDisplay']?.currentValue : changes['dataToDisplay']?.previousValue;
+      if (changes['dataToDisplay'])
+         this.displayedColumns = this.renderTable(changes['dataToDisplay'].currentValue)
+   }
 
-         this.dataSource = new MatTableDataSource(this.datos);
-
-         this.dataSource.paginator = this.paginator;
-         this.dataSource.sort = this.sort;
-
-         this.keyvalue.transform(this.datos[0] ?? this.datos[1])?.forEach((element: any, index: any) => {
-            this.columns?.push({
-               columnDef: element?.key,
-               header: element?.key.replace(/_/g, " "),
-               cell: (el: any) => `${el[element?.key]}`
-            });
-         });
-
-         this.displayedColumns = this.columns?.map((c: any) => c?.columnDef)
-      }
+   ngAfterViewInit() {
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
    }
 
    applyFilter(event: Event) {
@@ -71,4 +64,17 @@ export class MatTableComponent implements OnInit, OnChanges {
       }
    }
 
+   renderTable(data: any) {
+      this.dataSource = new MatTableDataSource(data);
+
+      this.keyvalue.transform(data[0] ?? data[1])?.forEach((column: any, index: any) => {
+         this.columns?.push({
+            columnDef: column?.key,
+            header: column?.key.replace(/_/g, " "),
+            cell: (data: any) => `${data[column?.key]}`
+         });
+      });
+
+      return this.columns?.map((c: any) => c?.columnDef)
+   }
 }

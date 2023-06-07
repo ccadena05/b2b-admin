@@ -1,23 +1,22 @@
-<div class="bg-gray-100 dark:bg-gradient-dark-gray">
-   <!-- <mat-toolbar class="bg-transparent dark:bg-transparent"> -->
-   <app-header [sidenav]="sidenav"></app-header>
-   <!-- </mat-toolbar> -->
-   <mat-sidenav-container class="pt-0 bg-transparent dark:bg-transparent !h-[calc(100%-4rem)]">
-      <mat-sidenav #sidenav [ngClass]="sidenav.mode == 'over' ? '!bg-gray-100 dark:!bg-dark-blue-50' : ''"
-         class="bg-slate-50 dark:bg-transparent sm:bg-transparent text-slate-500 dark:text-slate-300">
+<div #container class="h-full max-h-screen header finisher-header">
+   <app-header [sidenav]="sidenav" class="h-[calc(100%-4rem)]"></app-header>
+   <mat-drawer-container class="w-full h-[calc(100%-4rem)] flex bg-transparent rounded-2xl">
+      <mat-drawer #drawer [mode]="container.offsetWidth >= 1024 ? 'side' : 'over' " [opened]="container.offsetWidth >= 1024" class="w-full md:w-72 md:min-w-[18rem]" [ngClass]="drawer.mode == 'side' ? 'bg-transparent pr-6' :'!bg-b2b-1'">
          <app-sidebar></app-sidebar>
-      </mat-sidenav>
-
-      <!-- [breadcrumb]="location" -->
-      <mat-sidenav-content class="!flex !flex-col p-6 gap-y-8 h-[calc(100%-92px)] !overflow-x-hidden relative {{hola == false ? 'items-between' : ''}}">
+      </mat-drawer>
+      <mat-drawer-content>
+         <div class="h-full overflow-scroll p-6">
             <app-breadcrumbs class="h-6"></app-breadcrumbs><!--   -->
-            <div *ngIf="hola == false" class="h-full !overflow-hidden">
+            <router-outlet></router-outlet>
+
+            <!-- <div *ngIf="hola == false" class="h-full !overflow-hidden">
                <app-waiter></app-waiter>
             </div>
-            <div [class]="hola == true ? 'relative' : 'hidden'"><!-- {{}} -->
+            <div [class]="hola == true ? 'relative' : 'hidden'">
                <router-outlet></router-outlet>
-            </div>
+            </div> -->
             <app-footer class="h-[84px]"></app-footer>
-      </mat-sidenav-content>
-   </mat-sidenav-container>
+         </div>
+      </mat-drawer-content>
+   </mat-drawer-container>
 </div>

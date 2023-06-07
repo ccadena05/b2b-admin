@@ -41,7 +41,7 @@ export class DashboardComponent implements OnInit {
          this.mes == indice ? this.mesN = mes : '';
       });
 
-      this.displayName = this.jwtAuth.getUser().displayName;
+      this.displayName = this.jwtAuth.getUser()?.displayName;
       this.provider.BD_ActionPost('highcharts', 'dataCharts', { file: 'becas' }).subscribe({
          next: (data: any) => {
             console.log(data);

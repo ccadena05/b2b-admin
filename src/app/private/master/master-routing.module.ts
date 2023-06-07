@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { EgresadosDetailComponent } from './egresados-detail/egresados-detail.component';
 import { MasterComponent } from './master.component';
 
 const routes: Routes = [

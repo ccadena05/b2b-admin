@@ -1,6 +1,7 @@
 import { Component, HostBinding, AfterContentInit } from '@angular/core';
 import { JwtAuthService } from './services/auth/jwt-auth.service';
-
+declare var FinisherHeader: any;
+import '../assets/finisher-header.es5.min.js'
 // @Component({
 //   selector: 'body',
 //   template: `<child></child>`
@@ -26,7 +27,7 @@ export class AppComponent implements AfterContentInit {
     private jwtAuth: JwtAuthService,
 
   ) {
-   // if(this.jwtAuth.getUser().mode){
+   // if(this.jwtAuth.getUser()?.mode){
       // this.mode= this.jwtAuth.getColor();
    // }else{
      // this.mode= "light";
@@ -39,6 +40,47 @@ export class AppComponent implements AfterContentInit {
 
    if(this.jwtAuth.getColor() !== undefined)
       document.body.classList.add(this.jwtAuth.getColor() ?? "");
+    this.finisher()
 
   }
+
+
+  finisher() {
+    new FinisherHeader({
+      "count": 12,
+      "size": {
+        "min": 1300,
+        "max": 1500,
+        "pulse": 0
+      },
+      "speed": {
+        "x": {
+          "min": 0.6,
+          "max": 3
+        },
+        "y": {
+          "min": 0.6,
+          "max": 3
+        }
+      },
+      "colors": {
+        "background": "#ffffff",
+        "particles": [
+          "#0076ef",
+          "#000259",
+          "#f1f5f9",
+          "#0076f1"
+        ]
+      },
+      "blending": "lighten",
+      "opacity": {
+        "center": 0.6,
+        "edge": 0
+      },
+      "skew": -2,
+      "shapes": [
+        "c"
+      ]
+    });;
+ }
 }

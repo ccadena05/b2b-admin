@@ -355,3 +355,8 @@ snack-bar-container {
 ::-webkit-scrollbar-thumb {
    background: rgba(0,0,0,0.1);
 }
+
+
+.mat-drawer-side {
+   border-right: 0 transparent !important;
+}

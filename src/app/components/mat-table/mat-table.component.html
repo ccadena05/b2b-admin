@@ -1,5 +1,5 @@
 <div class="flex items-center gap-x-2 w-full md:w-1/2">
-   <mat-form-field class="w-full">
+   <mat-form-field appearance="outline" class="w-full">
       <mat-error>Ingresa un valor válido</mat-error>
       <mat-label class="text-slate-500 dark:!text-slate-100">Buscar</mat-label>
       <input matInput type="text" autocomplete="off" (keyup)="applyFilter($event)" #input
@@ -7,25 +7,25 @@
    </mat-form-field>
    <mat-icon class="text-slate-500 dark:!text-slate-300 cursor-pointer">tune</mat-icon>
 </div>
-<table mat-table  #table [dataSource]="dataSource" matSort class="bg-white dark:!bg-dark-blue-50 !w-full">
+<table mat-table  #table [dataSource]="dataSource" matSort class="!w-full">
    <ng-container *ngFor="let column of columns" [matColumnDef]="column?.columnDef">
       <th mat-header-cell
-         class="text-slate-700 dark:!text-slate-300 uppercase {{column?.header.match(matchStrings) ? '!hidden' : ''}}"
+         class="uppercase bg-slate-100/5 hover:bg-slate-100/10 duration-300 {{column?.header.match(matchStrings) ? '!hidden' : ''}}"
          mat-sort-header *matHeaderCellDef>{{ column?.header.slice(2,column?.header.length) }}</th>
       <td mat-cell
-         class="text-slate-500 dark:!text-slate-100 text-[80%] {{column?.header.match(matchStrings) ? '!hidden' : ''}}"
+         class="text-[80%] {{column?.header.match(matchStrings) ? '!hidden' : ''}}"
          *matCellDef="let row">
-         <span *ngIf="column.header != '00 '">{{ column?.cell(row) != 'null' ? column?.cell(row) : ''}}</span>
-         <img *ngIf="column.header == '00 '" (error)="img[column?.cell(row)] = true" [ngClass]="img[column?.cell(row)] == true ? 'hidden' : ''" [src]="column?.cell(row)" alt="" class="h-8 w-6 object-cover rounded-lg scale-110">
-         <div *ngIf="img && column.header == '00 '" [ngClass]="img[column?.cell(row)] == true ? '' : 'hidden'" class="h-8 w-6 bg-gradient-fuchsia rounded-lg flex shrink-0 shadow-lg shadow-fuchsia-600/40">
-            <mat-icon class="m-auto !text-white scale-90">account_circle</mat-icon>
-         </div>
+         <span *ngIf="column.header != '00 IMG'" [innerHTML]="column.cell(row).slice(0, 100)">{{ column?.cell(row) != 'null' ? column?.cell(row) : ''}}</span>
+         <img *ngIf="column.header == '00 ' || column.header == '00 IMG'" (error)="img[column?.cell(row)] = true" [ngClass]="img[column?.cell(row)] == true ? 'hidden' : ''" [src]="column?.cell(row)" alt="" class="h-8 w-6 object-cover rounded-lg scale-110">
+         <!-- <div *ngIf="img && column.header == '00 '" [ngClass]="img[column?.cell(row)] == true ? '' : 'hidden'" class="h-8 w-6 bg-gradient-fuchsia rounded-2xl flex shrink-0 shadow-lg shadow-fuchsia-600/40">
+            <mat-icon class="m-auto !text-slate-100 scale-90">account_circle</mat-icon>
+         </div> -->
       </td>
    </ng-container>
-   <tr mat-header-row  *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+   <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" class="rounded-2xl overflow-hidden"></tr>
    <!-- <a [routerLink]=" '/m/' + row.link_id + '/detail/' + row.id" *matRowDef="let row; columns: displayedColumns;"> -->
-      <tr mat-row [routerLink]=" '/m/' + row.link_id + '/detail/' + row.id" *matRowDef="let row; columns: displayedColumns;"
-         class="hover:!bg-slate-100 dark:hover:!bg-slate-100/10 cursor-pointer duration-300">
+      <tr mat-row (click)="action(row)" *matRowDef="let row; columns: displayedColumns;"
+         class="hover:!bg-black/10 dark:hover:!bg-slate-100/10 cursor-pointer duration-300">
          {{row}}</tr>
    <!-- </a> -->
    <tr class="mat-row block text-center justify-center !w-full" *matNoDataRow>
@@ -39,6 +39,6 @@
       </td>
    </tr>
 </table>
-<mat-paginator class="bg-white dark:!bg-dark-blue-50 text-slate-700 dark:!text-slate-300"
+<mat-paginator #paginator
    [pageSizeOptions]="[5, 10, 25, 100]">
 </mat-paginator>

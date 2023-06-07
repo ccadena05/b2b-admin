@@ -20,6 +20,11 @@ module.exports = {
             "nets-blue": "#002246",
             "b2b-1": "#000259",
             "b2b-2": "#0076ef",
+            "bblue": "#0F172A",
+            "bgray": "#9FA2AA",
+            "bgrayL": "#BBBDC3",
+            "bgray2": "#2C3344",
+            "bgray2L": "#556182",
          },
          gridTemplateRows: {
             12: "repeat(12, minmax(0, 1fr))",

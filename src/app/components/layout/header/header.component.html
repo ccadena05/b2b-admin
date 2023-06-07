@@ -1,8 +1,8 @@
 <!-- header -->
-<nav class="flex justify-between items-center w-screen h-16 bg-gray-100 dark:bg-gradient-to-r dark:from-slate-800 dark:to-[#151E2D] px-8 ">
-   <div [ngClass]="sidenav.mode === 'over' ? 'block md:hidden' : 'hidden'" class="cursor-pointer" (click)="toggleSidenav(sidenav)">
-      <mat-icon *ngIf="!sidenav.opened"> menu </mat-icon>
-      <mat-icon *ngIf="sidenav.opened"> close </mat-icon>
+<nav class="flex justify-between items-center w-full h-16 px-8 ">
+   <div [ngClass]="sidenav?.mode === 'over' ? 'block md:hidden' : 'hidden'" class="cursor-pointer" (click)="toggleSidenav(sidenav)">
+      <mat-icon *ngIf="!sidenav?.opened"> menu </mat-icon>
+      <mat-icon *ngIf="sidenav?.opened"> close </mat-icon>
    </div>
 
    <!-- <div *ngIf="checkColor(); then content; else other_content"></div>
@@ -15,7 +15,7 @@
 
    <!-- <div *ngIf="checkColor(); then content; else other_content"></div>
    <ng-template #content> -->
-      <img src="assets/img/{{jwtAuth.getColor() === 'dark' ? 'ITSESBlanco' : 'netscool2'}}.png" class="h-8" alt="PTS" />
+      <img src="assets/img/{{jwtAuth.getColor() === 'dark' ? 'dark' : 'light'}}.png" class="h-10" alt="PTS" />
    <!-- </ng-template>
    <ng-template #other_content>
       <img src="assets/img/netscool2.png" class="h-8" alt="PTS" />

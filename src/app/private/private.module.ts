@@ -17,11 +17,13 @@ import { RoutePartsService } from '../services/route-parts.service';
 import { HeaderModule } from '../components/layout/header/header.module';
 import { SidebarModule } from '../components/layout/sidebar/sidebar.module';
 import { MasterModule } from './master/master.module';
-
+import { EventsFormComponent } from './events-form/events-form.component';
+// import { QuillModule } from 'ngx-quill';
 
 @NgModule({
   declarations: [
     PrivateComponent,
+    EventsFormComponent,
 
   ],
   imports: [
