@@ -1,1 +1,134 @@
-<p>events-form works!</p>
+<form #cc [formGroup]="form" (ngSubmit)="save()" id="company-form">
+   <div class="sticky top-0 right-10 left-full w-[7.5rem] z-50 justify-end text-slate-100 rounded-2xl flex gap-x-2">
+      <span class="relative flex h-12 w-12">
+         <span #ping class="absolute inline-flex h-full w-full rounded-2xl bg-sky-400 opacity-75"></span>
+         <button (click)="save()" type="submit" class="relative rounded-2xl p-3 h-12 bg-b2b-2">
+            <mat-icon>save</mat-icon>
+         </button>
+         <!-- <span class="relative inline-flex rounded-full h-3 w-3 bg-sky-500"></span> -->
+      </span>
+      <button [matMenuTriggerFor]="addLang" class="rounded-2xl p-3 h-12 bg-b2b-2">
+         <mat-icon>translate</mat-icon>
+      </button>
+
+      <mat-menu #addLang="matMenu">
+         <button class="text-slate-100 disabled:text-slate-500" mat-menu-item
+            *ngFor="let lang of available_langs; let i = index" [disabled]="lang.id == tabs[i]?.id"
+            (click)="lang.id == tabs[i]?.id ? '' : addTab(lang)">
+            <span class="ml-2" [ngClass]="lang.id == tabs[i]?.id ? 'opacity-15' : 'opacity-100'">{{lang?.emoji}}</span>
+            <span class="ml-2" [ngClass]="lang.id == tabs[i]?.id ? 'opacity-15' : 'opacity-100'">{{lang?.name}}</span>
+         </button>
+      </mat-menu>
+   </div>
+
+   <mat-tab-group>
+      <mat-tab *ngFor="let tab of tabs; let i = index">
+         <ng-template mat-tab-label class="w-full flex gap-x-2">
+            <span class="ml-2">{{tab?.emoji}}</span>
+            <span class="ml-2">{{tab?.name}}</span>
+            <mat-icon class="ml-4" (click)="deleteTab(i, tab.id)"
+               *ngIf="this.tabs.length > 1 && i !== 0 && tab.id !== 1">close</mat-icon>
+         </ng-template>
+
+         <div class="flex flex-col gap-y-6">
+
+            <div 
+               [ngClass]="cc.offsetWidth <= 640 ? 'grid-cols-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'grid-cols-2' : 'grid-cols-3'"
+               class="grid gap-x-6 w-full">
+
+               <div class="title w-full"
+                  [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                  Información del evento
+               </div>
+               <div
+                  [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"
+                  class="grow" formArrayName="title">
+                  <div *ngFor="let item of master.getterA(form.controls['title']).controls; let i = index"
+                     [formGroupName]="i">
+                     <mat-form-field class="w-full" appearance="outline" *ngIf="item.value.languages_id == tab.id">
+                        <mat-label>Título</mat-label>
+                        <input formControlName="text" type="text" matInput>
+                        <!-- <mat-error>{{ "GENERAL.INPUTERROR" | translate }}</mat-error> -->
+                     </mat-form-field>
+                  </div>
+               </div>
+
+               <div
+                  [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"
+                  class="grow" formArrayName="description">
+                  <div *ngFor="let item of master.getterA(form.controls['description']).controls; let i = index"
+                     [formGroupName]="i">
+                     <mat-form-field class="w-full" appearance="outline" *ngIf="item.value.languages_id == tab.id">
+                        <mat-label>Descripción</mat-label>
+                        <textarea formControlName="text" type="text" matInput></textarea>
+                        <!-- <mat-error>{{ "GENERAL.INPUTERROR" | translate }}</mat-error> -->
+                     </mat-form-field>
+                  </div>
+               </div>
+
+               <div [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'" class="mb-6 border-2 border-transparent hover:border-slate-100 focus:border-slate-100 duration-300 rounded-2xl">
+                  <div id="editor" >
+                     <p>Hello World!</p>
+                     <p>Some initial <strong>bold</strong> text</p>
+                     <p><br></p>
+                  </div>
+               </div>
+
+               <mat-form-field appearance="outline" class="w-full" *ngIf="i == 0">
+                  <mat-label>Costo</mat-label>
+                  <input formControlName="cost" type="text" matInput>
+                  <!-- <mat-error>{{ "GENERAL.INPUTERROR" | translate }}</mat-error> -->
+               </mat-form-field>
+
+               <mat-form-field appearance="outline" class="w-full" *ngIf="i == 0">
+                  <mat-label>Moneda</mat-label>
+                  <mat-select formControlName="coin">
+                     <mat-option>MXN</mat-option>
+                     <mat-option>USD</mat-option>
+                  </mat-select>
+                  <!-- <mat-error>{{ "GENERAL.INPUTERROR" | translate }}</mat-error> -->
+               </mat-form-field>
+
+               <mat-form-field appearance="outline" class="w-full" *ngIf="i == 0">
+                  <mat-label>Tipo de evento</mat-label>
+                  <mat-select formControlName="coin">
+                     <mat-option>MXN</mat-option>
+                     <mat-option>USD</mat-option>
+                  </mat-select>
+                  <!-- <mat-error>{{ "GENERAL.INPUTERROR" | translate }}</mat-error> -->
+               </mat-form-field>
+
+               <mat-form-field appearance="outline" class="basis-64 grow" *ngIf="i == 0">
+                  <mat-label>Fechas del evento</mat-label>
+                  <mat-date-range-input [rangePicker]="picker">
+                    <input matStartDate formControlName="start_date" placeholder="Start date">
+                    <input matEndDate formControlName="end_date" placeholder="End date">
+                  </mat-date-range-input>
+                  <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-date-range-picker #picker></mat-date-range-picker>
+                
+                  <!-- <mat-error>{{ "GENERAL.INPUTERROR" | translate }}</mat-error> -->
+
+                </mat-form-field>
+
+                <div class="flex flex-col basis-full">
+                  <div (click)="uploadGallery(form.get('image_gallery'))" class="relative text-[#bbbdc3] cursor-default border-2 border-transparent hover:border-[#bbbdc3] bg-slate-100/15 {{form.value.img ? 'h-auto' : 'h-[58px]'}} mt-1 p-3 justify-start items-center rounded-xl flex gap-x-2" *ngIf="i == 0">
+                     <mat-icon>image</mat-icon>
+                     <div class="absolute left-11 duration-300" [ngClass]="form.value.image_gallery?.length > 0 ? 'top-0 text-xs' : ''">
+                        Galería de imágenes
+                     </div>
+      
+                     <div cdkDropList class="flex gap-x-3 mt-3" (cdkDropListDropped)="drop($event)">
+                        <div class="cursor-move" *ngFor="let item of form.value?.image_gallery" cdkDrag>
+                          <div class="example-custom-placeholder" *cdkDragPlaceholder></div>
+                          <img class="h-16 aspect-square object-cover rounded-lg" [src]="item" alt="">
+                        </div>
+                      </div>
+                  </div>
+                  <div *ngIf="form.value.image_gallery?.length > 0" class="text-xs text-[#bbbdc3] ml-2">Coloca la imagen que quieras como portada al principio</div>
+               </div>
+            </div>
+         </div>
+      </mat-tab>
+   </mat-tab-group>
+</form>

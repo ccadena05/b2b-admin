@@ -6,6 +6,7 @@ import { map, catchError, delay } from "rxjs/operators";
 import { User } from "../../models/user.model";
 import { of, BehaviorSubject, throwError, Observable } from "rxjs";
 import { environment } from "src/environments/environment";
+import { config } from "src/config";
 
 // ================= only for demo purpose ===========
 // const DEMO_TOKEN =
@@ -231,4 +232,8 @@ export class JwtAuthService {
       return this.ls.getItem(this.APP_COLOR);
    }
 
+
+   getLang() {
+      return this.ls.getItem(config.APP_LANG)
+   }
 }

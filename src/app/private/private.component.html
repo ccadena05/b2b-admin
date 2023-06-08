@@ -1,7 +1,7 @@
 <div #container class="h-full max-h-screen header finisher-header">
    <app-header [sidenav]="sidenav" class="h-[calc(100%-4rem)]"></app-header>
    <mat-drawer-container class="w-full h-[calc(100%-4rem)] flex bg-transparent rounded-2xl">
-      <mat-drawer #drawer [mode]="container.offsetWidth >= 1024 ? 'side' : 'over' " [opened]="container.offsetWidth >= 1024" class="w-full md:w-72 md:min-w-[18rem]" [ngClass]="drawer.mode == 'side' ? 'bg-transparent pr-6' :'!bg-b2b-1'">
+      <mat-drawer #drawer [mode]="container.offsetWidth >= 1024 ? 'side' : 'over' " [opened]="container.offsetWidth >= 1024" class="w-full md:w-72 md:min-w-[18rem]" [ngClass]="drawer.mode == 'side' ? 'bg-transparent' :'!bg-b2b-1  pr-6'">
          <app-sidebar></app-sidebar>
       </mat-drawer>
       <mat-drawer-content>

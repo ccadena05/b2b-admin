@@ -37,50 +37,51 @@ export class AppComponent implements AfterContentInit {
   }
 
   ngAfterContentInit(){
+    this.finisher()
 
    if(this.jwtAuth.getColor() !== undefined)
       document.body.classList.add(this.jwtAuth.getColor() ?? "");
-    this.finisher()
 
   }
 
 
   finisher() {
     new FinisherHeader({
-      "count": 12,
-      "size": {
-        "min": 1300,
-        "max": 1500,
-        "pulse": 0
-      },
-      "speed": {
-        "x": {
-          "min": 0.6,
-          "max": 3
-        },
-        "y": {
-          "min": 0.6,
-          "max": 3
-        }
-      },
-      "colors": {
-        "background": "#ffffff",
-        "particles": [
-          "#0076ef",
-          "#000259",
-          "#f1f5f9",
-          "#0076f1"
-        ]
-      },
-      "blending": "lighten",
-      "opacity": {
-        "center": 0.6,
-        "edge": 0
-      },
-      "skew": -2,
-      "shapes": [
-        "c"
-      ]
-    });;
+       "count": 12,
+       "size": {
+         "min": 1300,
+         "max": 1500,
+         "pulse": 0
+       },
+       "speed": {
+         "x": {
+           "min": 0.6,
+           "max": 3
+         },
+         "y": {
+           "min": 0.6,
+           "max": 3
+         }
+       },
+       "colors": {
+         "background": "#0076ee",
+         "particles": [
+           "#0076ef",
+           "#000259",
+           "#f1f5f9",
+           "#0076f1",
+           "#000260"
+         ]
+       },
+       "blending": "lighten",
+       "opacity": {
+         "center": 0.6,
+         "edge": 0
+       },
+       "skew": 0,
+       "shapes": [
+         "c"
+       ]
+     });
  }
 }

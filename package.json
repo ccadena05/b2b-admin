@@ -24,7 +24,6 @@
     "@angular/router": "~13.3.0",
     "@cloudinary/ng": "^1.2.2",
     "@cloudinary/url-gen": "^1.7.0",
-    "@dimpu/ngx-quill": "^7.0.10",
     "@fullcalendar/angular": "^5.11.0",
     "@fullcalendar/daygrid": "^5.11.0",
     "@material-ui/core": "^4.12.4",
