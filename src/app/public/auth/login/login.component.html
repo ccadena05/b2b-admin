@@ -1,4 +1,41 @@
-<div class="bg-gradient-fuchsia w-full h-full" id="parallax">
+<div class="h-screen w-screen flex items-center justify-center">
+   <div class="flex flex-col gap-y-2 justify-center items-center relative max-w-md bg-white shadow-lg backdrop-blur-sm rounded-2xl p-4">
+      <div class="w-8/12 blur-[128px] aspect-square rounded-full bg-b2b-2/40 absolute"></div>
+      <img src="assets/img/light.png" alt="logo" class="h-16">
+      <!-- <span class="text-slate-100 ">{{ "LOGIN.TITULO" | translate }}</span> -->
+      <!-- <span class="text-slate-100 text-sm leading-3">{{ "LOGIN.SUBTITULO" | translate }}</span> -->
+      <form [formGroup]="signinForm" (ngSubmit)="signin()" class="w-full flex flex-col items-center gap-y-2 p-3">
+         <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Correo electrónico</mat-label>
+            <input type="text" matInput formControlName="email">
+            <mat-error>Ingresa un valor válido</mat-error>
+         </mat-form-field>
+         <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Contraseña</mat-label>
+            <input [type]="hide ? 'password' : 'text'" matInput formControlName="password" #password>
+            <mat-icon matSuffix class="cursor-pointer" (click)="hide = !hide">
+               {{hide ? 'visibility' : 'visibility_off'}}
+            </mat-icon>
+            <mat-error>Ingresa un valor válido</mat-error>
+         </mat-form-field>
+         <a class="underline text-slate-900" routerLink="/auth/recover">
+            ¿Olvidaste tu contraseña?
+         </a>
+         <button type="submit" class="btn-p" [disabled]="signinForm.invalid">
+            Iniciar sesión
+         </button>
+      </form>
+<!--       <span class="text-slate-100">
+         {{ "LOGIN.NOCUENTA" | translate }}
+         <a class="text-[#0076ef] cursor-pointer" routerLink="/auth/signup">
+            {{ "LOGIN.REGISTRATE" | translate }}
+         </a>
+      </span> -->
+   </div>
+</div>
+
+
+<!-- <div class="bg-gradient-fuchsia w-full h-full" id="parallax">
    <div class="">
       <div class="container max-w-full mx-auto py-24 px-6">
          <div class="font-sans">
@@ -7,10 +44,9 @@
                   <div class="w-full relative">
                      <div class="mt-6">
                         <div class="mb-2 pb-1border-b-2 text-center font-base text-gray-700">
-                           <!-- <span>By <a class="text-blue-500" href="https://twitter.com/framansi">@framansi</a></span> -->
                         </div>
                         <div class="text-center font-semibold text-white">
-                           <img class="h-auto w-auto " src="assets/img/netscool.png" />
+                           <img class="h-auto w-auto " src="assets/img/light.png" />
 
                         </div>
                         <form class="mt-2" [formGroup]="signinForm" (ngSubmit)="signin()">
@@ -49,11 +85,6 @@
                                  </div>
                               </div>
                               <div class="flex justify-between">
-                                 <!-- <label class="block text-gray-500 font-bold my-4">
-                    <input type="checkbox"
-                      class="leading-loose text-pink-600">
-                      <span class="py-2 text-sm text-gray-600 leading-snug"> Remember
-                      Me </span></label>  -->
                                  <label class="block text-gray-500 font-bold my-4"><a href="#"
                                        class="cursor-pointer tracking-tighter text-gray-100 border-gray-200 hover:border-gray-400"><span>
                                           ¿Olvidaste tu contraseña? </span></a></label>
@@ -78,3 +109,4 @@
 
 </div>
 
+ -->

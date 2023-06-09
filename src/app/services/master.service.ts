@@ -6,6 +6,8 @@ import { JwtAuthService } from './auth/jwt-auth.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatRadioButton } from '@angular/material/radio';
 import { MatCheckbox } from '@angular/material/checkbox';
+import { config } from 'src/config';
+// import { CloudinaryWidgetManager } from 'ngx-cloudinary-upload-widget';
 
 @Injectable({
 	providedIn: 'root'
@@ -16,7 +18,8 @@ export class MasterService {
 		private snackbar: MatSnackBar,
 		private formBuilder: FormBuilder,
 		private jwt: JwtAuthService,
-		private sanitizer: DomSanitizer
+		private sanitizer: DomSanitizer,
+		// private manager: CloudinaryWidgetManager
 	) { }
 
 	/* Función para hacer un Patch de un JSON a un formulario. Si hay checkbox, convierte a true o false, según sea el caso */
@@ -268,4 +271,14 @@ export class MasterService {
 	hasValue(variable: any): boolean {
 		return variable != null && variable != undefined && variable != '' && variable != "";
 	}
+
+	/* uploadPDF(control: any) {
+      this.manager.open(config.upload_config).subscribe(
+         data => {
+            if (data.event == 'success') {
+               control?.patchValue(data.info.secure_url)
+            }
+         }
+      )
+   } */
 }

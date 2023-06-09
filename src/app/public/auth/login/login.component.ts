@@ -46,7 +46,7 @@ export class LoginComponent implements OnInit {
 
    ngAfterContentInit() {
 
-      // // Add event listener
+/*       // // Add event listener
       document.addEventListener("mousemove", parallax);
 
       const scene = document.getElementById("parallax");
@@ -67,7 +67,7 @@ export class LoginComponent implements OnInit {
 
       if (this.ls.getItem('openDialog') == false && this.ls.getItem('openDialog') != true) {
          this.configDialog();
-      }
+      } */
    }
 
    getErrorMessage() {

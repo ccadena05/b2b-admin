@@ -64,15 +64,15 @@ export class AppComponent implements AfterContentInit {
          }
        },
        "colors": {
-         "background": "#0076ee",
-         "particles": [
-           "#0076ef",
-           "#000259",
-           "#f1f5f9",
-           "#0076f1",
-           "#000260"
-         ]
-       },
+        "background": "#f1f5f9",
+        "particles": [
+          "#f1f5f9",
+          "#f1f5f9",
+          "#0076ef",
+          "#0076ef",
+          "#0076ef"
+        ]
+      },
        "blending": "lighten",
        "opacity": {
          "center": 0.6,

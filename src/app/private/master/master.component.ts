@@ -7,6 +7,8 @@ import { LocalStoreService } from 'src/app/services/local-store.service';
 import { filter } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { b2b_menu } from '../b2b_menu';
+import { CloudinaryWidgetManager } from 'ngx-cloudinary-upload-widget';
+import { config } from 'src/config';
 
 @Component({
    selector: 'app-master',
@@ -102,7 +104,8 @@ export class MasterComponent implements OnInit {
       private activatedRoute: ActivatedRoute,
       private output: OutputService,
       private ls: LocalStoreService,
-      private dialog: MatDialog
+      private dialog: MatDialog,
+      private manager: CloudinaryWidgetManager
    ) {
       router.events.pipe(
          filter((e: Event): e is RouterEvent => e instanceof RouterEvent)
