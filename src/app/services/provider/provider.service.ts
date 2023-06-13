@@ -20,6 +20,7 @@ export class ProviderService {
    public _urlMobile = '/_api.php?Funcion=';
    public mentores: any;
    countriesHeaders = new Headers();
+   urlAdmin = config.apiAdminProdUrl;
    url = config.apiProdUrl;
 
    resultadoHTML: any;   
@@ -41,8 +42,8 @@ export class ProviderService {
    }
 
    BD_ActionGet( modelo: any, action: any, params?: any ) {
-      // console.log(this.url + modelo + this._url + action, { headers: this.headers(), params: this.params(params)});
-      let get = this.http.get<Response>(this.url + modelo + this._url + action, { headers: this.headers(), params: this.params(params)})
+      console.log(this.url + modelo + this._url + action, { headers: this.headers(), params: this.params(params)});
+      let get = this.http.get<Response>(this.url + modelo + this._url + action, { headers: this.headers()/* , params: this.params(params) */})
 
       return get;
    }
@@ -50,6 +51,27 @@ export class ProviderService {
    BD_ActionPut( modelo: any, action: any, data?: any ) {
       console.log(this.url + modelo + this._url + action, data, { headers: this.headers()});
       let put = this.http.put(this.url + modelo + this._url + action, data, { headers: this.headers()})
+
+      return put;
+   }
+
+   BD_ActionAdminPost( modelo: any, action: any, data?: any ) {
+      // console.log(this.urlAdmin + modelo + this._url + action, data, {headers: this.headers()});
+      return this.http.post(this.urlAdmin + modelo + this._url + action, data, {
+         headers: this.headers()
+      });
+   }
+
+   BD_ActionAdminGet( modelo: any, action: any, params?: any ) {
+      console.log(this.urlAdmin + modelo + this._url + action, { headers: this.headers(), params: this.params(params)});
+      let get = this.http.get<Response>(this.urlAdmin + modelo + this._url + action, { headers: this.headers(), params: this.params(params)})
+
+      return get;
+   }
+
+   BD_ActionAdminPut( modelo: any, action: any, data?: any ) {
+      console.log(this.urlAdmin + modelo + this._url + action, data, { headers: this.headers()});
+      let put = this.http.put(this.urlAdmin + modelo + this._url + action, data, { headers: this.headers()})
 
       return put;
    }

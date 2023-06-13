@@ -15,6 +15,10 @@ export const config = {
    apiProdUrl:  PROTOCOL + '//' + PORD_DOMINIO + '/' + WSERVICE + '/controllers/',
    apiUrlMobile: PROTOCOL + '//' + DOMINIO + '/' + WSERVICE + '/controllers/',
 
+   apiAdminUrl: PROTOCOL + '//' + DOMINIO + '/' + WSERVICE + '/controllers_admin/',
+   apiAdminProdUrl:  PROTOCOL + '//' + PORD_DOMINIO + '/' + WSERVICE + '/controllers_admin/',
+   apiAdminUrlMobile: PROTOCOL + '//' + DOMINIO + '/' + WSERVICE + '/controllers_admin/',
+
    APP_TOKEN: "B2B_TOKEN",
    APP_USER: "B2B_USER",
    APP_PROFILE: "B2B_PROFILE_USER",

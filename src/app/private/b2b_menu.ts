@@ -16,5 +16,11 @@ export const b2b_menu = [
       link: '/m/blog',
       icon: 'speaker_notes',
       bg: 'bg-b2b-2'
+   },
+   {
+      label: 'Negocios',
+      link: '/m/rfq',
+      icon: 'request_quote',
+      bg: 'bg-b2b-2'
    }
 ]

@@ -37,38 +37,25 @@ export class MasterService {
 			for (let index2 = 0; index2 < keys_data.length; index2++) {
 				if (keys_form[index] == keys_data[index2]) {
 					if (form.get(keys_form[index]) instanceof FormArray) {
-						// console.log(keys_form[index]);
-						let key = keys_form[index] || '';
-						// console.log(this.getterA(form.controls[key])?.controls );
-						
+						let key = keys_form[index] || '';						
 						let index_data = Object.keys(data[keys_form[index]])
 						let index_form = Object.keys(this.getterA(form.controls[key])?.controls)
-						// console.log(index_data, index_form);
-						
+
 						for (let index3 = 0; index3 < index_data.length; index3++) {
 							for (let index4 = 0; index4 < index_form.length; index4++) {
-
 								if(index_data[index3] == index_form[index4]) {
 									let subkey_data = Object.keys(data[keys_form[index]][index3])
 									let subkey_form = Object.keys(this.getterA(form?.controls[keys_form[index]]).at(index3).value)
+
 									for (let index5 = 0; index5 < subkey_data.length; index5++) {
-										// const element = array[index5];
 										for (let index6 = 0; index6 < subkey_form.length; index6++) {
-											// const element = array[index6];
 											if(subkey_data[index5] == subkey_form[index6]) {
-												// console.log(this.getterC(this.getterG(this.getterA(form?.controls[keys_form[index]]).at(index3)).controls[subkey_data[index5]]));
-												
 												let fc = this.getterC(this.getterG(this.getterA(form?.controls[keys_form[index]]).at(index3)).controls[subkey_data[index5]])
-												fc?.patchValue(data[keys_form[index]][index3][subkey_data[index5]])
+												fc?.patchValue(data[keys_form[index]][index3][subkey_data[index5]].toString())
 											}
-											
 										}
 										
 									}
-									// console.log(subkey_data, subkey_form);
-									
-									/* let ff = this.getterA(form?.controls[keys_form[index]]).at(index3);
-									ff?.patchValue(data[keys_form[index]][index3]) */
 								}
 							}
 						}

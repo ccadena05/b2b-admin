@@ -9,6 +9,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { b2b_menu } from '../b2b_menu';
 import { CloudinaryWidgetManager } from 'ngx-cloudinary-upload-widget';
 import { config } from 'src/config';
+import { Response } from 'src/app/models/response.model';
 
 @Component({
    selector: 'app-master',
@@ -112,7 +113,7 @@ export class MasterComponent implements OnInit {
       ).subscribe((e: RouterEvent) => {
          if (e instanceof NavigationEnd) {          
             this.modulo = this.activatedRoute.snapshot.paramMap.get('modulo');
-            this.masterSection = this.findInMenu('link', '/m/' + this.modulo).label
+            this.masterSection = this.findInMenu('link', '/m/' + this.modulo)?.label
             this.getData();
          }
       });
@@ -139,7 +140,19 @@ export class MasterComponent implements OnInit {
             // this.output.ready.next(true);
          }
       ) */
-      this.dataToDisplay = this.events;
+      this.output.ready.next(false)
+      this.provider.BD_ActionAdminGet(this._modulo, 'get').subscribe(
+         
+         (data: Response) => {
+            if(typeof data.msg == 'object') {
+               this.dataToDisplay = data.msg
+               this.output.ready.next(true)
+            } /* else {
+               this.dataToDisplay = [{name: 'No hay registros disponibles'}]
+            } */
+         }
+         
+      )
 
    }
 
@@ -185,7 +198,9 @@ export class MasterComponent implements OnInit {
 
 
    edit(row?: any): void {
-      this.router.navigate([this.router.url, 'detail', btoa(row.id)])
+      console.log(row.ID, btoa(row.ID));
+      
+      this.router.navigate([this.router.url, 'detail', btoa(row.ID)])
    }
 
    add(): void {

@@ -39,8 +39,8 @@ export class AppComponent implements AfterContentInit {
   ngAfterContentInit(){
     this.finisher()
 
-   if(this.jwtAuth.getColor() !== undefined)
-      document.body.classList.add(this.jwtAuth.getColor() ?? "");
+  /*  if(this.jwtAuth.getColor() !== undefined)
+      document.body.classList.add(this.jwtAuth.getColor() ?? ""); */
 
   }
 

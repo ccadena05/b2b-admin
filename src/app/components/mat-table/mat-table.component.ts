@@ -67,13 +67,15 @@ export class MatTableComponent implements OnInit, OnChanges {
    renderTable(data: any) {
       this.dataSource = new MatTableDataSource(data);
 
-      this.keyvalue.transform(data[0] ?? data[1])?.forEach((column: any, index: any) => {
+      if(data && data.length > 0){
+         this.keyvalue.transform(data[0] ?? data[1])?.forEach((column: any, index: any) => {
          this.columns?.push({
             columnDef: column?.key,
             header: column?.key.replace(/_/g, " "),
             cell: (data: any) => `${data[column?.key]}`
          });
       });
+   }
 
       return this.columns?.map((c: any) => c?.columnDef)
    }

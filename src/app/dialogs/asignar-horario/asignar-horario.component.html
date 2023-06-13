@@ -1,8 +1,0 @@
-<div class="text-slate-100 text-center">
-   {{materia.nombre}}
-</div>
-<app-mat-table [dataToDisplay]="data"></app-mat-table>
-<form #f [formGroup]="formulario" [ngClass]="f.clientWidth > 768 ? 'grid-cols-6' : 'grid-cols-3'" class="grid gap-x-4">
-      <search-select class="w-full col-span-3" [select]="sel['tbl_maestro_id']" [group]="grup['tbl_maestro_id']" [formCN]="'tbl_maestro_id'" [label]="'Maestro'" (response)="recibiRespuesta($event, 'tbl_maestro_id')"></search-select>
-      <search-select class="w-full col-span-3" [select]="sel['tbl_grupo_id']" [group]="grup['tbl_grupo_id']" [formCN]="'tbl_grupo_id'" [label]="'Grupo'" (response)="recibiRespuesta($event, 'tbl_grupo_id')"></search-select>
-</form>

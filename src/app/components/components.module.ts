@@ -10,7 +10,6 @@ import { BarChartComponent } from './charts/bar-chart/bar-chart.component';
 import { ColumnChartComponent } from './charts/column-chart/column-chart.component';
 import { PieChartComponent } from './charts/pie-chart/pie-chart.component';
 import { LineChartComponent } from './charts/line-chart/line-chart.component';
-import { ReticulaComponent } from './reticula/reticula.component';
 import { NumberToRomanSymbolPipe } from '../pipes/number-to-roman.pipe';
 import { KardexComponent } from './kardex/kardex.component';
 import { MatTableModule } from './mat-table/mat-table.module';
@@ -25,14 +24,13 @@ let components = [
    FooterComponent,
    BreadcrumbsComponent,
    WaiterComponent,
-   ReticulaComponent,
    KardexComponent,
    PagosComponent,
    SearchSelectComponent
 ]
 
 @NgModule({
-  declarations: [components, FunnelChartComponent, BarChartComponent, ColumnChartComponent, PieChartComponent, LineChartComponent, ReticulaComponent, NumberToRomanSymbolPipe, MatTableGroupComponent, SnackbarComponent],
+  declarations: [components, FunnelChartComponent, BarChartComponent, ColumnChartComponent, PieChartComponent, LineChartComponent, NumberToRomanSymbolPipe, MatTableGroupComponent, SnackbarComponent],
   imports: [
     CommonModule,
     RouterModule,
