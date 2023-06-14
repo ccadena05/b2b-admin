@@ -11,7 +11,7 @@
         </div>
 
         <mat-menu #addLang="matMenu">
-            <button class="text-slate-100 disabled:text-slate-500" mat-menu-item
+            <button class="text-slate-900 disabled:text-slate-500" mat-menu-item
                 *ngFor="let lang of available_langs; let i = index" [disabled]="lang.id == tabs[i]?.id"
                 (click)="lang.id == tabs[i]?.id ? '' : addTab(lang)">
                 <span class="ml-2"
@@ -54,12 +54,13 @@
                         </div>
                     </div>
 
-                    <div class="grow" formArrayName="description"
-                        [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"
-                        class="quill_editor mb-6 border-2 border-[rgba(0,0,0,0.12)] hover:border-slate-900 focus:border-slate-900 duration-300 rounded-2xl">
-                        <div *ngFor="let item of master.getterA(form.controls['title']).controls; let i = index"
-                            [formGroupName]="i">
-                            <div id="editor" *ngIf="item.value.languages_id == tab.id">
+                    <div class="mb-6"
+                        [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                        <div formArrayName="description"
+                            *ngFor="let item of master.getterA(form.controls['description']).controls; let i = index;">
+                            <div [formGroupName]="i">
+                                <quill-editor *ngIf="item.value.languages_id == tab.id"
+                                    formControlName="text"></quill-editor>
                             </div>
                         </div>
                     </div>

@@ -1,8 +1,7 @@
 <form #cc [formGroup]="form" (ngSubmit)="save()" id="company-form" class="bg-slate-100 rounded-2xl shadow-lg p-6">
    <div
       class="sticky top-0 right-0 left-full w-[7.5rem] z-50 justify-end text-slate-100 rounded-2xl flex gap-x-2 group">
-      <button (click)="save()" type="submit"
-         class="rounded-2xl p-3 h-12 bg-b2b-2">
+      <button (click)="save()" type="submit" class="rounded-2xl p-3 h-12 bg-b2b-2">
          <mat-icon>publish</mat-icon>
       </button>
       <div [matMenuTriggerFor]="addLang" class="rounded-2xl p-3 h-12 bg-b2b-2 cursor-pointer">
@@ -68,7 +67,8 @@
                   <div (click)="uploadPDF(form.get('image_url'))" class="file-field" *ngIf="i == 0"
                      [ngClass]="form.controls['image_url'].invalid && form.controls['image_url'].touched ? 'border-red-500 text-red-500' : ''">
                      <mat-icon *ngIf="!form.value.image_url" class="text-[rgba(0,0,0,.54)]">upload_file</mat-icon>
-                     <img *ngIf="form.value.image_url" [src]="form.value.image_url" alt="" class="h-8 rounded-lg aspect-square grow-0">
+                     <img *ngIf="form.value.image_url" [src]="form.value.image_url" alt=""
+                        class="h-8 rounded-lg aspect-square grow-0">
                      <div class="absolute left-11" [ngClass]="form.value.image_url ? 'top-0 text-xs' : ''">
                         Portada
                      </div>
@@ -77,24 +77,24 @@
                      </div>
                   </div>
                </div>
-               
-               <search-select [label]="'Tipo de evento'" [select]="sel['event_type']" [rq]="true"  *ngIf="i == 0"
+
+               <search-select [label]="'Tipo de evento'" [select]="sel['event_type']" [rq]="true" *ngIf="i == 0"
                   [control]="form.controls['event_type']" class="w-full"></search-select>
 
-                  <search-select [label]="'Privacidad'" [select]="sel['event_privacy']" [rq]="true"  *ngIf="i == 0"
+               <search-select [label]="'Privacidad'" [select]="sel['event_privacy']" [rq]="true" *ngIf="i == 0"
                   [control]="form.controls['event_privacy']" class="w-full"></search-select>
 
-                  <search-select [label]="'Categoría del evento'" [select]="sel['category']" [rq]="true"  *ngIf="i == 0"
+               <search-select [label]="'Categoría del evento'" [select]="sel['category']" [rq]="true" *ngIf="i == 0"
                   [control]="form.controls['category']" class="w-full"></search-select>
 
                <div class="flex gap-x-3" *ngIf="i == 0">
-                  <mat-form-field appearance="outline" class="w-full max-w-[50%]" >
+                  <mat-form-field appearance="outline" class="w-full max-w-[50%]">
                      <mat-label>Costo</mat-label>
                      <input formControlName="cost" type="text" matInput>
                      <mat-error>Ingresa un valor válido</mat-error>
                   </mat-form-field>
-                  <search-select [label]="'Moneda'" [select]="sel['coin']" [rq]="true"
-                  [control]="form.controls['coin']" class="w-full max-w-[calc(50%-0.75rem)]"></search-select>
+                  <search-select [label]="'Moneda'" [select]="sel['coin']" [rq]="true" [control]="form.controls['coin']"
+                     class="w-full max-w-[calc(50%-0.75rem)]"></search-select>
                </div>
 
                <mat-form-field appearance="outline" class="basis-64 grow" *ngIf="i == 0">
@@ -113,12 +113,15 @@
 
 
 
-               <div class="flex flex-col mb-6 file-field !justify-start"  *ngIf="i == 0"
+               <div class="flex flex-col mb-6 file-field !justify-start" *ngIf="i == 0"
                   [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
                   <mat-radio-group formControlName="form" class="flex gap-x-3">
-                     <mat-radio-button class="!text-slate-800" [value]="1" [checked]="form.value.url_form  && router.url.includes('detail')">Formulario de registro
+                     <mat-radio-button class="!text-slate-800" [value]="1"
+                        [checked]="form.value.url_form  && router.url.includes('detail')">Formulario de registro
                         externo</mat-radio-button>
-                     <mat-radio-button class="!text-slate-800" [value]="2" [checked]="!form.value.url_form  && router.url.includes('detail')">Formulario de registro B2B</mat-radio-button>
+                     <mat-radio-button class="!text-slate-800" [value]="2"
+                        [checked]="!form.value.url_form  && router.url.includes('detail')">Formulario de registro
+                        B2B</mat-radio-button>
                   </mat-radio-group>
                </div>
 
@@ -129,10 +132,12 @@
                   <mat-error>Ingresa un valor válido</mat-error>
                </mat-form-field>
 
-               <div [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
-                  <div formArrayName="description" *ngFor="let item of master.getterA(form.controls['description']).controls; let i = index;">
-                     <div [formGroupName]="i" >
-                        <quill-editor *ngIf="item.value.languages_id == tab.id"  formControlName="text" ></quill-editor>
+               <div
+                  [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                  <div formArrayName="description"
+                     *ngFor="let item of master.getterA(form.controls['description']).controls; let i = index;">
+                     <div [formGroupName]="i">
+                        <quill-editor *ngIf="item.value.languages_id == tab.id" formControlName="text"></quill-editor>
                      </div>
                   </div>
                </div>
@@ -161,7 +166,7 @@
                      <input [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                         [matChipInputAddOnBlur]="true" (matChipInputTokenEnd)="addTag($event)">
                   </mat-chip-list>
-               </mat-form-field> 
+               </mat-form-field>
 
                <mat-form-field *ngIf="i == 0 && router.url.includes('detail')" appearance="outline"
                   [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
@@ -169,8 +174,9 @@
                   <input formControlName="video_gallery" type="text" matInput>
                   <mat-error>Ingresa un valor válido</mat-error>
                </mat-form-field>
-                
-               <div  *ngIf="router.url.includes('detail')" class="flex flex-col basis-full cursor-pointer mb-6" [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+
+               <div *ngIf="router.url.includes('detail')" class="flex flex-col basis-full cursor-pointer mb-6"
+                  [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
                   <div (click)="uploadGallery(form.get('image_gallery'))"
                      class="relative text-slate-900 cursor-default border-2 border-[rgba(0,0,0,0.12)] hover:border-slate-900 bg-slate-900/5 {{form.value.img ? 'h-auto' : 'h-[58px]'}} mt-1 p-3 justify-start items-center rounded-xl flex gap-x-2 cursor-pointer duration-300"
                      *ngIf="i == 0">
