@@ -235,8 +235,8 @@ mat-form-field {
 
 .mat-select-panel, .mat-autocomplete-panel {
    overflow: scroll !important;
-   background-color: rgba(#0f172a, 0.7) !important;
-   backdrop-filter: blur(4px);
+   background-color: rgba($slate-100, 1) !important;
+   // backdrop-filter: blur(4px);
    .mat-option-text {
       color: $slate-900 !important;
    }
@@ -511,7 +511,7 @@ mat-radio-button .mat-ripple-element {
 }
 
 .mat-menu-panel {
-   background: $bblue;
+   background: $slate-100;
    a {
       color: $slate-900;
    }

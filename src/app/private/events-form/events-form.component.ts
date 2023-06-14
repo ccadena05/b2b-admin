@@ -31,7 +31,6 @@ export class EventsFormComponent implements OnInit {
    tabs: any = [{ id: '1', name: 'English', language: 'EN', emoji: '🇺🇸' }];
    available_langs: any = []
    readonly separatorKeysCodes = [ENTER, COMMA] as const;
-   tagsAsString: string = '';
 
    // _ql: typeof Quill;
 
@@ -83,7 +82,7 @@ export class EventsFormComponent implements OnInit {
          coin: [null, Validators.required],
          event_type: [null],
          image_gallery: [null],
-         video_gallery: [null,Validators.pattern(/^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtube\.com\/embed\/|youtu\.be\/)[a-zA-Z0-9_-]+(\/)?(\?[\w=&]*)?(#([\w-]+))?$/i)],
+         video_gallery: [null, Validators.pattern(/^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtube\.com\/embed\/|youtu\.be\/)[a-zA-Z0-9_-]+(\/)?(\?[\w=&]*)?(#([\w-]+))?$/i)],
          public_gallery: [null],
          start_date: [null, Validators.required],
          end_date: [null, Validators.required],
@@ -144,58 +143,62 @@ export class EventsFormComponent implements OnInit {
                      console.log(category);
                      
                      this.sel['category'] = category.msg */
-
-                     section = 'Agregar'
-
                if (this.router.url.includes('detail')) {
                   let id = atob(this.__id)
 
                   this.provider.BD_ActionAdminGet('events', 'get_event_by_id', { id }).subscribe(
                      (event: Response) => {
-                        if(!event.error){
+                        if (!event.error) {
                            console.log(event.msg);
-                           section = event.msg.title[0].text
-                        event?.msg?.description.forEach((element: any) => {
+                           event?.msg?.description.forEach((element: any) => {
 
-                           if (element.languages_id != 1) {
-                              this.master.createTranslation(element.languages_id)
-                              this.addTab(this.language_index(element.languages_id))
-                           }
-                           // console.log(event.msg.tags.split(','));
-                           // if(typeof event.msg.tags == 'string')
-                              // event.msg.tags = event.msg.tags.split(',')
+                              if (element.languages_id != 1) {
+                                 this.master.createTranslation(element.languages_id)
+                                 this.addTab(this.language_index(element.languages_id))
+                              }
 
-                           this.master.patchForm(event.msg, this.form)
+                              this.ls.update('bc', [
+                                 {
+                                    item: 'Eventos',
+                                    link: '/m/events'
+                                 },
+                                 {
+                                    item: event.msg.title[0].text,
+                                    link: null
+                                 }
+                              ])
 
-                        });
-                     }
+                              this.master.patchForm(event.msg, this.form)
+
+                           });
+                        }
                      }
                   )
+               } else {
+                  this.ls.update('bc', [
+                     {
+                        item: 'Eventos',
+                        link: '/m/events'
+                     },
+                     {
+                        item: 'Agregar',
+                        link: null
+                     }
+                  ])
                }
-            /* } 
-            ) */
+               /* } 
+               ) */
             }
          }
       )
 
-      this.ls.update('bc', [
-         {
-            item: 'Eventos',
-            link: '/m/events'
-         },
-         {
-            item: section,
-            link: null
-         }
-      ])
+     
 
    }
 
    save() {
       this.patch_quill()
-      // this.form.value.tags = this.form.value.tags.toString().replace(/[\[\]"]/g, '').replace(/","/g, ', ');
-      // this.form.value.tags = this.form.value.tags.map((tag: any) => tag).join(', ');
-      // console.log(this.form.value.tags.map((tag: any) => tag).join(', '));
+
       if (this.router.url.includes('detail')) {
          this.provider.BD_ActionAdminPut('events', 'update_event', this.form.value).subscribe(
             data => console.log(data)
@@ -325,7 +328,7 @@ export class EventsFormComponent implements OnInit {
       const value = (event.value || '').trim();
 
       if (value)
-         this.form.value.tags = this.form.value.tags + ', ' + value 
+         this.form.value.tags = this.form.value.tags + ', ' + value
 
       event.chipInput!.clear();
    }
@@ -333,29 +336,6 @@ export class EventsFormComponent implements OnInit {
    removeTag(tag: any): void {
       const tagToRemove = tag + ', ';
       this.form.value.tags = this.form.value.tags.replace(tagToRemove, '');
-    }
+   }
 
-/*    updateTags(chipList: any): void {
-      this.form.value.tags = chipList.selected.map((chip: any) => chip.value);
-      this.tagsAsString = this.form.value.tags.map((tag: any) => tag).join(', ');
-    }
-  
-    addTag(value: string): void {
-      value = value.trim();
-  
-      if (value) {
-        const newTag =  value;
-        this.form.value.tags.push(newTag);
-        this.tagsAsString = this.form.value.tags.map((tag: any) => tag).join(', ');
-      }
-    }
-  
-    removeTag(tag: any): void {
-      const index = this.form.value.tags.indexOf(tag);
-  
-      if (index >= 0) {
-        this.form.value.tags.splice(index, 1);
-        this.tagsAsString = this.form.value.tags.map((tag: any) => tag).join(', ');
-      }
-    } */
 }

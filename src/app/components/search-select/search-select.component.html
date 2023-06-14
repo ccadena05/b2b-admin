@@ -1,13 +1,13 @@
 <mat-form-field appearance="outline" class="w-full" [ngClass]="!filtered ? 'cursor-not-allowed' : 'cursor-pointer' ">
    <mat-label>{{_label}}</mat-label>
    <mat-select *ngIf="controlName(_control) != 'phone_code'" [disabled]="!filtered" [required]="_rq" [formControlName]="controlName(_control)" (valueChange)="selected($event, _control)" class="!rounded-xl overflow-hidden relative !disabled:cursor-not-allowed">
-      <input #sch (keyup)="search(sch.value)" (keydown.Space)="$event.stopPropagation()" placeholder="Buscar" class="sticky top-0 left-0 right-0 z-20 h-12 w-full bg-bblue border-b-2 [border-image:linear-gradient(310deg,#0076ef,#000259)1] p-3">
+      <input #sch (keyup)="search(sch.value)" (keydown.Space)="$event.stopPropagation()" placeholder="Buscar" class="sticky top-0 left-0 right-0 z-20 h-12 w-full bg-slate-200 border-b-2 [border-image:linear-gradient(310deg,#0076ef,#000259)1] p-3">
       <div class="sticky top-0 left-0 right-0 bg-bblue z-10"></div>
       <div *ngIf="filtered?.length == 0" disabled class="text-slate-100 h-12 p-3" >Sin resultados</div>
       <mat-option *ngFor="let item of filtered" value="{{item?.id.toString()}}" class="uppercase !text-sm">{{item?.name }}</mat-option>
    </mat-select>
    <mat-select #select *ngIf="controlName(_control) == 'phone_code'" [disabled]="!filtered" [required]="_rq" [formControlName]="controlName(_control)" (valueChange)="selected($event, _control)" class="!rounded-xl overflow-hidden relative !disabled:cursor-not-allowed">
-      <input #sch (keyup)="search(sch.value)" (keydown.Space)="$event.stopPropagation()" placeholder="Buscar" class="sticky top-0 left-0 right-0 z-20 h-12 w-full bg-bblue border-b-2 [border-image:linear-gradient(310deg,#0076ef,#000259)1] p-3">
+      <input #sch (keyup)="search(sch.value)" (keydown.Space)="$event.stopPropagation()" placeholder="Buscar" class="sticky top-0 left-0 right-0 z-20 h-12 w-full bg-slate-200 border-b-2 [border-image:linear-gradient(310deg,#0076ef,#000259)1] p-3">
       <div class="sticky top-0 left-0 right-0 bg-bblue z-10"></div>
       <div *ngIf="filtered?.length == 0" disabled class="text-slate-100 h-12 p-3" >Sin resultados</div>
       <mat-option *ngFor="let item of filtered" value="{{item?.id.toString()}}" class="capitalize !text-sm">

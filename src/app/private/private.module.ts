@@ -19,12 +19,14 @@ import { SidebarModule } from '../components/layout/sidebar/sidebar.module';
 import { MasterModule } from './master/master.module';
 import { EventsFormComponent } from './events-form/events-form.component';
 import { QuillModule } from 'ngx-quill';
+import { BlogFormComponent } from './blog-form/blog-form.component';
 
 
 @NgModule({
   declarations: [
     PrivateComponent,
     EventsFormComponent,
+    BlogFormComponent,
 
   ],
   imports: [
