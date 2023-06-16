@@ -22,5 +22,11 @@ export const b2b_menu = [
       link: '/m/rfq',
       icon: 'request_quote',
       bg: 'bg-b2b-2'
+   },
+   {
+      label: 'Empresas',
+      link: '/m/companies',
+      icon: 'apartment',
+      bg: 'bg-b2b-2'
    }
 ]

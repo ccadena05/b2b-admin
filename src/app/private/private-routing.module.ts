@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { PrivateComponent } from './private.component';
 import { EventsFormComponent } from './events-form/events-form.component';
 import { BlogFormComponent } from './blog-form/blog-form.component';
+import { CompaniesDetailComponent } from './companies-detail/companies-detail.component';
 const routes: Routes = [
   {
     path: '',
@@ -31,6 +32,10 @@ const routes: Routes = [
         //   data: { title: 'Alumnos', breadcrumb: 'ALUMNOS' },
       },
       {
+        path: 'm/companies/detail',
+        component: CompaniesDetailComponent
+      },
+      {
         path: 'm/events/add',
         component: EventsFormComponent
         //   data: { title: 'Alumnos', breadcrumb: 'ALUMNOS' },
@@ -45,7 +50,6 @@ const routes: Routes = [
           import('./master/master.module').then((m) => m.MasterModule),
         //   data: { title: 'Alumnos', breadcrumb: 'ALUMNOS' },
       },
-
       /* {
         path: 'm/:modulo/detail/:id',
         loadChildren: () =>
