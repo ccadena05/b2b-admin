@@ -149,7 +149,7 @@ export class MasterComponent implements OnInit {
          '02_DESCRIPCION': 'Descripción del Requerimiento',
          '03_FECHA': '2023-06-10'
       },
-   ]
+   ];
 
    url: any;
    constructor(

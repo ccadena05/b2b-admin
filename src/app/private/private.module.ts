@@ -27,6 +27,7 @@ import { CapacitaionesComponent } from './companies-detail/capacitaiones/capacit
 import { ProductsTableComponent } from './companies-detail/products-table/products-table.component';
 import { ServicesTableComponent } from './companies-detail/services-table/services-table.component';
 import { MatTableModule } from 'src/app/components/mat-table/mat-table.module';
+import { RfqTableComponent } from './companies-detail/rfq-table/rfq-table.component';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { MatTableModule } from 'src/app/components/mat-table/mat-table.module';
     CapacitaionesComponent,
     ProductsTableComponent,
     ServicesTableComponent,
+    RfqTableComponent,
 
   ],
   imports: [
@@ -54,16 +56,16 @@ import { MatTableModule } from 'src/app/components/mat-table/mat-table.module';
     MasterModule,
     MatTableModule,
     QuillModule.forRoot(),
-    NgxCloudinaryWidgetModule.forRoot({cloudName: environment.cloudName}),
+    NgxCloudinaryWidgetModule.forRoot({ cloudName: environment.cloudName }),
   ],
   providers: [
     {
-        provide: HTTP_INTERCEPTORS,
-        useClass: ErrorCatchingInterceptor,
-        multi: true,
+      provide: HTTP_INTERCEPTORS,
+      useClass: ErrorCatchingInterceptor,
+      multi: true,
     },
     RoutePartsService,
 
-],
+  ],
 })
 export class PrivateModule { }
