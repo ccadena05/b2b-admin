@@ -6,6 +6,7 @@ import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/dr
 import { LocalStoreService } from 'src/app/services/local-store.service';
 import { config } from 'src/config';
 import { ProviderService } from 'src/app/services/provider/provider.service';
+import { Router } from '@angular/router';
 
 declare var Quill: any;
 
@@ -20,13 +21,31 @@ export class BlogFormComponent implements OnInit {
   tabs: any = [{ id: '1', name: 'English', language: 'EN', emoji: '🇺🇸' }];
   available_langs: any = []
   _ql: typeof Quill;
+  comments: Object[] = [
+    {
+      '01_USUARIO': 'Angel Antonio Zapatero Díaz',
+      '02_COMENTARIO': 'Muy interesante!',
+      '03_FECHA': '2023-06-10'
+    },
+    {
+      '01_USUARIO': 'Roberto Navarro Rodriguez',
+      '02_COMENTARIO': 'Me ha encantado',
+      '03_FECHA': '2023-06-10'
+    },
+    {
+      '01_USUARIO': 'Eduardo Ramírez Navarrp',
+      '02_COMENTARIO': 'Bastante bueno',
+      '03_FECHA': '2023-06-10'
+    },
+  ]
 
   constructor(
     public master: MasterService,
     private formBuilder: FormBuilder,
     private manager: CloudinaryWidgetManager,
     private ls: LocalStoreService,
-    private provider: ProviderService
+    private provider: ProviderService,
+    public router: Router
   ) {
     this.form = this.formBuilder.group({
       title: this.formBuilder.array([this.master.createTranslation('1')]),

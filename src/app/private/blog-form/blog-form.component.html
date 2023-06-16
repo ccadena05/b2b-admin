@@ -1,108 +1,119 @@
-<form #cc [formGroup]="form" (ngSubmit)="save()" id="company-form" class="bg-slate-100 rounded-2xl shadow-lg p-6">
-    <div
-        class="sticky top-0 right-10 left-full w-[7.5rem] z-50 justify-end text-slate-100 rounded-2xl flex gap-x-2 group">
-        <button (click)="save()" type="submit"
-            class="rounded-2xl p-3 h-12 bg-b2b-2 flex gap-0 hover:gap-x-1.5 duration-300">
-            <mat-icon>publish</mat-icon>
-            <div class="w-0 opacity-0 group-hover:w-14 group-hover:opacity-100 duration-300">Publicar</div>
-        </button>
-        <div [matMenuTriggerFor]="addLang" class="rounded-2xl p-3 h-12 bg-b2b-2 cursor-pointer">
-            <mat-icon>translate</mat-icon>
-        </div>
-
-        <mat-menu #addLang="matMenu">
-            <button class="text-slate-900 disabled:text-slate-500" mat-menu-item
-                *ngFor="let lang of available_langs; let i = index" [disabled]="lang.id == tabs[i]?.id"
-                (click)="lang.id == tabs[i]?.id ? '' : addTab(lang)">
-                <span class="ml-2"
-                    [ngClass]="lang.id == tabs[i]?.id ? 'opacity-15' : 'opacity-100'">{{lang?.emoji}}</span>
-                <span class="ml-2"
-                    [ngClass]="lang.id == tabs[i]?.id ? 'opacity-15' : 'opacity-100'">{{lang?.name}}</span>
-            </button>
-        </mat-menu>
-    </div>
-
-    <mat-tab-group>
-        <mat-tab *ngFor="let tab of tabs; let i = index">
-            <ng-template mat-tab-label class="w-full flex gap-x-2">
-                <span>{{tab?.emoji}}</span>
-                <span class="ml-2">{{tab?.name}}</span>
-                <mat-icon class="ml-4" (click)="deleteTab(i, tab.id)"
-                    *ngIf="this.tabs.length > 1 && i !== 0 && tab.id !== 1">close</mat-icon>
-            </ng-template>
-
-            <div class="flex flex-col gap-y-6">
-
-                <div [ngClass]="cc.offsetWidth <= 640 ? 'grid-cols-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'grid-cols-2' : 'grid-cols-3'"
-                    class="grid gap-x-6 w-full">
-
-                    <div class="title w-full"
-                        [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
-                        Información Del Blog
-                    </div>
-
-                    <div [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"
-                        class="grow" formArrayName="title">
-                        <div *ngFor="let item of master.getterA(form.controls['title']).controls; let i = index"
-                            [formGroupName]="i">
-                            <mat-form-field class="w-full" appearance="outline"
-                                *ngIf="item.value.languages_id == tab.id">
-                                <mat-label>Título</mat-label>
-                                <input formControlName="text" type="text" matInput>
-                                <mat-error>Ingresa un valor válido</mat-error>
-                            </mat-form-field>
-                        </div>
-                    </div>
-
-                    <div class="mb-6"
-                        [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
-                        <div formArrayName="description"
-                            *ngFor="let item of master.getterA(form.controls['description']).controls; let i = index;">
-                            <div [formGroupName]="i">
-                                <quill-editor *ngIf="item.value.languages_id == tab.id"
-                                    formControlName="text"></quill-editor>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div (click)="uploadPDF(form.get('image_url'))" class="file-field" *ngIf="i == 0"
-                        [ngClass]="form.controls['image_url'].invalid && form.controls['image_url'].touched ? 'border-red-500 text-red-500' : ''">
-                        <mat-icon class="text-[rgba(0,0,0,.54)]">upload_file</mat-icon>
-                        <div class="absolute left-11" [ngClass]="form.value.image_url ? 'top-0 text-xs' : ''">
-                            Portada
-                        </div>
-                        {{form.value.image_url ?? ''}}
-                    </div>
-
-                    <mat-tab-group class="w-full"
-                        [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"
-                        *ngIf="i == 0">
-
-                        <mat-tab label=" Ninguno">
-                        </mat-tab>
-
-                        <mat-tab label="Agregar Link">
-                            <mat-form-field class="w-full" appearance="outline">
-                                <mat-label>Link</mat-label>
-                                <input formControlName="link" type="text" matInput>
-                                <mat-error>Ingresa un valor válido</mat-error>
-                            </mat-form-field>
-                        </mat-tab>
-
-                        <mat-tab label="Agregar Descargable">
-                            <div (click)="uploadPDF(form.get('file'))" class="file-field"
-                                [ngClass]="form.controls['file'].invalid && form.controls['file'].touched ? 'border-red-500 text-red-500' : ''">
-                                <mat-icon class="text-[rgba(0,0,0,.54)]">upload_file</mat-icon>
-                                <div class="absolute left-11" [ngClass]="form.value.file ? 'top-0 text-xs' : ''">
-                                    Archivo
-                                </div>
-                                {{form.value.file ?? ''}}
-                            </div>
-                        </mat-tab>
-
-                    </mat-tab-group>
+<mat-tab-group>
+    <mat-tab label="Blog">
+        <form #cc [formGroup]="form" (ngSubmit)="save()" id="company-form"
+            class="bg-slate-100 rounded-2xl shadow-lg p-6">
+            <div
+                class="sticky top-0 right-10 left-full w-[7.5rem] z-50 justify-end text-slate-100 rounded-2xl flex gap-x-2 group">
+                <button (click)="save()" type="submit"
+                    class="rounded-2xl p-3 h-12 bg-b2b-2 flex gap-0 hover:gap-x-1.5 duration-300">
+                    <mat-icon>publish</mat-icon>
+                    <div class="w-0 opacity-0 group-hover:w-14 group-hover:opacity-100 duration-300">Publicar</div>
+                </button>
+                <div [matMenuTriggerFor]="addLang" class="rounded-2xl p-3 h-12 bg-b2b-2 cursor-pointer">
+                    <mat-icon>translate</mat-icon>
                 </div>
+
+                <mat-menu #addLang="matMenu">
+                    <button class="text-slate-900 disabled:text-slate-500" mat-menu-item
+                        *ngFor="let lang of available_langs; let i = index" [disabled]="lang.id == tabs[i]?.id"
+                        (click)="lang.id == tabs[i]?.id ? '' : addTab(lang)">
+                        <span class="ml-2"
+                            [ngClass]="lang.id == tabs[i]?.id ? 'opacity-15' : 'opacity-100'">{{lang?.emoji}}</span>
+                        <span class="ml-2"
+                            [ngClass]="lang.id == tabs[i]?.id ? 'opacity-15' : 'opacity-100'">{{lang?.name}}</span>
+                    </button>
+                </mat-menu>
             </div>
-        </mat-tab>
-    </mat-tab-group>
-</form>
+
+            <mat-tab-group>
+                <mat-tab *ngFor="let tab of tabs; let i = index">
+                    <ng-template mat-tab-label class="w-full flex gap-x-2">
+                        <span>{{tab?.emoji}}</span>
+                        <span class="ml-2">{{tab?.name}}</span>
+                        <mat-icon class="ml-4" (click)="deleteTab(i, tab.id)"
+                            *ngIf="this.tabs.length > 1 && i !== 0 && tab.id !== 1">close</mat-icon>
+                    </ng-template>
+
+                    <div class="flex flex-col gap-y-6">
+
+                        <div [ngClass]="cc.offsetWidth <= 640 ? 'grid-cols-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'grid-cols-2' : 'grid-cols-3'"
+                            class="grid gap-x-6 w-full">
+
+                            <div class="title w-full"
+                                [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                                Información Del Blog
+                            </div>
+
+                            <div [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"
+                                class="grow" formArrayName="title">
+                                <div *ngFor="let item of master.getterA(form.controls['title']).controls; let i = index"
+                                    [formGroupName]="i">
+                                    <mat-form-field class="w-full" appearance="outline"
+                                        *ngIf="item.value.languages_id == tab.id">
+                                        <mat-label>Título</mat-label>
+                                        <input formControlName="text" type="text" matInput>
+                                        <mat-error>Ingresa un valor válido</mat-error>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+
+                            <div class="mb-6"
+                                [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                                <div formArrayName="description"
+                                    *ngFor="let item of master.getterA(form.controls['description']).controls; let i = index;">
+                                    <div [formGroupName]="i">
+                                        <quill-editor *ngIf="item.value.languages_id == tab.id"
+                                            formControlName="text"></quill-editor>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div (click)="uploadPDF(form.get('image_url'))" class="file-field" *ngIf="i == 0"
+                                [ngClass]="form.controls['image_url'].invalid && form.controls['image_url'].touched ? 'border-red-500 text-red-500' : ''">
+                                <mat-icon class="text-[rgba(0,0,0,.54)]">upload_file</mat-icon>
+                                <div class="absolute left-11" [ngClass]="form.value.image_url ? 'top-0 text-xs' : ''">
+                                    Portada
+                                </div>
+                                {{form.value.image_url ?? ''}}
+                            </div>
+
+                            <mat-tab-group class="w-full"
+                                [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"
+                                *ngIf="i == 0">
+
+                                <mat-tab label=" Ninguno">
+                                </mat-tab>
+
+                                <mat-tab label="Agregar Link">
+                                    <mat-form-field class="w-full" appearance="outline">
+                                        <mat-label>Link</mat-label>
+                                        <input formControlName="link" type="text" matInput>
+                                        <mat-error>Ingresa un valor válido</mat-error>
+                                    </mat-form-field>
+                                </mat-tab>
+
+                                <mat-tab label="Agregar Descargable">
+                                    <div (click)="uploadPDF(form.get('file'))" class="file-field"
+                                        [ngClass]="form.controls['file'].invalid && form.controls['file'].touched ? 'border-red-500 text-red-500' : ''">
+                                        <mat-icon class="text-[rgba(0,0,0,.54)]">upload_file</mat-icon>
+                                        <div class="absolute left-11"
+                                            [ngClass]="form.value.file ? 'top-0 text-xs' : ''">
+                                            Archivo
+                                        </div>
+                                        {{form.value.file ?? ''}}
+                                    </div>
+                                </mat-tab>
+
+                            </mat-tab-group>
+                        </div>
+                    </div>
+                </mat-tab>
+            </mat-tab-group>
+        </form>
+    </mat-tab>
+    <mat-tab label="Comentarios" *ngIf="router.url !== '/m/blog/add'">
+        <div class="bg-slate-100 rounded-2xl shadow-lg p-6">
+            <app-mat-table [dataToDisplay]="comments"></app-mat-table>
+        </div>
+    </mat-tab>
+</mat-tab-group>

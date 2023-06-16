@@ -32,10 +32,6 @@ const routes: Routes = [
         //   data: { title: 'Alumnos', breadcrumb: 'ALUMNOS' },
       },
       {
-        path: 'm/companies/detail',
-        component: CompaniesDetailComponent
-      },
-      {
         path: 'm/events/add',
         component: EventsFormComponent
         //   data: { title: 'Alumnos', breadcrumb: 'ALUMNOS' },
@@ -43,6 +39,14 @@ const routes: Routes = [
       {
         path: 'm/blog/add',
         component: BlogFormComponent
+      },
+      {
+        path: 'm/blog/detail/:id',
+        component: BlogFormComponent
+      },
+      {
+        path: 'm/companies/detail',
+        component: CompaniesDetailComponent
       },
       {
         path: 'm/:modulo',
