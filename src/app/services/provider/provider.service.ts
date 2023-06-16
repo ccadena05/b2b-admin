@@ -43,7 +43,7 @@ export class ProviderService {
 
    BD_ActionGet( modelo: any, action: any, params?: any ) {
       console.log(this.url + modelo + this._url + action, { headers: this.headers(), params: this.params(params)});
-      let get = this.http.get<Response>(this.url + modelo + this._url + action, { headers: this.headers()/* , params: this.params(params) */})
+      let get = this.http.get<Response>(this.url + modelo + this._url + action, { headers: this.headers(), params: this.params(params)})
 
       return get;
    }

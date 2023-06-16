@@ -5,6 +5,7 @@ import { CloudinaryWidgetManager } from 'ngx-cloudinary-upload-widget';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { LocalStoreService } from 'src/app/services/local-store.service';
 import { config } from 'src/config';
+import { ProviderService } from 'src/app/services/provider/provider.service';
 
 declare var Quill: any;
 
@@ -25,6 +26,7 @@ export class BlogFormComponent implements OnInit {
     private formBuilder: FormBuilder,
     private manager: CloudinaryWidgetManager,
     private ls: LocalStoreService,
+    private provider: ProviderService
   ) {
     this.form = this.formBuilder.group({
       title: this.formBuilder.array([this.master.createTranslation('1')]),
@@ -156,8 +158,8 @@ export class BlogFormComponent implements OnInit {
   }
 
   save() {
-    console.log(this._ql)
-    console.log(this._ql.root.innerHTML)
-    console.log(this._ql.getContents())
+    this.provider.BD_ActionAdminPost('blog', 'update_blog', this.form.value).subscribe(
+      data => console.log(data)
+    )
   }
 }
