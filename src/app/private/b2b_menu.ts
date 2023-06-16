@@ -13,7 +13,7 @@ export const b2b_menu = [
    },
    {
       label: 'Blog',
-      link: '/m/blog',
+      link: '/m/blogs',
       icon: 'speaker_notes',
       bg: 'bg-b2b-2'
    },

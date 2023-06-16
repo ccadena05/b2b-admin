@@ -61,7 +61,6 @@ export class BlogFormComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    this.quill()
   }
 
   uploadPDF(
@@ -167,13 +166,6 @@ export class BlogFormComponent implements OnInit {
          ]
        }
     ) */
-  }
-
-  quill() {
-    this._ql = new Quill('#editor', {
-      theme: 'snow',
-      placeholder: 'Descripción',
-    })
   }
 
   save() {

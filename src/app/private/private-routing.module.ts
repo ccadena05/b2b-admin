@@ -37,11 +37,11 @@ const routes: Routes = [
         //   data: { title: 'Alumnos', breadcrumb: 'ALUMNOS' },
       },
       {
-        path: 'm/blog/add',
+        path: 'm/blogs/add',
         component: BlogFormComponent
       },
       {
-        path: 'm/blog/detail/:id',
+        path: 'm/blogs/detail/:id',
         component: BlogFormComponent
       },
       {

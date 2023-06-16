@@ -197,6 +197,8 @@ export class MasterComponent implements OnInit {
       this.provider.BD_ActionAdminGet(this._modulo, 'get').subscribe(
 
          (data: Response) => {
+            console.log(data);
+            
             if (typeof data.msg == 'object') {
                this.dataToDisplay = data.msg
                this.output.ready.next(true)

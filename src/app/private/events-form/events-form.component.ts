@@ -202,8 +202,6 @@ export class EventsFormComponent implements OnInit {
    }
 
    save() {
-      this.patch_quill()
-
       if (this.router.url.includes('detail')) {
          this.provider.BD_ActionAdminPut('events', 'update_event', this.form.value).subscribe(
             data => console.log(data)
@@ -278,37 +276,6 @@ export class EventsFormComponent implements OnInit {
       )
    }
 
-   // @HostListener('document:keyup', ['$event'])
-   patch_quill() {
-      // this.tabs.forEach((tab: any) => {
-      //    let index = this.form.value['description'].findIndex(
-      //       (con: any) => con.languages_id == tab.id
-      //    )
-
-      //    let control = this.master.getterG(this.master.getterA(this.form.controls['description']).at(index))
-      //    console.log(this.deltaToHtml(this.form.value['description'][index].text));
-      //    // console.log(control);
-
-      //    let delta_value = this._ql.getContents()
-      //    let new_value = this.deltaToHtml(delta_value);
-      //    if(new_value != '<p><br></p>'){
-      //       control.controls['text'].patchValue(new_value)
-      //       this._ql.root.innerHTML = new_value;
-      //       this._ql.setText(new_value)
-      //    }
-
-      // console.log(delta_value);
-      // this._ql.setContents(delta_value.ops)
-      // console.log(this._ql);
-      // console.log(this.form.value);
-
-      /*  let old = control.value.text
-       let new_value = ... _old + 
-       
-       control.controls['text'].patchValue(...old, this.deltaToHtml(this.form.value['description'][index].text)) */
-      // this.master.getterA(this.form.controls['description']).at(parseInt(tab.id))?.patchValue(this.deltaToHtml(this.form.value.description[0].text))
-      //    });
-   }
    /* backup_form(event: KeyboardEvent) {
       JSON.stringify((this.master.getterC(this.form.controls['tags'])).value).replace(/\\/g, '\\\\');
       this.ls.setItem('COMPANY_FORM', this.form.value)
