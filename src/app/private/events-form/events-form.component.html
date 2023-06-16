@@ -1,7 +1,7 @@
 <form #cc [formGroup]="form" (ngSubmit)="save()" id="company-form" class="bg-slate-100 rounded-2xl shadow-lg p-6">
    <div
       class="sticky top-0 right-0 left-full w-[7.5rem] z-50 justify-end text-slate-100 rounded-2xl flex gap-x-2 group">
-      <button (click)="save()" type="submit" class="rounded-2xl p-3 h-12 bg-b2b-2">
+      <button type="submit" class="rounded-2xl p-3 h-12 bg-b2b-2">
          <mat-icon>publish</mat-icon>
       </button>
       <div [matMenuTriggerFor]="addLang" class="rounded-2xl p-3 h-12 bg-b2b-2 cursor-pointer">
@@ -145,7 +145,7 @@
                <div class="grow" formArrayName="description"
                   [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"
                   class="quill_editor mb-6 border-2 border-[rgba(0,0,0,0.12)] hover:border-slate-900 focus:border-slate-900 duration-300 rounded-2xl">
-                  <div *ngFor="let item of master.getterA(form.controls['title']).controls; let i = index"
+                  <div *ngFor="let item of master.getterA(form.controls['description']).controls; let i = index"
                      [formGroupName]="i">
                      <div id="editor" *ngIf="item.value.languages_id == tab.id">
                      </div>

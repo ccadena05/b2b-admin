@@ -6,7 +6,7 @@ import { MasterService } from 'src/app/services/master.service';
 import { ProviderService } from 'src/app/services/provider/provider.service';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { config } from 'src/config';
-import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { COMMA, ENTER, X } from '@angular/cdk/keycodes';
 
 // import 'src/assets/scripts/quill.js'
 import { LocalStoreService } from 'src/app/services/local-store.service';
@@ -84,13 +84,13 @@ export class EventsFormComponent implements OnInit {
          image_gallery: [null],
          video_gallery: [null, Validators.pattern(/^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtube\.com\/embed\/|youtu\.be\/)[a-zA-Z0-9_-]+(\/)?(\?[\w=&]*)?(#([\w-]+))?$/i)],
          public_gallery: [null],
-         start_date: [null, Validators.required],
-         end_date: [null, Validators.required],
+         start_date: [null, Validators.required],//yyyy-mm-dd 2023-01-23
+         end_date: [null, Validators.required],//yyyy-mm-dd 2023-01-23
          event_summary: [null],
-         profile_company_id: [null],
+         profile_company_id: ['20230424174025ZN7LCeF3DKH9DnAxTx'],
          file_url: [null],
          blog_id: [null],
-         organizer: [null],
+         organizer: ['PARQUE TECNOLÓGICO SANMIGUELENSE'],
          tags: [null],
          web_page: [null],
          url_form: [null],
@@ -101,7 +101,7 @@ export class EventsFormComponent implements OnInit {
          active: [null],
          create_date: [null],
          last_update: [null],
-         category: [null]
+         category: [633]
       })
 
       console.log(this.form.value);
@@ -138,61 +138,66 @@ export class EventsFormComponent implements OnInit {
                this.sel['coin'] = [{ name: 'MXN', id: 0 }, { name: 'USD', id: 1 }]
                this.sel['event_privacy'] = [{ name: 'Público', id: 0 }, { name: 'Registrado', id: 1 }, { name: 'Premium', id: 2 }]
 
-               /* this.provider.BD_ActionGet('general', 'get_category_events', {id: 3}).subscribe(
+               this.provider.BD_ActionGet('general', 'get_category_events', { tree_size: -1 }).subscribe(
                   (category: Response) => {
                      console.log(category);
-                     
-                     this.sel['category'] = category.msg */
-               if (this.router.url.includes('detail')) {
-                  let id = atob(this.__id)
+                     if (!category.error) {
+                        /* category.msg[0]['children'].forEach((child: any) => {
+                           child = this.master?.changeKey({ 'ES': 'name' }, child)
+                        });
+                        this.sel['category'] = category.msg[0]['children']
+                        log */
+                        if (this.router.url.includes('detail')) {
+                           let id = atob(this.__id)
 
-                  this.provider.BD_ActionAdminGet('events', 'get_event_by_id', { id }).subscribe(
-                     (event: Response) => {
-                        if (!event.error) {
-                           console.log(event.msg);
-                           event?.msg?.description.forEach((element: any) => {
+                           this.provider.BD_ActionAdminGet('events', 'get_event_by_id', { event_id: id }).subscribe(
+                              (event: Response) => {
+                                 if (!event.error) {
+                                    console.log(event.msg);
+                                    event?.msg?.description.forEach((element: any) => {
 
-                              if (element.languages_id != 1) {
-                                 this.master.createTranslation(element.languages_id)
-                                 this.addTab(this.language_index(element.languages_id))
-                              }
+                                       if (element.languages_id != 1) {
+                                          this.master.createTranslation(element.languages_id)
+                                          this.addTab(this.language_index(element.languages_id))
+                                       }
 
-                              this.ls.update('bc', [
-                                 {
-                                    item: 'Eventos',
-                                    link: '/m/events'
-                                 },
-                                 {
-                                    item: event.msg.title[0].text,
-                                    link: null
+                                       this.ls.update('bc', [
+                                          {
+                                             item: 'Eventos',
+                                             link: '/m/events'
+                                          },
+                                          {
+                                             item: event.msg.title[0].text,
+                                             link: null
+                                          }
+                                       ])
+
+                                       this.master.patchForm(event.msg, this.form)
+
+                                    });
                                  }
-                              ])
-
-                              this.master.patchForm(event.msg, this.form)
-
-                           });
+                              }
+                           )
+                        } else {
+                           this.ls.update('bc', [
+                              {
+                                 item: 'Eventos',
+                                 link: '/m/events'
+                              },
+                              {
+                                 item: 'Agregar',
+                                 link: null
+                              }
+                           ])
                         }
                      }
-                  )
-               } else {
-                  this.ls.update('bc', [
-                     {
-                        item: 'Eventos',
-                        link: '/m/events'
-                     },
-                     {
-                        item: 'Agregar',
-                        link: null
-                     }
-                  ])
-               }
-               /* } 
-               ) */
+                  }
+               )
             }
          }
       )
 
-     
+
 
    }
 
