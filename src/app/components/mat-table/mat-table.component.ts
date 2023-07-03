@@ -38,8 +38,10 @@ export class MatTableComponent implements OnInit, OnChanges {
 
    ngOnChanges(changes: SimpleChanges) {
       this.columns = this.datos = [];
-      if (changes['dataToDisplay'])
+      if (changes['dataToDisplay']){
          this.displayedColumns = this.renderTable(changes['dataToDisplay'].currentValue)
+         this.ngAfterViewInit()
+      }
    }
 
    ngAfterViewInit() {
@@ -78,5 +80,9 @@ export class MatTableComponent implements OnInit, OnChanges {
    }
 
       return this.columns?.map((c: any) => c?.columnDef)
+   }
+
+   match_date(text: any) {
+      return (/^\d{4}-\d{2}-\d{2}$/).test(text)
    }
 }

@@ -108,48 +108,191 @@ export class MasterComponent implements OnInit {
       }
    ];
 
-   requierements = [
-      {
-         '01_TITULO': 'Titulo del Requerimiento',
-         '02_DESCRIPCION': 'Descripción del Requerimiento',
-         '03_FECHA': '2023-06-10'
-      },
-      {
-         '01_TITULO': 'Titulo del Requerimiento',
-         '02_DESCRIPCION': 'Descripción del Requerimiento',
-         '03_FECHA': '2023-06-10'
-      },
-      {
-         '01_TITULO': 'Titulo del Requerimiento',
-         '02_DESCRIPCION': 'Descripción del Requerimiento',
-         '03_FECHA': '2023-06-10'
-      },
-      {
-         '01_TITULO': 'Titulo del Requerimiento',
-         '02_DESCRIPCION': 'Descripción del Requerimiento',
-         '03_FECHA': '2023-06-10'
-      },
-      {
-         '01_TITULO': 'Titulo del Requerimiento',
-         '02_DESCRIPCION': 'Descripción del Requerimiento',
-         '03_FECHA': '2023-06-10'
-      },
-      {
-         '01_TITULO': 'Titulo del Requerimiento',
-         '02_DESCRIPCION': 'Descripción del Requerimiento',
-         '03_FECHA': '2023-06-10'
-      },
-      {
-         '01_TITULO': 'Titulo del Requerimiento',
-         '02_DESCRIPCION': 'Descripción del Requerimiento',
-         '03_FECHA': '2023-06-10'
-      },
-      {
-         '01_TITULO': 'Titulo del Requerimiento',
-         '02_DESCRIPCION': 'Descripción del Requerimiento',
-         '03_FECHA': '2023-06-10'
-      },
-   ];
+   requierements = 
+  [
+     {
+        'ID': 'PTS130620I4820230630135954z1GDE',
+        '01_TITULO': 'Servidores',
+        '03_EMPRESA': 'Parque Tecnológico Sanmiguelense',
+        '04_UBICACIÓN': 'San Miguel de Allende, Guanajuato',
+        '05_FECHA': '2023-06-18',
+     },
+     {
+        'ID': 'PTS130620I4820230630135954z1GDE',
+        '01_TITULO': 'Asientos',
+        '03_EMPRESA': 'Caterpillar Industrias México, S. de R.L. de C.V. (Caterpillar México) [Caterpillar, Inc.]',
+        '04_UBICACIÓN': 'Santa Catarina, Nuevo León',
+        '05_FECHA': '2023-06-15',
+     },
+     {
+        'ID': 'PTS130620I4820230630135954z1GDE',
+        '01_TITULO': 'Cable de red',
+        '03_EMPRESA': 'Parque Tecnológico Sanmiguelense',
+        '04_UBICACIÓN': 'San Miguel de Allende, Guanajuato',
+        '05_FECHA': '2023-06-18',
+     },
+     {
+        'ID': 'PTS130620I4820230630135954z1GDE',
+        '01_TITULO': 'Troquelado',
+        '03_EMPRESA': 'Vitro, S.A.B. de C.V.',
+        '04_UBICACIÓN': 'García, Nuevo León',
+        '05_FECHA': '2023-06-13',
+     },
+     {
+        'ID': 'PTS130620I4820230630135954z1GDE',
+        '01_TITULO': 'Vidrios',
+        '03_EMPRESA': 'Caterpillar Industrias México, S. de R.L. de C.V. (Caterpillar México) [Caterpillar, Inc.]',
+        '04_UBICACIÓN': 'Santa Catarina, Nuevo León',
+        '05_FECHA': '2023-06-15',
+     },
+     {
+        'ID': 'PTS130620I4820230630135954z1GDE',
+        '01_TITULO': 'Equipo de cómputo',
+        '03_EMPRESA': 'Parque Tecnológico Sanmiguelense',
+        '04_UBICACIÓN': 'San Miguel de Allende, Guanajuato',
+        '05_FECHA': '2023-06-18',
+     },
+     {
+        'ID': 'PTS130620I4820230630135954z1GDE',
+        '01_TITULO': 'Sistema de seguridad (AGS)',
+        '03_EMPRESA': 'HBPO México, S.A. de C.V. Puebla JIS (Hella Behr Plastic Omnium/HBPO Puebla) [HBPO GmbH/HELLA KGaA Hueck & Co./Plastic Omnium SA]',
+        '04_UBICACIÓN': 'Cuautlancingo, Puebla',
+        '05_FECHA': '2023-06-15',
+     },
+     {
+        'ID': 'PTS130620I4820230630135954z1GDE',
+        '01_TITULO': 'Troquelado',
+        '03_EMPRESA': 'Vitro, S.A.B. de C.V.',
+        '04_UBICACIÓN': 'García, Nuevo León',
+        '05_FECHA': '2023-06-13',
+     },
+     {
+        'ID': 'PTS130620I4820230630135954z1GDE',
+        '01_TITULO': 'Estampado de acero',
+        '03_EMPRESA': 'Vitro, S.A.B. de C.V.',
+        '04_UBICACIÓN': 'García, Nuevo León',
+        '05_FECHA': '2023-06-13',
+     },
+     {
+        'ID': 'PTS130620I4820230630135954z1GDE',
+        '01_TITULO': 'Inyección de foam',
+        '03_EMPRESA': 'Faurecia Sistemas Automotrices de México, S.A. de C.V. HQ México [Faurecia S.A. (Faurecia Group)/Forvia]',
+        '04_UBICACIÓN': 'San Andrés Cholula, Puebla',
+        '05_FECHA': '2023-06-13',
+     },
+     {
+        'ID': 'PTS130620I4820230630135954z1GDE',
+        '01_TITULO': 'Partes cromadas',
+        '03_EMPRESA': 'Marquardt México, S. de R.L. de C.V. [Marquardt Group]',
+        '04_UBICACIÓN': 'Irapuato, Guanajuato',
+        '05_FECHA': '2023-06-12',
+     },
+     {
+        'ID': 'PTS130620I4820230630135954z1GDE',
+        '01_TITULO': 'Partes moldeadas con fibra de carbono',
+        '03_EMPRESA': 'Marquardt México, S. de R.L. de C.V. [Marquardt Group]',
+        '04_UBICACIÓN': 'Irapuato, Guanajuato',
+        '05_FECHA': '2023-06-12',
+     },
+     {
+        'ID': 'PTS130620I4820230630135954z1GDE',
+        '01_TITULO': 'Componentes moldeados y pintados',
+        '03_EMPRESA': 'Marquardt México, S. de R.L. de C.V. [Marquardt Group]',
+        '04_UBICACIÓN': 'Irapuato	Guanajuato',
+        '05_FECHA': '2023-06-12',
+     },
+     {
+        'ID': 'PTS130620I4820230630135954z1GDE',
+        '01_TITULO': 'Arneses y conectores',
+        '03_EMPRESA': 'Marquardt México, S. de R.L. de C.V. [Marquardt Group]',
+        '04_UBICACIÓN': 'Irapuato	Guanajuato',
+        '05_FECHA': '2023-06-12',
+     },
+     {
+        'ID': 'PTS130620I4820230630135954z1GDE',
+        '01_TITULO': 'Distribuidores locales de electrónicos',
+        '03_EMPRESA': 'Marquardt México, S. de R.L. de C.V. [Marquardt Group]',
+        '04_UBICACIÓN': 'Irapuato	Guanajuato',
+        '05_FECHA': '2023-06-12',
+     },
+     {
+        'ID': 'PTS130620I4820230630135954z1GDE',
+        '01_TITULO': 'PCB (placa de circuito impreso)',
+        '03_EMPRESA': 'Marquardt México, S. de R.L. de C.V. [Marquardt Group]',
+        '04_UBICACIÓN': 'Irapuato	Guanajuato',
+        '05_FECHA': '2023-06-12',
+     },
+     {
+        'ID': 'PTS130620I4820230630135954z1GDE',
+        '01_TITULO': 'Die cast',
+        '03_EMPRESA': 'Marquardt México, S. de R.L. de C.V. [Marquardt Group]',
+        '04_UBICACIÓN': 'Irapuato	Guanajuato',
+        '05_FECHA': '2023-06-12',
+     },
+     {
+        'ID': 'PTS130620I4820230630135954z1GDE',
+        '01_TITULO': 'Partes de silicón (covers y mats interiores)',
+        '03_EMPRESA': 'Marquardt México, S. de R.L. de C.V. [Marquardt Group]',
+        '04_UBICACIÓN': 'Irapuato	Guanajuato',
+        '05_FECHA': '2023-06-12',
+     },
+     {
+        'ID': 'PTS130620I4820230630135954z1GDE',
+        '01_TITULO': 'O-Rings de catálogo',
+        '03_EMPRESA': 'Marquardt México, S. de R.L. de C.V. [Marquardt Group]',
+        '04_UBICACIÓN': 'Irapuato	Guanajuato',
+        '05_FECHA': '2023-06-12',
+     },
+     {
+        'ID': 'PTS130620I4820230630135954z1GDE',
+        '01_TITULO': 'Tool makers para moldes prototipo',
+        '03_EMPRESA': 'Marquardt México, S. de R.L. de C.V. [Marquardt Group]',
+        '04_UBICACIÓN': 'Irapuato	Guanajuato',
+        '05_FECHA': '2023-06-12',
+     },
+     {
+        'ID': 'PTS130620I4820230630135954z1GDE',
+        '01_TITULO': 'Grommets en México o USA',
+        '03_EMPRESA': 'Vitro, S.A.B. de C.V.',
+        '04_UBICACIÓN': 'García, Nuevo León',
+        '05_FECHA': '2023-06-12',
+     },
+     {
+        'ID': 'PTS130620I4820230630135954z1GDE',
+        '01_TITULO': 'Tornillos',
+        '03_EMPRESA': 'Vitro, S.A.B. de C.V.',
+        '04_UBICACIÓN': 'García, Nuevo León',
+        '05_FECHA': '2023-06-12',
+     },
+     {
+        'ID': 'PTS130620I4820230630135954z1GDE',
+        '01_TITULO': 'Materiales de inyección de plástico',
+        '03_EMPRESA': 'Vitro, S.A.B. de C.V.',
+        '04_UBICACIÓN': 'García, Nuevo León',
+        '05_FECHA': '2023-06-12',
+     },
+     {
+        'ID': 'PTS130620I4820230630135954z1GDE',
+        '01_TITULO': 'Arandelas especiales',
+        '03_EMPRESA': 'Vitro, S.A.B. de C.V.',
+        '04_UBICACIÓN': 'García, Nuevo León',
+        '05_FECHA': '2023-06-12',
+     },
+     {
+        'ID': 'PTS130620I4820230630135954z1GDE',
+        '01_TITULO': 'Tuercas',
+        '03_EMPRESA': 'Vitro, S.A.B. de C.V.',
+        '04_UBICACIÓN': 'García, Nuevo León',
+        '05_FECHA': '2023-06-12',
+     },
+     {
+        'ID': 'PTS130620I4820230630135954z1GDE',
+        '01_TITULO': 'Die casting de aluminio',
+        '03_EMPRESA': 'Vitro, S.A.B. de C.V.',
+        '04_UBICACIÓN': 'García, Nuevo León',
+        '05_FECHA': '2023-06-12',
+     }
+  ];
 
    url: any;
    constructor(

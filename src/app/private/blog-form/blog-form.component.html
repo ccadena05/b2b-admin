@@ -1,11 +1,14 @@
-<mat-tab-group>
+<mat-tab-group dynamicHeight>
     <mat-tab label="Blog">
         <form #cc [formGroup]="form" (ngSubmit)="save()" id="company-form"
             class="bg-slate-100 rounded-2xl shadow-lg p-6">
             <div
                 class="sticky top-0 right-10 left-full w-[7.5rem] z-50 justify-end text-slate-100 rounded-2xl flex gap-x-2 group">
-                <button (click)="save()" type="submit"
-                    class="rounded-2xl p-3 h-12 bg-b2b-2 flex gap-0 hover:gap-x-1.5 duration-300">
+                <!-- <div (click)="draft()" class="rounded-2xl p-3 h-12 bg-b2b-2 cursor-pointer flex gap-0 hover:gap-x-1.5">
+                    <mat-icon>edit_square</mat-icon>
+                    <div class="w-0 opacity-0 group-hover:w-14 group-hover:opacity-100 duration-300">Borrador</div>
+                </div> -->
+                <button type="submit" class="rounded-2xl p-3 h-12 bg-b2b-2 flex gap-0 hover:gap-x-1.5 duration-300">
                     <mat-icon>publish</mat-icon>
                     <div class="w-0 opacity-0 group-hover:w-14 group-hover:opacity-100 duration-300">Publicar</div>
                 </button>
@@ -62,20 +65,71 @@
                                 <div formArrayName="description"
                                     *ngFor="let item of master.getterA(form.controls['description']).controls; let i = index;">
                                     <div [formGroupName]="i">
-                                        <quill-editor *ngIf="item.value.languages_id == tab.id"
+                                        <quill-editor *ngIf="item.value.languages_id == tab.id" [required]="true"
                                             formControlName="text"></quill-editor>
                                     </div>
                                 </div>
                             </div>
 
-                            <div (click)="uploadPDF(form.get('image_url'))" class="file-field" *ngIf="i == 0"
-                                [ngClass]="form.controls['image_url'].invalid && form.controls['image_url'].touched ? 'border-red-500 text-red-500' : ''">
-                                <mat-icon class="text-[rgba(0,0,0,.54)]">upload_file</mat-icon>
-                                <div class="absolute left-11" [ngClass]="form.value.image_url ? 'top-0 text-xs' : ''">
-                                    Portada
-                                </div>
-                                {{form.value.image_url ?? ''}}
+                            <div
+                                [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                                <!-- class="flex gap-x-6" -->
+                                <recursive-select [select]="sel['category_blogs']" label="Categoría"
+                                    [control]="form.controls['category']" [rq]="true"
+                                    (categorySelected)="onCategorySelected($event)"></recursive-select>
                             </div>
+
+                            <div class="flex gap-x-3">
+                                <!-- <img *ngIf="form.value.image_url" [src]="form.value.image_url" alt="" class="h-10 mt-1 rounded-lg aspect-square grow-0"> -->
+                                <div (click)="uploadPDF(form.get('image_url'))" class="file-field" *ngIf="i == 0"
+                                   [ngClass]="form.controls['image_url'].invalid && form.controls['image_url'].touched ? 'border-red-500 text-red-500' : ''">
+                                   <mat-icon *ngIf="!form.value.image_url" class="text-[rgba(0,0,0,.54)]">upload_file</mat-icon>
+                                   <img *ngIf="form.value.image_url" [src]="form.value.image_url" alt=""
+                                      class="h-8 rounded-lg aspect-square grow-0">
+                                   <div class="absolute left-11" [ngClass]="form.value.image_url ? 'top-0 text-xs' : ''">
+                                      Portada
+                                   </div>
+                                   <div class="max-w-[12rem] overflow-hidden whitespace-nowrap">
+                                      {{form.value.image_url ?? ''}}
+                                   </div>
+                                </div>
+                             </div>
+
+                            <mat-form-field class="w-full"
+                                [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"
+                                appearance="outline" *ngIf="i == 0">
+                                <mat-label>Etiquetas</mat-label>
+                                <mat-chip-list #chipList formControlName="tags">
+                                    <mat-chip *ngFor="let tag of form.value.tags?.split(',')"
+                                        (removed)="removeTag(tag)">
+                                        {{tag}}
+                                        <button matChipRemove>
+                                            <mat-icon>cancel</mat-icon>
+                                        </button>
+                                    </mat-chip>
+                                    <input [matChipInputFor]="chipList"
+                                        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                        [matChipInputAddOnBlur]="true" (matChipInputTokenEnd)="addTag($event)">
+                                </mat-chip-list>
+                            </mat-form-field>
+
+                            <div class="flex basis-full"
+                            [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                                <div (click)="uploadGallery(form.controls['image_gallery'])" class="file-field w-full" *ngIf="i == 0">
+                                   <mat-icon class="text-[rgba(0,0,0,.54)]">image</mat-icon>
+                                   <div class="absolute left-11 duration-300" [ngClass]="form.value.image_gallery.length > 0 ? 'top-0 text-xs' : ''">
+                                      Galería de imágenes
+                                   </div>
+                    
+                                   <div cdkDropList class="flex gap-x-3 mt-3" (cdkDropListDropped)="drop($event)">
+                                      <div class="cursor-move" *ngFor="let item of form.value.image_gallery" cdkDrag>
+                                        <div class="example-custom-placeholder" *cdkDragPlaceholder></div>
+                                        <img class="h-16 aspect-square object-cover rounded-lg" [src]="item.url" alt="">
+                                      </div>
+                                    </div>
+                                </div>
+                                <!-- <div *ngIf="form.value.image_gallery.length > 0" class="text-xs text-[#bbbdc3] ml-2">Coloca la imagen que quieras como portada al principio</div> -->
+                             </div>
 
                             <mat-tab-group class="w-full"
                                 [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"
@@ -87,20 +141,20 @@
                                 <mat-tab label="Agregar Link">
                                     <mat-form-field class="w-full" appearance="outline">
                                         <mat-label>Link</mat-label>
-                                        <input formControlName="link" type="text" matInput>
+                                        <input formControlName="video_url" type="text" matInput>
                                         <mat-error>Ingresa un valor válido</mat-error>
                                     </mat-form-field>
                                 </mat-tab>
 
                                 <mat-tab label="Agregar Descargable">
-                                    <div (click)="uploadPDF(form.get('file'))" class="file-field"
-                                        [ngClass]="form.controls['file'].invalid && form.controls['file'].touched ? 'border-red-500 text-red-500' : ''">
+                                    <div (click)="uploadPDF(form.get('file_url'))" class="file-field"
+                                        [ngClass]="form.controls['file_url'].invalid && form.controls['file_url'].touched ? 'border-red-500 text-red-500' : ''">
                                         <mat-icon class="text-[rgba(0,0,0,.54)]">upload_file</mat-icon>
                                         <div class="absolute left-11"
-                                            [ngClass]="form.value.file ? 'top-0 text-xs' : ''">
+                                            [ngClass]="form.value.file_url ? 'top-0 text-xs' : ''">
                                             Archivo
                                         </div>
-                                        {{form.value.file ?? ''}}
+                                        {{form.value.file_url ?? ''}}
                                     </div>
                                 </mat-tab>
 

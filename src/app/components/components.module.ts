@@ -18,6 +18,8 @@ import { MatTableGroupComponent } from './mat-table-group/mat-table-group.compon
 import { SearchSelectComponent } from './search-select/search-select.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SnackbarComponent } from './snackbar/snackbar.component';
+import { RecursiveSelectComponent } from './recursive-select/recursive-select.component';
+import { LocationComponent } from './location/location.component';
 
 
 let components = [
@@ -26,11 +28,21 @@ let components = [
    WaiterComponent,
    KardexComponent,
    PagosComponent,
-   SearchSelectComponent
+   SearchSelectComponent,
+   RecursiveSelectComponent,
+   LocationComponent
 ]
 
 @NgModule({
-  declarations: [components, FunnelChartComponent, BarChartComponent, ColumnChartComponent, PieChartComponent, LineChartComponent, NumberToRomanSymbolPipe, MatTableGroupComponent, SnackbarComponent],
+  declarations: [components, 
+    FunnelChartComponent, 
+    BarChartComponent, 
+    ColumnChartComponent, 
+    PieChartComponent, 
+    LineChartComponent, 
+    NumberToRomanSymbolPipe, 
+    MatTableGroupComponent, 
+    SnackbarComponent],
   imports: [
     CommonModule,
     RouterModule,

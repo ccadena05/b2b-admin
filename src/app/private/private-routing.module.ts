@@ -4,6 +4,8 @@ import { PrivateComponent } from './private.component';
 import { EventsFormComponent } from './events-form/events-form.component';
 import { BlogFormComponent } from './blog-form/blog-form.component';
 import { CompaniesDetailComponent } from './companies-detail/companies-detail.component';
+import { RfqFormComponent } from './rfq-form/rfq-form.component';
+import { RfqEditComponent } from './rfq-edit/rfq-edit.component';
 const routes: Routes = [
   {
     path: '',
@@ -41,12 +43,20 @@ const routes: Routes = [
         component: BlogFormComponent
       },
       {
+        path: 'm/rfq/add',
+        component: RfqFormComponent
+      },
+      {
         path: 'm/blogs/detail/:id',
         component: BlogFormComponent
       },
       {
         path: 'm/companies/detail',
         component: CompaniesDetailComponent
+      },
+      {
+        path: 'm/rfq/detail/:id',
+        component: RfqEditComponent
       },
       {
         path: 'm/:modulo',

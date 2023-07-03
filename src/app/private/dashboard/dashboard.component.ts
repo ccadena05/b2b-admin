@@ -42,7 +42,7 @@ export class DashboardComponent implements OnInit {
       });
 
       this.displayName = this.jwtAuth.getUser()?.displayName;
-      this.provider.BD_ActionPost('highcharts', 'dataCharts', { file: 'becas' }).subscribe({
+      /* this.provider.BD_ActionPost('highcharts', 'dataCharts', { file: 'becas' }).subscribe({
          next: (data: any) => {
             console.log(data);
             this.dataCharts = data['data'];
@@ -51,13 +51,13 @@ export class DashboardComponent implements OnInit {
          }, error: (error: any) => {
             console.log(JSON.stringify(error));
          }
-      });
+      }); */
       this.output.ready.next(true)
-      this.generarChart();
+      this.generarChart();/*  */
    }
 
    ngOnInit(): void {
-      console.log(this.getDecodedAccessToken().data.role)
+    //   console.log(this.getDecodedAccessToken().data.role)
    }
 
    getDecodedAccessToken(): any {

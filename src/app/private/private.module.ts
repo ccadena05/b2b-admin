@@ -28,6 +28,8 @@ import { ProductsTableComponent } from './companies-detail/products-table/produc
 import { ServicesTableComponent } from './companies-detail/services-table/services-table.component';
 import { MatTableModule } from 'src/app/components/mat-table/mat-table.module';
 import { RfqTableComponent } from './companies-detail/rfq-table/rfq-table.component';
+import { RfqFormComponent } from './rfq-form/rfq-form.component';
+import { RfqEditComponent } from './rfq-edit/rfq-edit.component';
 
 @NgModule({
   declarations: [
@@ -41,6 +43,8 @@ import { RfqTableComponent } from './companies-detail/rfq-table/rfq-table.compon
     ProductsTableComponent,
     ServicesTableComponent,
     RfqTableComponent,
+    RfqFormComponent,
+    RfqEditComponent,
 
   ],
   imports: [

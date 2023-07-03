@@ -1,0 +1,42 @@
+<!-- <
+   
+div class="text-red-500">RECURSIVE</div>
+<div  *ngIf="filtered && filtered.children.legth > 0"> z
+   <mat-form-field appearance="outline" class="w-full" [ngClass]="!filtered ? 'cursor-not-allowed' : 'cursor-pointer'">
+      <mat-label>{{_label}}</mat-label>
+      <mat-select [disabled]="!filtered" [required]="_rq"  (valueChange)="selected($event, _control)" class="!rounded-xl overflow-hidden relative !disabled:cursor-not-allowed">
+         <input #sch (keyup)="search(sch.value)" (keydown.Space)="$event.stopPropagation()" placeholder="Buscar" class="sticky top-0 left-0 right-0 z-20 h-12 w-full bg-bblue border-b-2 [border-image:linear-gradient(310deg,#0076ef,#000259)1] p-3">
+         <div class="sticky top-0 left-0 right-0 bg-bblue z-10"></div>
+         <div *ngIf="filtered?.length == 0" disabled class="text-slate-100 h-12 p-3" >Sin resultados</div>
+         <mat-option *ngFor="let item of filtered?.children" value="{{item?.id.toString()}}" class="uppercase !text-sm">{{item['ES'] }}</mat-option>
+      </mat-select>
+      <mat-error>Ingresa un valor válido</mat-error>
+   </mat-form-field>
+   
+   <recursive-select *ngIf="filtered.children"></recursive-select>
+</div>
+<div class="text-red-500">RECURSIVE</div>
+
+-->
+
+<ng-container *ngIf="_select.children && _select.children.length > 0">
+   <!-- <div #rec class="grid gap-x-6 w-full" [ngClass]="rec.offsetWidth <= 640 ? 'grid-cols-1' : rec.offsetWidth > 640 && rec.offsetWidth < 768 ? 'grid-cols-2' : 'grid-cols-3'"> -->
+   <mat-form-field appearance="outline" class="w-full">
+      <mat-label>{{ _label }}</mat-label>
+      <mat-select [(ngModel)]="selectedCategory" (selectionChange)="onSelectionChange($event, _control)"
+         [required]="_rq">
+         <!--          <input #sch (keyup)="search(sch.value)" (keydown.Space)="$event.stopPropagation()" placeholder="Buscar" class="sticky top-0 left-0 right-0 z-20 h-12 w-full bg-white border-b-2 [border-image:linear-gradient(310deg,#0076ef,#000259)1] p-3">
+            <div class="sticky top-0 left-0 right-0 bg-bblue z-10"></div>
+            <div *ngIf="filtered?.length == 0" disabled class="text-slate-500 h-12 p-3" >Sin resultados</div> -->
+         <mat-option *ngFor="let category of filtered.children" [value]="category">
+            {{ category['ES'] }}
+         </mat-option>
+      </mat-select>
+      <mat-error>Ingresa un valor válido</mat-error>
+   </mat-form-field>
+   <div *ngIf="selectedCategory && hasChildren(selectedCategory)"><!-- class="flex gap-x-6" -->
+      <recursive-select [select]="selectedCategory.children" [label]="'Subcategoría'" [control]="_control" [rq]="_rq"
+         (categorySelected)="onCategorySelected($event)"></recursive-select>
+   </div>
+   <!-- </div> -->
+</ng-container>

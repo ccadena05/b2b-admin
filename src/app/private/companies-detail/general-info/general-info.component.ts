@@ -31,7 +31,7 @@ export class GeneralInfoComponent implements OnInit {
   selectedState: any;
   fullLanguage: any;
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
-  profile_company_id: string = this.ls.getItem("B2B_PROFILE_COMPANY");
+  profile_company_id: string = this.ls.getItem(config.APP_COMPANY);
   @ViewChild('a') slide_dia!: MatSlideToggle;
   @ViewChild('consi') consi!: MatRadioButton
   @ViewChild('ping') ping!: ElementRef;
@@ -496,11 +496,14 @@ export class GeneralInfoComponent implements OnInit {
   addTag(event: MatChipInputEvent): void {
     const value = (event.value || '').trim();
 
-    if (value)
-      this.form.value.tags.push(value);
-
+    if (value) {
+       if (this.form.value.tags != null) 
+          this.form.controls['tags'].patchValue(this.form.value.tags + ', ' + value);
+       else
+          this.form.controls['tags'].patchValue(value);
+    }
     event.chipInput!.clear();
-  }
+ }
 
   removeTag(tag: any): void {
     const index = this.form.value.tags.indexOf(tag);

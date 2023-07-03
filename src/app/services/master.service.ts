@@ -22,6 +22,40 @@ export class MasterService {
 		// private manager: CloudinaryWidgetManager
 	) { }
 
+	new_patch(data: any, formGroup: FormGroup) {
+		Object.keys(data).forEach((key) => {
+			const control = formGroup.get(key);
+
+			if (control instanceof FormControl) {
+				control.patchValue(data[key]);
+			} else if (control instanceof FormGroup) {
+				this.new_patch(data[key], control);
+			} else if (control instanceof FormArray && Array.isArray(data[key])) {
+				const formArray = control as FormArray;
+				const currentLength = formArray.length;
+				const dataLength = data[key].length;
+
+				if (currentLength < dataLength) {
+					for (let i = currentLength; i < dataLength; i++) {
+						const subGroup = new FormGroup({});
+						formArray.push(subGroup);
+					}
+				}
+
+				data[key].forEach((value: any, index: number) => {
+					const subGroup = formArray.at(index) as FormGroup;
+					this.new_patch(value, subGroup);
+				});
+
+				if (currentLength > dataLength) {
+					for (let i = currentLength - 1; i >= dataLength; i--) {
+						formArray.removeAt(i);
+					}
+				}
+			}
+		});
+	}
+
 	/* Función para hacer un Patch de un JSON a un formulario. Si hay checkbox, convierte a true o false, según sea el caso */
 	patchForm(data: any, form: FormGroup, check?: any): any {
 
@@ -37,29 +71,30 @@ export class MasterService {
 			for (let index2 = 0; index2 < keys_data.length; index2++) {
 				if (keys_form[index] == keys_data[index2]) {
 					if (form.get(keys_form[index]) instanceof FormArray) {
-						let key = keys_form[index] || '';						
-						let index_data = Object.keys(data[keys_form[index]])
+						let key = keys_form?.[index] || '';
+						let index_data = Object?.keys(data?.[keys_form?.[index]] || {});
+						
 						let index_form = Object.keys(this.getterA(form.controls[key])?.controls)
 
 						for (let index3 = 0; index3 < index_data.length; index3++) {
 							for (let index4 = 0; index4 < index_form.length; index4++) {
-								if(index_data[index3] == index_form[index4]) {
+								if (index_data[index3] == index_form[index4]) {
 									let subkey_data = Object.keys(data[keys_form[index]][index3])
 									let subkey_form = Object.keys(this.getterA(form?.controls[keys_form[index]]).at(index3).value)
 
 									for (let index5 = 0; index5 < subkey_data.length; index5++) {
 										for (let index6 = 0; index6 < subkey_form.length; index6++) {
-											if(subkey_data[index5] == subkey_form[index6]) {
+											if (subkey_data[index5] == subkey_form[index6]) {
 												let fc = this.getterC(this.getterG(this.getterA(form?.controls[keys_form[index]]).at(index3)).controls[subkey_data[index5]])
 												fc?.patchValue(data[keys_form[index]][index3][subkey_data[index5]].toString())
 											}
 										}
-										
+
 									}
 								}
 							}
 						}
-					} else if(keys_form[index] == 'schedule_week' && form.get(keys_form[index]) instanceof FormGroup){
+					} else if (keys_form[index] == 'schedule_week' && form.get(keys_form[index]) instanceof FormGroup) {
 
 						// console.log(JSON.parse(JSON.parse(data[keys_form[index].replace(/\\\\\\/g, '\\')])));
 						// console.log(Object.keys(form.get(keys_form[index])?.value));
@@ -68,22 +103,22 @@ export class MasterService {
 						console.log(subkey_form_g, subkey_data_g);
 						for (let index7 = 0; index7 < subkey_form_g.length; index7++) {
 							for (let index8 = 0; index8 < subkey_data_g.length; index8++) {
-								if(subkey_data_g[index8] == subkey_form_g[index7]) {
+								if (subkey_data_g[index8] == subkey_form_g[index7]) {
 									let fc = this.getterG(form.controls[keys_form[index]]).controls[subkey_form_g[index7]]
 									fc.patchValue(JSON.parse(JSON.parse(data[keys_form[index].replace(/\\\\\\/g, '\\')]))[subkey_data_g[index8]])
 								}
-								
+
 							}
-							
+
 						}
-						
+
 					}
-					
+
 					else if (keys_form[index] == 'schedule_week' || keys_form[index] == 'tags') {
 						try {
 							// console.log(JSON.parse(data[keys_form[index].replace(/\\\\\\/g, '\\')]));
 							// console.log(data[keys_form[index]].replace(/\\\\\\/g, '\\'));
-							
+
 							form.patchValue({
 								[keys_form[index]]: JSON.parse(data[keys_form[index].replace(/\\\\\\/g, '\\')])
 							})
@@ -95,8 +130,8 @@ export class MasterService {
 					}
 
 					else {
-						
-							 
+
+
 						let value = typeof data[keys_form[index]] == 'number' ? data[keys_form[index]].toString() : data[keys_form[index]]
 						form.patchValue({
 							[keys_form[index]]: value
@@ -137,7 +172,7 @@ export class MasterService {
 		let form = document.getElementById(id);
 		let firstInvalidControl = form?.getElementsByClassName('ng-invalid')[0];
 		console.log(firstInvalidControl);
-		
+
 		firstInvalidControl?.scrollIntoView();
 		(firstInvalidControl as HTMLElement).focus();
 		this.snack(0, 'Revisa tu información e inténtalo de nuevo.')
@@ -163,6 +198,14 @@ export class MasterService {
 			text: [null, Validators.required],
 			active: ['1', Validators.required],
 		});
+	}
+
+	createGallery(url: string): FormGroup {
+		return this.formBuilder.group({
+			id: [null],
+			identifier: [null],
+			url: [url]
+		})
 	}
 
 	changeKey(mapeo: { [oldKey: string]: string }, json: any) {
@@ -260,12 +303,68 @@ export class MasterService {
 	}
 
 	/* uploadPDF(control: any) {
-      this.manager.open(config.upload_config).subscribe(
-         data => {
-            if (data.event == 'success') {
-               control?.patchValue(data.info.secure_url)
-            }
-         }
-      )
-   } */
+		this.manager.open(config.upload_config).subscribe(
+			data => {
+				if (data.event == 'success') {
+					control?.patchValue(data.info.secure_url)
+				}
+			}
+		)
+	} */
+
+	add_lang_tab(tabs: any, language: any, form: FormGroup) {
+		if (!tabs.some((item: any) => item.id == language.id) && (language.id != '1' || language.id != 1)) {
+			tabs.push(language);
+
+			Object.keys(form.controls).forEach(element => {
+				if (form.controls[element] instanceof FormArray)
+					this.getterA(form.controls[element]).push(this.createTranslation(language.id))
+			})
+		}
+	}
+
+	del_lang_tab(tabs: any, languages_id: any, form: FormGroup, tab_index: any) {
+		if (tabs.length > 1) {
+			tabs.splice(tab_index, 1)
+
+			Object.keys(form.controls).forEach(element => {
+				if (form.controls[element] instanceof FormArray) {
+					const formArray = this.getterA(form.controls[element]);
+					const indexToRemove = formArray.controls.findIndex(
+						control => control.value.languages_id == languages_id
+					)
+					if (indexToRemove >= 0)
+						formArray.removeAt(indexToRemove)
+				}
+			});
+		}
+	}
+
+	add_lang_tab_array(tabs: any, language: any, form: FormGroup, array: any, item_index: any) {
+		tabs.push(language);
+
+		Object.keys(this.getterA(this.getterA(form.controls[array]).at(item_index)).controls).forEach((element: any) => {
+			let form_array = this.getterA(this.getterA(form.controls[array]).at(item_index)).controls[element];
+			console.log(element);
+			console.log(form_array);
+			
+			
+			
+			if (form_array instanceof FormArray)
+				this.getterA(form_array).push(this.createTranslation(language.id))
+		})
+	}
+
+	del_lang_tab_array(total: any, form: FormGroup, tab_index: any, array: any) {
+		if (total.length > 1) {
+			total.splice(tab_index, 1)
+
+			Object.keys(form.controls).forEach((element: any) => {
+				if (this.getterA(this.getterA(form.controls[array])) instanceof FormArray) {
+					const formArray = this.getterA(this.getterA(form.controls[array]));
+					formArray.removeAt(tab_index)
+				}
+			});
+		}
+	}
 }

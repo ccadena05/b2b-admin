@@ -39,7 +39,7 @@
          <app-mat-table [dataToDisplay]="companies" [action]="viewCompany"></app-mat-table>
       </div>
       <div class="overflow-x-scroll" *ngIf="router.url === '/m/rfq'">
-         <app-mat-table [dataToDisplay]="requierements"></app-mat-table>
+         <app-mat-table [dataToDisplay]="requierements" [action]="edit"></app-mat-table>
       </div>
       <!-- </div> -->
       <!-- {{readyT}}

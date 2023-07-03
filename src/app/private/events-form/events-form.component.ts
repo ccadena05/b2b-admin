@@ -196,9 +196,6 @@ export class EventsFormComponent implements OnInit {
             }
          }
       )
-
-
-
    }
 
    save() {
@@ -299,9 +296,12 @@ export class EventsFormComponent implements OnInit {
    addTag(event: MatChipInputEvent): void {
       const value = (event.value || '').trim();
 
-      if (value)
-         this.form.value.tags = this.form.value.tags + ', ' + value
-
+      if (value) {
+         if (this.form.value.tags != null) 
+            this.form.controls['tags'].patchValue(this.form.value.tags + ', ' + value);
+         else
+            this.form.controls['tags'].patchValue(value);
+      }
       event.chipInput!.clear();
    }
 

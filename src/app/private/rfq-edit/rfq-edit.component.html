@@ -1,0 +1,150 @@
+
+
+<form (ngSubmit)="save()" [formGroup]="form"
+class="h-full !max-h-[80vh] w-full overflow-scroll rfq relative bg-white p-6 rounded-2xl">
+<div class="title">Agregar requerimiento</div>
+   <div class="sticky top-0 right-10 left-full w-[7.5rem] z-50 justify-end text-slate-100 rounded-2xl flex gap-x-2">
+      <span class="relative flex h-12 w-12">
+         <span #ping class="absolute inline-flex h-full w-full rounded-2xl bg-sky-400 opacity-75"></span>
+         <button type="submit" class="relative rounded-2xl p-3 h-12 bg-b2b-2">
+            <mat-icon>save</mat-icon>
+         </button>
+      </span>
+      <div [matMenuTriggerFor]="addLang" class="rounded-2xl p-3 h-12 bg-b2b-2 cursor-pointer">
+         <mat-icon>translate</mat-icon>
+      </div>
+
+      <mat-menu #addLang="matMenu">
+         <div class="text-slate-100 disabled:text-slate-500" mat-menu-item
+            *ngFor="let lang of available_langs; let i = index" [disabled]="lang.id == tabs[i]?.id"
+            (click)="lang.id == tabs[i]?.id ? '' : master.add_lang_tab(tabs, lang, form)">
+            <span class="ml-2" [ngClass]="lang.id == tabs[i]?.id ? 'opacity-15' : 'opacity-100'">{{lang?.emoji}}</span>
+            <span class="ml-2" [ngClass]="lang.id == tabs[i]?.id ? 'opacity-15' : 'opacity-100'">{{lang?.name}}</span>
+         </div>
+      </mat-menu>
+   </div>
+
+
+   <mat-tab-group dynamicHeight>
+      <mat-tab *ngFor="let tab of tabs; let i = index">
+         <ng-template mat-tab-label class="w-full flex gap-x-2">
+            <span class="ml-2">{{tab?.emoji}}</span>
+            <span class="ml-2">{{tab?.name}}</span>
+            <mat-icon class="ml-4" (click)="master.del_lang_tab(tabs, i, form, tab.id)"
+               *ngIf="this.tabs.length > 1 && i !== 0 && tab.id !== 1">close</mat-icon>
+         </ng-template>
+
+         <div class="flex flex-col gap-y-6 w-full">
+
+            <div #cc>
+               <div
+                  [ngClass]="cc.offsetWidth <= 640 ? 'grid-cols-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'grid-cols-2' : 'grid-cols-3'"
+                  class="grid gap-x-6 w-full">
+
+                  <div
+                     [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"
+                     class="grow" formArrayName="title">
+                     <div *ngFor="let item of master.getterA(form.controls['title']).controls; let i = index"
+                        [formGroupName]="i">
+                        <mat-form-field class="w-full" appearance="outline" *ngIf="item.value.languages_id == tab.id">
+                           <mat-label>Título</mat-label>
+                           <input formControlName="text" type="text" matInput>
+                           <mat-error>Ingresa un valor válido</mat-error>
+                        </mat-form-field>
+                     </div>
+                  </div>
+
+                  <div
+                     [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"
+                     formArrayName="description">
+                     <div [formGroupName]="i"
+                        *ngFor="let item of master.getterA(form.controls['description']).controls; let i = index">
+                        <mat-form-field class="w-full" appearance="outline" *ngIf="item.value.languages_id == tab.id">
+                           <mat-label>Descripción</mat-label>
+                           <textarea formControlName="text" type="text" matInput></textarea>
+                           <mat-error>Ingresa un valor válido</mat-error>
+                        </mat-form-field>
+                     </div>
+                  </div>
+
+                  <location *ngIf="i == 0 && !rfq_id" [form]="form"
+                     [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                  </location>
+
+                  <mat-form-field appearance="outline" class="w-full" *ngIf="i == 0">
+                           <mat-label>Duration del proyecto(meses)</mat-label>
+                           <mat-icon class="text-slate-100" matPrefix
+                              (click)="expiration_date.valueAsNumber = expiration_date.valueAsNumber - 1">remove</mat-icon>
+
+                           <input #expiration_date formControlName="expiration_date" type="number" matInput [value]="0">
+                           <mat-icon class="text-slate-100" matSuffix
+                              (click)="expiration_date.valueAsNumber = expiration_date.valueAsNumber + 1">add</mat-icon>
+                           <mat-error>Ingresa un valor válido</mat-error>
+                        </mat-form-field>
+
+                  <div class="text-slate-900 mb-3 flex justify-center"
+                     [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                     <mat-slide-toggle #rfq formControlName="is_rfq">Convertir en RFQ</mat-slide-toggle>
+                  </div>
+                  <div *ngIf="rfq.checked"
+                     [ngClass]="cc.offsetWidth <= 640 ? 'grid-cols-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'grid-cols-2' : 'grid-cols-3'"
+                     class="grid gap-x-6 w-full"
+                     [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                     <mat-form-field appearance="outline" class="w-full" *ngIf="i == 0">
+                        <mat-label>Giro</mat-label>
+                        <input formControlName="activity" type="text" matInput>
+                        <mat-error>Ingresa un valor válido</mat-error>
+                     </mat-form-field>
+
+
+                     <div class="w-full" formArrayName="materials">
+                        <div [formGroupName]="i"
+                           *ngFor="let item of master.getterA(form.controls['materials']).controls; let i = index">
+                           <mat-form-field class="w-full" appearance="outline"
+                              *ngIf="item.value.languages_id == tab.id">
+                              <mat-label>Material</mat-label>
+                              <input formControlName="text" type="text" matInput>
+                              <mat-error>Ingresa un valor válido</mat-error>
+                           </mat-form-field>
+                        </div>
+                     </div>
+
+                     <mat-form-field appearance="outline" class="w-full" *ngIf="i == 0">
+                        <mat-label>Volúmenes</mat-label>
+                        <input formControlName="volumes" type="text" matInput>
+                        <mat-error>Ingresa un valor válido</mat-error>
+                     </mat-form-field>
+
+                     <mat-form-field appearance="outline" class="w-full" *ngIf="i == 0">
+                        <mat-label>Presupuesto / precio objetivo</mat-label>
+                        <input formControlName="budget" type="text" matInput>
+                        <mat-error>Ingresa un valor válido</mat-error>
+                     </mat-form-field>
+
+                     <search-select [label]="'Certificaciones / Capacidad requerida'" [select]="sel['isos']" [rq]="true"
+                        *ngIf="i == 0" [control]="form.controls['isos']" class="w-full"></search-select>
+
+                     <mat-form-field appearance="outline" class="w-full" *ngIf="i == 0">
+                        <mat-label>Fechas del proyecto</mat-label>
+                        <input formControlName="date" type="text" matInput>
+                        <mat-error>Ingresa un valor válido</mat-error>
+                     </mat-form-field>
+
+                     <div (click)="uploadPDF(form.get('url'))" class="file-field" *ngIf="i == 0">
+                        <mat-icon>upload_file</mat-icon>
+                        <div class="absolute left-11" [ngClass]="form.value.url ? 'top-0 text-xs' : ''">
+                           Archivo
+                        </div>
+                        {{form.value.url ?? ''}}
+                     </div>
+                     <div class="text-slate-900 mb-3 flex justify-center"
+                        [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                        <mat-slide-toggle #rfq formControlName="is_public">RFQ público</mat-slide-toggle>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </mat-tab>
+   </mat-tab-group>
+</form>
