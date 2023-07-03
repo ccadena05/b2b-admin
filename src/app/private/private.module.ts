@@ -21,9 +21,6 @@ import { EventsFormComponent } from './events-form/events-form.component';
 import { QuillModule } from 'ngx-quill';
 import { BlogFormComponent } from './blog-form/blog-form.component';
 import { CompaniesDetailComponent } from './companies-detail/companies-detail.component';
-import { GeneralInfoComponent } from './companies-detail/general-info/general-info.component';
-import { CompanyDetailsComponent } from './companies-detail/company-details/company-details.component';
-import { CapacitaionesComponent } from './companies-detail/capacitaiones/capacitaiones.component';
 import { ProductsTableComponent } from './companies-detail/products-table/products-table.component';
 import { ServicesTableComponent } from './companies-detail/services-table/services-table.component';
 import { MatTableModule } from 'src/app/components/mat-table/mat-table.module';
@@ -37,9 +34,6 @@ import { RfqEditComponent } from './rfq-edit/rfq-edit.component';
     EventsFormComponent,
     BlogFormComponent,
     CompaniesDetailComponent,
-    GeneralInfoComponent,
-    CompanyDetailsComponent,
-    CapacitaionesComponent,
     ProductsTableComponent,
     ServicesTableComponent,
     RfqTableComponent,
