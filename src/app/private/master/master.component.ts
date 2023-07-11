@@ -20,6 +20,9 @@ import { MatTableComponent } from 'src/app/components/mat-table/mat-table.compon
 export class MasterComponent implements OnInit {
    modulo: any;
    dataToDisplay: any;
+   dataToDisplay1: any;
+   dataToDisplay2: any;
+   dataToDisplay3: any;
    dataArray: any;
    masterSection: any;
    r1 = Math.floor(Math.random() * (12 - 4) + 4)
@@ -40,7 +43,6 @@ export class MasterComponent implements OnInit {
          '03_PLAN': '1'
       }
    ];
-
 
    url: any;
    constructor(
@@ -85,44 +87,79 @@ export class MasterComponent implements OnInit {
             // this.output.ready.next(true);
          }
       ) */
-      this.output.ready.next(false)
+      this.output.ready.next(false);
 
-         this.provider.BD_ActionAdminGet(this._modulo, 'get').subscribe(
+      this.provider.BD_ActionAdminGet(this._modulo, 'get').subscribe((data) => {
+         switch (this._modulo) {
+            case 'events':
+               this.dataToDisplay = data.msg;
+               console.log(data.msg);
+               break;
 
-            (data: Response) => {
-               console.log(data);
+            case 'blogs':
+               this.dataToDisplay = data.msg;
+               console.log(data.msg);
+               break;
 
-               if (typeof data.msg == 'object') {
-                  if (this.router.url != '/m/rfq') {
-                  this.dataToDisplay = data.msg
-                  } else {
-                     const element2: any = []
-                     for (const key in data?.msg) {
-                        if (Object.prototype.hasOwnProperty.call(data?.msg, key)) {
-                           const element = data?.msg[key];
-                           for (const sub_key in data?.msg[key]) {
-                              if (Object.prototype.hasOwnProperty.call(data?.msg[key], sub_key)) {
-                                 element2[sub_key + '_' + key] = data?.msg[key][sub_key];
+            case 'rfq':
+               this.dataToDisplay = data.msg.approved.no_rfq;
+               this.dataToDisplay1 = data.msg.no_approved.no_rfq;
+               this.dataToDisplay2 = data.msg.approved.is_rfq;
+               this.dataToDisplay3 = data.msg.no_approved.is_rfq;
+               console.log(data.msg);
+               break;
 
-                              }
-                           }
+            case 'companies':
+               this.dataToDisplay = data.msg.approved;
+               this.dataToDisplay1 = data.msg.pending;
+               break;
+
+            default:
+               break;
+         }
+      });
+
+      // this.provider.BD_ActionAdminGet(this._modulo, 'get').subscribe((data) => {
+      //    this.dataToDisplay = data.msg.approved.is_rfq;
+      //    console.log(data.msg.approved.is_rfq);
+      // });
+
+      // this.provider.BD_ActionAdminGet(this._modulo, 'get').subscribe(
+
+      //    (data: Response) => {
+      //       console.log(data);
+
+      //       if (typeof data.msg == 'object') {
+      //          if (this.router.url != '/m/rfq') {
+      //             this.dataToDisplay = data.msg
+      //          } else {
+      //             const element2: any = []
+      //             for (const key in data?.msg) {
+      //                if (Object.prototype.hasOwnProperty.call(data?.msg, key)) {
+      //                   const element = data?.msg[key];
+      //                   for (const sub_key in data?.msg[key]) {
+      //                      if (Object.prototype.hasOwnProperty.call(data?.msg[key], sub_key)) {
+      //                         element2[sub_key + '_' + key] = data?.msg[key][sub_key];
+
+      //                      }
+      //                   }
 
 
-                        }
-                     }
-                     console.log(element2);
-                     this.dataArray = element2
-                     console.log(this.dataArray);
-                  }
+      //                }
+      //             }
+      //             console.log(element2);
+      //             this.dataArray = element2
+      //             console.log(this.dataArray);
+      //          }
 
-                  this.output.ready.next(true)
-               } /* else {
-               this.dataToDisplay = [{name: 'No hay registros disponibles'}]
-            } */
-            }
+      //          this.output.ready.next(true)
+      //       } /* else {
+      //          this.dataToDisplay = [{name: 'No hay registros disponibles'}]
+      //       } */
+      //    }
 
-         )
-      
+      // )
+
    }
    /*      
         this.output.ready.next(false)
@@ -165,8 +202,7 @@ export class MasterComponent implements OnInit {
    get _modulo() {
       let m = ''
       this.activatedRoute.params.subscribe(params => {
-         console.log(params);
-
+         // console.log(params);
          m = params['modulo'];
       });
 

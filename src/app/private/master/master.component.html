@@ -9,7 +9,7 @@
                class="bg-b2b-2 text-white h-12 w-12 shrink-0 grow-0 flex justify-center items-center">
                <mat-icon class="m-auto">add</mat-icon>
             </button>
-            <!--             <button [matMenuTriggerFor]="menu"
+            <!-- <button [matMenuTriggerFor]="menu"
                class="bg-white dark:!bg-dark-blue-50 text-slate-500 dark:text-slate-300 h-12 w-12 flex">
                <mat-icon class="m-auto">expand_more</mat-icon>
             </button>
@@ -32,19 +32,60 @@
          </div>
       </div>
       <!-- <div *ngIf="readyT"> -->
-      <div class="overflow-x-scroll" *ngIf="router.url !== '/m/companies' && router.url !== '/m/rfq'">
-         <app-mat-table [dataToDisplay]="dataToDisplay" [action]="edit"></app-mat-table>
-      </div>
-      <div class="overflow-x-scroll" *ngIf="router.url === '/m/companies'">
-         <app-mat-table [dataToDisplay]="companies" [action]="viewCompany"></app-mat-table>
+      <div class="overflow-x-scroll">
+
+         <div *ngIf="_modulo === 'events'">
+            <h1 class="title">
+               Eventos
+            </h1>
+            <app-mat-table [dataToDisplay]="dataToDisplay" [action]="edit"></app-mat-table>
+         </div>
+
+         <div *ngIf="_modulo === 'blogs'">
+            <h1 class="title">
+               Blogs
+            </h1>
+            <app-mat-table [dataToDisplay]="dataToDisplay" [action]="edit"></app-mat-table>
+         </div>
+
+         <div *ngIf="_modulo === 'rfq'">
+            <h1 class="title">
+               Requerimientos Aprobados
+            </h1>
+            <app-mat-table [dataToDisplay]="dataToDisplay" [action]="edit"></app-mat-table>
+            <h1 class="title">
+               Requerimientos No Aprobados
+            </h1>
+            <app-mat-table [dataToDisplay]="dataToDisplay1" [action]="edit"></app-mat-table>
+            <h1 class="title">
+               RFQ's Aprobados
+            </h1>
+            <app-mat-table [dataToDisplay]="dataToDisplay2" [action]="edit"></app-mat-table>
+            <h1 class="title">
+               RFQ's No Aprobados
+            </h1>
+            <app-mat-table [dataToDisplay]="dataToDisplay3" [action]="edit"></app-mat-table>
+         </div>
+
+         <div *ngIf="_modulo === 'companies'">
+            <h1 class="title">
+               Empresas Aprobadas
+            </h1>
+            <app-mat-table [dataToDisplay]="dataToDisplay" [action]="edit"></app-mat-table>
+            <h1 class="title">
+               Empresas Pendientes
+            </h1>
+            <app-mat-table [dataToDisplay]="dataToDisplay1" [action]="edit"></app-mat-table>
+         </div>
+
       </div>
       <!-- <app-mat-table [dataToDisplay]="dataToDisplay?.['is_rfq_approved']" [action]="viewCompany"></app-mat-table> -->
 
-      <div class="overflow-x-scroll" *ngIf="router.url === '/m/rfq'">
+      <!-- <div class="overflow-x-scroll" *ngIf="router.url === '/m/rfq'">
          <div *ngFor="let table of dataArray">
-            <app-mat-table  [dataToDisplay]="table" [action]="edit"></app-mat-table>
+            <app-mat-table [dataToDisplay]="table" [action]="edit"></app-mat-table>
          </div>
-      </div>
+      </div> -->
       <!-- </div> -->
       <!-- {{readyT}}
       <div *ngIf="!readyT" class="flex flex-col w-full">

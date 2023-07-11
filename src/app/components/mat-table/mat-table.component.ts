@@ -38,9 +38,9 @@ export class MatTableComponent implements OnInit, OnChanges {
 
    ngOnChanges(changes: SimpleChanges) {
       console.log(changes);
-      
+
       this.columns = this.datos = [];
-      if (changes['dataToDisplay']){
+      if (changes['dataToDisplay']) {
          this.displayedColumns = this.renderTable(changes['dataToDisplay'].currentValue)
          this.ngAfterViewInit()
       }
@@ -52,10 +52,10 @@ export class MatTableComponent implements OnInit, OnChanges {
    }
 
    ngAfterContentInit(/* changes: SimpleChanges */) {
-      console.log('a');
-      
+      // console.log('a');
+
       /* console.log(changes); */
-      
+
    }
 
    applyFilter(event: Event) {
@@ -78,15 +78,15 @@ export class MatTableComponent implements OnInit, OnChanges {
    renderTable(data: any) {
       this.dataSource = new MatTableDataSource(data);
 
-      if(data && data.length > 0){
+      if (data && data.length > 0) {
          this.keyvalue.transform(data[0] ?? data[1])?.forEach((column: any, index: any) => {
-         this.columns?.push({
-            columnDef: column?.key,
-            header: column?.key.replace(/_/g, " "),
-            cell: (data: any) => `${data[column?.key]}`
+            this.columns?.push({
+               columnDef: column?.key,
+               header: column?.key.replace(/_/g, " "),
+               cell: (data: any) => `${data[column?.key]}`
+            });
          });
-      });
-   }
+      }
 
       return this.columns?.map((c: any) => c?.columnDef)
    }
