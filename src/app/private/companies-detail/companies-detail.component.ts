@@ -16,7 +16,7 @@ import { Response } from 'src/app/models/response.model';
 import { MatRadioButton } from '@angular/material/radio';
 import { cloneDeep } from 'lodash';
 
-declare var google: any;
+// declare var google: any;
 
 @Component({
   selector: 'app-companies-detail',
