@@ -38,8 +38,12 @@
       <div class="overflow-x-scroll" *ngIf="router.url === '/m/companies'">
          <app-mat-table [dataToDisplay]="companies" [action]="viewCompany"></app-mat-table>
       </div>
+      <!-- <app-mat-table [dataToDisplay]="dataToDisplay?.['is_rfq_approved']" [action]="viewCompany"></app-mat-table> -->
+
       <div class="overflow-x-scroll" *ngIf="router.url === '/m/rfq'">
-         <app-mat-table [dataToDisplay]="requierements" [action]="edit"></app-mat-table>
+         <div *ngFor="let table of dataArray">
+            <app-mat-table  [dataToDisplay]="table" [action]="edit"></app-mat-table>
+         </div>
       </div>
       <!-- </div> -->
       <!-- {{readyT}}

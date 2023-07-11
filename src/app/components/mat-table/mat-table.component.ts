@@ -37,6 +37,8 @@ export class MatTableComponent implements OnInit, OnChanges {
    }
 
    ngOnChanges(changes: SimpleChanges) {
+      console.log(changes);
+      
       this.columns = this.datos = [];
       if (changes['dataToDisplay']){
          this.displayedColumns = this.renderTable(changes['dataToDisplay'].currentValue)
@@ -47,6 +49,13 @@ export class MatTableComponent implements OnInit, OnChanges {
    ngAfterViewInit() {
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
+   }
+
+   ngAfterContentInit(/* changes: SimpleChanges */) {
+      console.log('a');
+      
+      /* console.log(changes); */
+      
    }
 
    applyFilter(event: Event) {
