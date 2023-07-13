@@ -21,30 +21,10 @@ export class MasterComponent implements OnInit {
    modulo: any;
    dataToDisplay: any;
    dataToDisplay1: any;
-   dataToDisplay2: any;
-   dataToDisplay3: any;
-   dataArray: any;
    masterSection: any;
-   r1 = Math.floor(Math.random() * (12 - 4) + 4)
-   r2 = Math.floor(Math.random() * (8 - 2) + 2)
-   sideMenu = menu;
    b2b_menu = b2b_menu;
-   keys = {
-      is_rfq_approved: 'RFQs aprobados',
-      is_rfq_no_approved: 'RFQs no aprobados',
-      no_rfq_approved: 'Requerimientos aprobados',
-      no_rfq_no_approved: 'Requerimientos no aprobados',
-   }
-   companies = [
-      {
-         'id': '20230519205945',
-         '01_NOMBRE': 'Parque Tecnológico Sanmiguelense',
-         '02_RFC': 'PTS130620I48',
-         '03_PLAN': '1'
-      }
-   ];
-
    url: any;
+
    constructor(
       private provider: ProviderService,
       public router: Router,
@@ -88,6 +68,7 @@ export class MasterComponent implements OnInit {
          }
       ) */
       this.output.ready.next(false);
+      this.output.table_ready.next(false);
 
       this.provider.BD_ActionAdminGet(this._modulo, 'get').subscribe((data) => {
          switch (this._modulo) {
@@ -102,10 +83,10 @@ export class MasterComponent implements OnInit {
                break;
 
             case 'rfq':
-               this.dataToDisplay = data.msg.approved.no_rfq;
-               this.dataToDisplay1 = data.msg.no_approved.no_rfq;
-               this.dataToDisplay2 = data.msg.approved.is_rfq;
-               this.dataToDisplay3 = data.msg.no_approved.is_rfq;
+               console.log(data.msg);
+
+               this.dataToDisplay = data.msg.no_rfq;
+               this.dataToDisplay1 = data.msg.is_rfq;
                console.log(data.msg);
                break;
 

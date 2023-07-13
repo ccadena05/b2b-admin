@@ -9,6 +9,7 @@ export class OutputService {
    // detailObject = new Subject<any>();
    modulo = new Subject<any>();
    ready = new Subject<any>();
+   table_ready = new Subject<any>();
    masterSection = new Subject<any>();
    detail = new BehaviorSubject<any>('');
 

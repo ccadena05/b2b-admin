@@ -16,11 +16,11 @@
 <div class="w-full flex justify-between items-center">
    <div class="font-bold capitalize dark:text-slate-100 flex gap-x-2">
       
-      <a routerLink="/dashboard" [ngClass]="bread ? ' hover:!text-nets-yellow cursor-pointer duration-300' : 'cursor-default'" class="text-slate-900 dark:text-slate-100">Dashboard</a>
+      <a routerLink="/dashboard" [ngClass]="bread ? ' hover:!text-b2b-2 cursor-pointer duration-300' : 'cursor-default'" class="text-slate-900 dark:text-slate-100">Dashboard</a>
       <span *ngIf="bread != null && ready === true" class="cursor-default">/</span>
 
       <div *ngFor="let b of bread; let i = index" class="flex gap-x-2">
-         <a [routerLink]="b?.link" *ngIf="b?.item" [ngClass]="b?.link ? 'hover:!text-nets-yellow cursor-pointer duration-300' : 'cursor-default'" class="text-slate-900 dark:text-slate-100"> {{b?.item}}</a>
+         <a [routerLink]="b?.link" *ngIf="b?.item" [ngClass]="b?.link ? 'hover:!text-b2b-2   cursor-pointer duration-300' : 'cursor-default'" class="text-slate-900 dark:text-slate-100"> {{b?.item}}</a>
          <span *ngIf="bread[i + 1]?.item != null && ready === true" class="cursor-default">/</span>
       </div>
       

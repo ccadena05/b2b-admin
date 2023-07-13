@@ -50,21 +50,13 @@
 
          <div *ngIf="_modulo === 'rfq'">
             <h1 class="title">
-               Requerimientos Aprobados
+               Requerimientos
             </h1>
             <app-mat-table [dataToDisplay]="dataToDisplay" [action]="edit"></app-mat-table>
             <h1 class="title">
-               Requerimientos No Aprobados
+               RFQ's
             </h1>
             <app-mat-table [dataToDisplay]="dataToDisplay1" [action]="edit"></app-mat-table>
-            <h1 class="title">
-               RFQ's Aprobados
-            </h1>
-            <app-mat-table [dataToDisplay]="dataToDisplay2" [action]="edit"></app-mat-table>
-            <h1 class="title">
-               RFQ's No Aprobados
-            </h1>
-            <app-mat-table [dataToDisplay]="dataToDisplay3" [action]="edit"></app-mat-table>
          </div>
 
          <div *ngIf="_modulo === 'companies'">

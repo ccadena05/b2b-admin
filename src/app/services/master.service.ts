@@ -7,53 +7,71 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { MatRadioButton } from '@angular/material/radio';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { config } from 'src/config';
+import { ProviderService } from './provider/provider.service';
+import { Response } from '../models/response.model';
 // import { CloudinaryWidgetManager } from 'ngx-cloudinary-upload-widget';
 
 @Injectable({
 	providedIn: 'root'
 })
 export class MasterService {
+	_languages: any = [];
+	translate_keys = "id,text,active,identifier,languages_id";
 
 	constructor(
 		private snackbar: MatSnackBar,
 		private formBuilder: FormBuilder,
 		private jwt: JwtAuthService,
 		private sanitizer: DomSanitizer,
+		private provider: ProviderService
 		// private manager: CloudinaryWidgetManager
-	) { }
+	) { 
+		this.languages();
 
-	new_patch(data: any, formGroup: FormGroup) {
-		Object.keys(data).forEach((key) => {
-			const control = formGroup.get(key);
+	}
 
-			if (control instanceof FormControl) {
-				control.patchValue(data[key]);
-			} else if (control instanceof FormGroup) {
-				this.new_patch(data[key], control);
-			} else if (control instanceof FormArray && Array.isArray(data[key])) {
-				const formArray = control as FormArray;
-				const currentLength = formArray.length;
-				const dataLength = data[key].length;
+	patch(data: any, formGroup: FormGroup, tabs?: any) {
+		if (data)
+			Object.keys(data)?.forEach((key) => {
+				const control = formGroup.get(key);
 
-				if (currentLength < dataLength) {
-					for (let i = currentLength; i < dataLength; i++) {
-						const subGroup = new FormGroup({});
-						formArray.push(subGroup);
+				if (control instanceof FormControl) {
+					control.patchValue(data[key]);
+				} else if (control instanceof FormGroup) {
+					while (typeof data?.[key] == 'string')
+						data[key] = JSON.parse(data?.[key])
+
+					this.patch(data?.[key], control);
+				} else if (control instanceof FormArray && Array.isArray(data[key])) {
+
+					const formArray = this.getterA(control);
+					const currentLength = formArray.length;
+					const dataLength = data[key].length;
+
+					if (currentLength < dataLength) {
+						for (let i = currentLength; i < dataLength; i++) {
+							const subGroup = new FormGroup({});
+							formArray.push(subGroup);
+						}
+					}
+
+					data[key].forEach((value: any, index: number) => {
+						this.patch(value, this.getterG(formArray.at(index)));
+						formArray?.controls?.forEach(array => {
+							if (array instanceof FormGroup && Object.keys(value).join() == this.translate_keys) {
+								let new_lang = this._languages.filter((lang: any) => value.languages_id == lang.id)
+								this.add_lang_tab(tabs, new_lang[0], formGroup)
+							}
+						});
+					});
+
+					if (currentLength > dataLength) {
+						for (let i = currentLength - 1; i >= dataLength; i--) {
+							formArray.removeAt(i);
+						}
 					}
 				}
-
-				data[key].forEach((value: any, index: number) => {
-					const subGroup = formArray.at(index) as FormGroup;
-					this.new_patch(value, subGroup);
-				});
-
-				if (currentLength > dataLength) {
-					for (let i = currentLength - 1; i >= dataLength; i--) {
-						formArray.removeAt(i);
-					}
-				}
-			}
-		});
+			});
 	}
 
 	/* Función para hacer un Patch de un JSON a un formulario. Si hay checkbox, convierte a true o false, según sea el caso */
@@ -366,5 +384,32 @@ export class MasterService {
 				}
 			});
 		}
+	}
+
+	toogle_validators(action: boolean, controls: string[], form: any) {
+		controls.forEach(control => {
+			if (action)
+				form.controls[control].setValidators(Validators.required)
+			else {
+				form.controls[control].removeValidators(Validators.required)
+				/* if(form.controls[control] instanceof FormArray) {
+					this.getterA(form.controls[control]).controls.forEach((control: any) => {
+						control.controls['active'].patchValue(0)
+					});
+				} else {
+					form.controls[control].patchValue(null)
+				} */
+			}
+			form.controls[control].updateValueAndValidity()
+		});
+	}
+
+	languages() {
+		this.provider.BD_ActionGet('general', 'get_languages').subscribe(
+			(languages: Response) => {
+				// console.log(languages);
+				this._languages = languages.msg
+			}
+		)
 	}
 }

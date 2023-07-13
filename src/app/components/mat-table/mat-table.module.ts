@@ -3,6 +3,8 @@ import { CommonModule, KeyValuePipe } from '@angular/common';
 import { MatTableComponent } from './mat-table.component';
 import { MaterialModule } from '../material/material.module';
 import { RouterModule } from '@angular/router';
+import { MatSortModule } from '@angular/material/sort';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 
 
@@ -13,7 +15,9 @@ import { RouterModule } from '@angular/router';
   imports: [
     CommonModule,
     RouterModule,
-    MaterialModule
+    MaterialModule,
+    MatSortModule,
+    MatPaginatorModule
   ],
   providers:[
    KeyValuePipe

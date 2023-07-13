@@ -18,7 +18,7 @@ export const b2b_menu = [
       bg: 'bg-b2b-2'
    },
    {
-      label: 'Requerimientos / RFQ',
+      label: 'Requerimientos - RFQ',
       link: '/m/rfq',
       icon: 'request_quote',
       bg: 'bg-b2b-2'
@@ -26,7 +26,7 @@ export const b2b_menu = [
    {
       label: 'Empresas',
       link: '/m/companies',
-      icon: 'apartment',
+      icon: 'domain',
       bg: 'bg-b2b-2'
    }
 ]

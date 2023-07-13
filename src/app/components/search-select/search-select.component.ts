@@ -42,8 +42,8 @@ export class SearchSelectComponent implements OnInit, OnChanges, AfterViewInit {
       this._control = changes['control']?.currentValue ?? this.control;
       this.filtered = this._select;
       
+      console.log('this._select', this._select), this.controlName(this._control);
       /*
-            console.log('this._select', this._select);
             console.log('this._label', this._label);
             console.log('this._formCN', this._formCN);
             console.log('this._rq', this._rq);
@@ -65,7 +65,7 @@ export class SearchSelectComponent implements OnInit, OnChanges, AfterViewInit {
 
    controlName(control: any) {
       const parent = control?.parent as FormGroup
-      return Object?.keys(parent?.controls).find(key => control === parent?.get(key)) || ''
+      return Object?.keys(parent?.controls)?.find(key => control === parent?.get(key)) || ''
    }
 
    transform(value: any) {
