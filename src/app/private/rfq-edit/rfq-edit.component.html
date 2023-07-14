@@ -86,6 +86,7 @@ class=" w-full overflow-scroll rfq relative p-6 rounded-2xl bg-white">
                   <search-select [label]="'Status'" [select]="sel['rfq_status']" [rq]="true"
                      *ngIf="i == 0" [control]="form.controls['rfq_status_id']" class="w-full"></search-select>
                   
+                     
 
                   <div class="file-field" #field (click)="uploadPDF(form.get('image_url'))" *ngIf="i == 0">
                      <mat-icon *ngIf="!form.value.image_url">image</mat-icon>

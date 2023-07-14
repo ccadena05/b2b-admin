@@ -71,11 +71,9 @@
                                 </div>
                             </div>
 
-                            <div
-                                [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
-                                <!-- class="flex gap-x-6" -->
-                                <recursive-select [select]="sel['category_blogs']" label="Categoría"
-                                    [control]="form.controls['category']" [rq]="true"
+                            <div class="flex gap-x-6 w-full" [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                                <recursive-select [select]="sel['category_blogs']" label="Categoría" class="w-full flex basis-1/3 gap-x-6"
+                                    [control]="form.controls['category']" [rq]="true" [generation]="0"
                                     (categorySelected)="onCategorySelected($event)"></recursive-select>
                             </div>
 
@@ -115,7 +113,7 @@
 
                             <div class="flex basis-full"
                             [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
-                                <div (click)="uploadGallery(form.controls['image_gallery'])" class="file-field w-full" *ngIf="i == 0">
+                                <div (click)="uploadGallery(form.controls['image_gallery'])" class="file-field w-full !h-20" *ngIf="i == 0">
                                    <mat-icon class="text-[rgba(0,0,0,.54)]">image</mat-icon>
                                    <div class="absolute left-11 duration-300" [ngClass]="form.value.image_gallery.length > 0 ? 'top-0 text-xs' : ''">
                                       Galería de imágenes
@@ -124,7 +122,7 @@
                                    <div cdkDropList class="flex gap-x-3 mt-3" (cdkDropListDropped)="drop($event)">
                                       <div class="cursor-move" *ngFor="let item of form.value.image_gallery" cdkDrag>
                                         <div class="example-custom-placeholder" *cdkDragPlaceholder></div>
-                                        <img class="h-16 aspect-square object-cover rounded-lg" [src]="item.url" alt="">
+                                        <img class="h-10 aspect-square object-cover rounded-lg" [src]="item.url" alt="">
                                       </div>
                                     </div>
                                 </div>

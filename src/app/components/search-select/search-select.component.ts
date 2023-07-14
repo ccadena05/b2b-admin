@@ -42,7 +42,7 @@ export class SearchSelectComponent implements OnInit, OnChanges, AfterViewInit {
       this._control = changes['control']?.currentValue ?? this.control;
       this.filtered = this._select;
       
-      console.log('this._select', this._select), this.controlName(this._control);
+      // console.log('this._select', this._select), this.controlName(this._control);
       /*
             console.log('this._label', this._label);
             console.log('this._formCN', this._formCN);

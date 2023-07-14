@@ -47,9 +47,14 @@ export class MasterService {
 					const formArray = this.getterA(control);
 					const currentLength = formArray.length;
 					const dataLength = data[key].length;
-
+					
 					if (currentLength < dataLength) {
+						console.log('a');
+						
 						for (let i = currentLength; i < dataLength; i++) {
+							console.log(data);
+							console.log(Object.keys(data[i][key]));
+							
 							const subGroup = new FormGroup({});
 							formArray.push(subGroup);
 						}
@@ -73,6 +78,7 @@ export class MasterService {
 				}
 			});
 	}
+
 
 	/* Función para hacer un Patch de un JSON a un formulario. Si hay checkbox, convierte a true o false, según sea el caso */
 	patchForm(data: any, form: FormGroup, check?: any): any {
@@ -218,11 +224,12 @@ export class MasterService {
 		});
 	}
 
-	createGallery(url: string): FormGroup {
+	createGallery(url: string, identifier: any): FormGroup {
 		return this.formBuilder.group({
 			id: [null],
-			identifier: [null],
-			url: [url]
+			identifier: [identifier],
+			url: [url],
+			active: ['1']
 		})
 	}
 

@@ -27,6 +27,7 @@ export class BlogFormComponent implements OnInit {
    _ql: typeof Quill;
    sel: any = [];
    readonly separatorKeysCodes = [ENTER, COMMA] as const;
+   selected_all: any = [];
    comments: Object[] = [
       {
          '01_USUARIO': 'Angel Antonio Zapatero Díaz',
@@ -58,6 +59,7 @@ export class BlogFormComponent implements OnInit {
       this.form = this.formBuilder.group({
          id: [null],
          user_create: [this.jwt.getUser()],
+         user_update: [this.jwt.getUser()],
          title: this.formBuilder.array([this.master.createTranslation('1')]),
          description: this.formBuilder.array([this.master.createTranslation('1')]),
          image_url: [null, Validators.required],
@@ -66,7 +68,9 @@ export class BlogFormComponent implements OnInit {
          file_url: [null],
          tags: [null, Validators.required],
          category: [null, Validators.required],
-         profile_company_id: [this.ls.getItem(config.APP_COMPANY)]
+         sub_category: [null, Validators.required],
+         profile_company_id: [this.ls.getItem(config.APP_COMPANY)],
+         released: [null]
       })
    }
 
@@ -77,34 +81,22 @@ export class BlogFormComponent implements OnInit {
    ngAfterViewInit() {
    }
 
-   uploadPDF(
-      control: any,
-      // name_control: any
-   ) {
+   uploadPDF(control: any,) {
       this.manager.open(config.upload_config).subscribe(
          data => {
-            if (data.event == 'success') {
+            if (data.event == 'success') 
                control?.patchValue(data.info.secure_url)
-               // name_control?.patchValue(data.info.original_filename)
-            }
          }
       )
    }
 
    uploadGallery(control: any) {
-      let images: any = []
       this.manager.open(config.upload_config).subscribe(
          data => {
-            if (data.event == 'success') {
-               // this.master.getterA(this.form.controls[element]).push(this.master.createTranslation(language.id))
-               this.master.getterA(this.form.controls['image_gallery']).push(this.master.createGallery(data.info.secure_url))
-               // images.push(this.master.createGallery(data.info.secure_url))
-               console.log(images);
-
-            }
+            if (data.event == 'success')
+               this.master.getterA(this.form.controls['image_gallery']).push(this.master.createGallery(data.info.secure_url, this.form.value['image_gallery'][0]['identifier'] ?? null))
          }
       )
-      // control?.patchValue(images)
    }
 
    addTab(language: any) {
@@ -141,7 +133,6 @@ export class BlogFormComponent implements OnInit {
    }
 
    get() {
-      let section = null
       this.provider.BD_ActionGet('general', 'get_languages').subscribe(
          (languages: Response) => {
             // console.log(languages.msg);
@@ -157,13 +148,17 @@ export class BlogFormComponent implements OnInit {
                         this.provider.BD_ActionAdminGet('blogs', 'get_blog_by_id', { blog_id: id }).subscribe(
                            (blog: Response) => {
                               if (!blog.error) {
-                                 console.log(blog.msg);
+                                 // console.log(blog.msg);
                                  blog?.msg?.description.forEach((element: any) => {
 
                                     if (element.languages_id != 1) {
                                        this.master.createTranslation(element.languages_id)
                                        this.addTab(this.language_index(element.languages_id))
                                     }
+
+                                    blog.msg.image_gallery?.forEach((element: any) => {
+                                       this.master.getterA(this.form.controls['image_gallery']).push(this.master.createGallery('', null))          
+                                    });
 
                                     this.ls.update('bc', [
                                        {
@@ -204,11 +199,13 @@ export class BlogFormComponent implements OnInit {
    }
 
    onCategorySelected(category: any): void {
+      this.selected_all[category.generation] = category.id;
+      while (this.selected_all[category.generation + 1])
+         this.selected_all.pop()
+      console.log(this.selected_all);
+      
       const categoryId = category.id;
-      // Realiza la llamada a la API para obtener los hijos de la categoría seleccionada
-      // Utiliza this.provider.BD_ActionGet('general', 'get_category_blogs', {tree_size: 0, id_category: categoryId})
-      // para obtener los hijos correspondientes
-      // Por ejemplo:
+
       this.provider.BD_ActionGet('general', 'get_category_blogs', { tree_size: 0, id_category: categoryId })
          .subscribe((category_blogs: Response) => {
             category.children = category_blogs.msg;
@@ -217,7 +214,10 @@ export class BlogFormComponent implements OnInit {
 
 
    save() {
+      this.form.controls['category'].patchValue(this.selected_all[0])
+      this.form.controls['sub_category'].patchValue(this.selected_all[this.selected_all.length - 1])
       if (this.router.url.includes('detail')) {
+         this.form.controls['user_update'].patchValue(this.jwt.getUser())
          this.provider.BD_ActionAdminPut('blogs', 'update_blog', this.form.value).subscribe(
             (data: Response) => {
                console.log(data)

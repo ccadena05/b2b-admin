@@ -449,8 +449,12 @@ mat-tab-group {
    }
 }
 
-.mat-drawer-container, .mat-drawer {
+.mat-drawer-container, .mat-drawer:not(.mat-drawer-over.mat-drawer-opened) {
    background: transparent !important;
+}
+.mat-drawer.mat-drawer-over.mat-drawer-opened {
+   width: 16rem !important;
+
 }
 .mat-drawer-side.mat-drawer-end {
    border: unset !important;

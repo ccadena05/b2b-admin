@@ -18,6 +18,7 @@ Quill.register('modules/imageHandler', ImageHandler);
 import Quill from 'quill';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatChipInputEvent } from '@angular/material/chips';
+import { JwtAuthService } from 'src/app/services/auth/jwt-auth.service';
 
 @Component({
    selector: 'app-events-form',
@@ -31,9 +32,9 @@ export class EventsFormComponent implements OnInit {
    tabs: any = [{ id: '1', name: 'English', language: 'EN', emoji: '🇺🇸' }];
    available_langs: any = []
    readonly separatorKeysCodes = [ENTER, COMMA] as const;
-
+   selected_all: any = []
    // _ql: typeof Quill;
-
+   video_rexexp: RegExp = /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtube\.com\/embed\/|youtu\.be\/)[a-zA-Z0-9_-]+(\/)?(\?[\w=&]*)?(#([\w-]+))?$/i;
    modules = {
       toolbar: [
          ['bold', 'italic', 'underline', 'strike'],
@@ -66,6 +67,7 @@ export class EventsFormComponent implements OnInit {
       public master: MasterService,
       public router: Router,
       private ls: LocalStoreService,
+      private jwt: JwtAuthService,
       private formBuilder: FormBuilder,
       private provider: ProviderService,
       private manager: CloudinaryWidgetManager,
@@ -81,35 +83,42 @@ export class EventsFormComponent implements OnInit {
          cost: [null, Validators.required],
          coin: [null, Validators.required],
          event_type: [null],
-         image_gallery: [null],
-         video_gallery: [null, Validators.pattern(/^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtube\.com\/embed\/|youtu\.be\/)[a-zA-Z0-9_-]+(\/)?(\?[\w=&]*)?(#([\w-]+))?$/i)],
+         image_gallery: this.formBuilder.array([]),
+         video_gallery: this.formBuilder.array([this.master.createGallery('', null)]),
+         // video_url: [null, Validators.pattern(/^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtube\.com\/embed\/|youtu\.be\/)[a-zA-Z0-9_-]+(\/)?(\?[\w=&]*)?(#([\w-]+))?$/i)],
          public_gallery: [null],
          start_date: [null, Validators.required],//yyyy-mm-dd 2023-01-23
          end_date: [null, Validators.required],//yyyy-mm-dd 2023-01-23
          event_summary: [null],
-         profile_company_id: ['20230424174025ZN7LCeF3DKH9DnAxTx'],
-         file_url: [null],
+         profile_company_id: [null],
          blog_id: [null],
-         organizer: ['PARQUE TECNOLÓGICO SANMIGUELENSE'],
+         organizer: [null],
          tags: [null],
          web_page: [null],
          url_form: [null],
-         form: [null, Validators.required],
+         form: [null, Validators.required], //Saber si se registra internamente o externo
          released: [null],
          released_date: [null],
          event_privacy: [null],
          active: [null],
          create_date: [null],
          last_update: [null],
-         category: [633]
+         category: [null],
+         sub_category: [null],
+         user_update: [this.jwt.getUser()],
+         user_create: [this.jwt.getUser()],
       })
 
-      console.log(this.form.value);
+      console.log(this.form);
 
       this.activatedRoute.params.subscribe(params => {
 
          this._id = params['id']
       })
+
+      this.form.controls['profile_company_id'].valueChanges.subscribe(
+         (company: any) => this.form.controls['organizer'].setValue(this.get_company_name(company))
+      )
 
    }
 
@@ -141,55 +150,68 @@ export class EventsFormComponent implements OnInit {
                this.provider.BD_ActionGet('general', 'get_category_events', { tree_size: -1 }).subscribe(
                   (category: Response) => {
                      console.log(category);
+                     this.sel['category'] = category.msg
+
                      if (!category.error) {
-                        /* category.msg[0]['children'].forEach((child: any) => {
-                           child = this.master?.changeKey({ 'ES': 'name' }, child)
-                        });
-                        this.sel['category'] = category.msg[0]['children']
-                        log */
-                        if (this.router.url.includes('detail')) {
-                           let id = atob(this.__id)
+                        this.provider.BD_ActionAdminGet('companies', 'get').subscribe(
+                           (companies: Response) => {
+                              console.log(companies.msg);
+                              
+                              if (!companies.error) {
+                                 this.sel['companies'] = this.master?.changeKey({ 'ID': 'id', '01_TITLE': 'name' }, companies.msg.approved)
 
-                           this.provider.BD_ActionAdminGet('events', 'get_event_by_id', { event_id: id }).subscribe(
-                              (event: Response) => {
-                                 if (!event.error) {
-                                    console.log(event.msg);
-                                    event?.msg?.description.forEach((element: any) => {
+                                 /* this.provider.BD_ActionGet('general', 'get_category_events',{ tree_size: 0}).subscribe(
+                                    (category_events: Response) => {
+                                       if(!category_events.error)
+                                          this.sel['category'] = category_events.msg */
+                                       if (this.router.url.includes('detail')) {
+                                          let id = atob(this.__id)
 
-                                       if (element.languages_id != 1) {
-                                          this.master.createTranslation(element.languages_id)
-                                          this.addTab(this.language_index(element.languages_id))
+                                          this.provider.BD_ActionAdminGet('events', 'get_event_by_id', { event_id: id }).subscribe(
+                                             (event: Response) => {
+                                                if (!event.error) {
+                                                   console.log(event.msg);
+                                                   /* event?.msg?.description.forEach((element: any) => {
+
+                                                      if (element.languages_id != 1) {
+                                                         this.master.createTranslation(element.languages_id)
+                                                         this.addTab(this.language_index(element.languages_id))
+                                                      }
+                                                   }); */
+
+                                                      this.ls.update('bc', [
+                                                         {
+                                                            item: 'Eventos',
+                                                            link: '/m/events'
+                                                         },
+                                                         {
+                                                            item: event.msg.title[0].text,
+                                                            link: null
+                                                         }
+                                                      ])
+
+                                                      this.master.patch(event.msg, this.form, this.tabs)
+
+                                                }
+                                             }
+                                          )
+                                       } else {
+                                          this.ls.update('bc', [
+                                             {
+                                                item: 'Eventos',
+                                                link: '/m/events'
+                                             },
+                                             {
+                                                item: 'Agregar',
+                                                link: null
+                                             }
+                                          ])
                                        }
-
-                                       this.ls.update('bc', [
-                                          {
-                                             item: 'Eventos',
-                                             link: '/m/events'
-                                          },
-                                          {
-                                             item: event.msg.title[0].text,
-                                             link: null
-                                          }
-                                       ])
-
-                                       this.master.patchForm(event.msg, this.form)
-
-                                    });
-                                 }
+                                    /* }
+                                 ) */
                               }
-                           )
-                        } else {
-                           this.ls.update('bc', [
-                              {
-                                 item: 'Eventos',
-                                 link: '/m/events'
-                              },
-                              {
-                                 item: 'Agregar',
-                                 link: null
-                              }
-                           ])
-                        }
+                           }
+                        )
                      }
                   }
                )
@@ -199,6 +221,9 @@ export class EventsFormComponent implements OnInit {
    }
 
    save() {
+      this.form.controls['user_update'].patchValue(this.jwt.getUser())
+      this.form.controls['category'].patchValue(this.selected_all[0])
+      this.form.controls['sub_category'].patchValue(this.selected_all[this.selected_all.length - 1])
       if (this.router.url.includes('detail')) {
          this.provider.BD_ActionAdminPut('events', 'update_event', this.form.value).subscribe(
             data => console.log(data)
@@ -210,6 +235,20 @@ export class EventsFormComponent implements OnInit {
       }
       console.log(this.form.value)
 
+   }
+
+   onCategorySelected(category: any): void {
+      this.selected_all[category.generation] = category.id;
+      while (this.selected_all[category.generation + 1])
+         this.selected_all.pop()
+      console.log(this.selected_all);
+      
+      const categoryId = category.id;
+
+      this.provider.BD_ActionGet('general', 'get_category_events', { tree_size: 0, id_category: categoryId })
+         .subscribe((category_blogs: Response) => {
+            category.children = category_blogs.msg;
+         });
    }
 
    // deltaToHtml(delta: any): string {
@@ -248,15 +287,12 @@ export class EventsFormComponent implements OnInit {
    }
 
    uploadGallery(control: any) {
-      let images: any[] = []
       this.manager.open(config.upload_config).subscribe(
          data => {
-            if (data.event == 'success') {
-               images.push(data.info.secure_url)
-            }
+            if (data.event == 'success')
+               this.master.getterA(this.form.controls['image_gallery']).push(this.master.createGallery(data.info.secure_url,this.form.value['image_gallery'][0]?.['identifier'] ?? null))
          }
       )
-      control?.patchValue(images)
    }
 
    drop(event: any) {
@@ -297,7 +333,7 @@ export class EventsFormComponent implements OnInit {
       const value = (event.value || '').trim();
 
       if (value) {
-         if (this.form.value.tags != null) 
+         if (this.form.value.tags != null)
             this.form.controls['tags'].patchValue(this.form.value.tags + ', ' + value);
          else
             this.form.controls['tags'].patchValue(value);
@@ -308,6 +344,10 @@ export class EventsFormComponent implements OnInit {
    removeTag(tag: any): void {
       const tagToRemove = tag + ', ';
       this.form.value.tags = this.form.value.tags.replace(tagToRemove, '');
+   }
+
+   get_company_name(id: any) {
+      return this.sel['companies']?.filter((company: any) => company.id == id)[0]?.['name']
    }
 
 }
