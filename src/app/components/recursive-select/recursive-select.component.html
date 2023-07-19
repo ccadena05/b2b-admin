@@ -21,7 +21,7 @@ div class="text-red-500">RECURSIVE</div>
 
 <ng-container *ngIf="_select.children && _select.children.length > 0" class="flex">
    <!-- <div #rec class="grid gap-x-6 w-full" [ngClass]="rec.offsetWidth <= 640 ? 'grid-cols-1' : rec.offsetWidth > 640 && rec.offsetWidth < 768 ? 'grid-cols-2' : 'grid-cols-3'"> -->
-   <mat-form-field appearance="outline" class="w-full">
+   <mat-form-field appearance="outline" class="w-full mr-4">
       <mat-label>{{ _label }}</mat-label>
       <mat-select [(ngModel)]="selectedCategory" (selectionChange)="onSelectionChange($event, _control)"[required]="_rq">
                   <input #sch (keyup)="search(sch.value)" (keydown.Space)="$event.stopPropagation()" placeholder="Buscar" class="sticky top-0 left-0 right-0 z-20 h-12 w-full bg-white border-b-2 [border-image:linear-gradient(310deg,#0076ef,#000259)1] p-3">

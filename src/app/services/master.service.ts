@@ -25,61 +25,133 @@ export class MasterService {
 		private sanitizer: DomSanitizer,
 		private provider: ProviderService
 		// private manager: CloudinaryWidgetManager
-	) { 
+	) {
 		this.languages();
 
 	}
 
 	patch(data: any, formGroup: FormGroup, tabs?: any) {
-		if (data)
-			Object.keys(data)?.forEach((key) => {
-				const control = formGroup.get(key);
+		Object.keys(data).forEach((key) => {
+			const control = formGroup.get(key);
 
-				if (control instanceof FormControl) {
-					control.patchValue(data[key]);
-				} else if (control instanceof FormGroup) {
-					while (typeof data?.[key] == 'string')
-						data[key] = JSON.parse(data?.[key])
+			if (control  instanceof FormArray && data[key] == null) 
+				this.getterA(control).clear()
 
-					this.patch(data?.[key], control);
-				} else if (control instanceof FormArray && Array.isArray(data[key])) {
+			if (control instanceof FormControl) {
+				control.patchValue(data[key]);
+			} 
 
-					const formArray = this.getterA(control);
-					const currentLength = formArray.length;
-					const dataLength = data[key].length;
-					
-					if (currentLength < dataLength) {
-						console.log('a');
-						
-						for (let i = currentLength; i < dataLength; i++) {
-							console.log(data);
-							console.log(Object.keys(data[i][key]));
-							
-							const subGroup = new FormGroup({});
-							formArray.push(subGroup);
-						}
-					}
+			else if (control instanceof FormGroup) {
+				while (typeof data?.[key] == 'string')
+					data[key] = JSON.parse(data?.[key])
 
-					data[key].forEach((value: any, index: number) => {
-						this.patch(value, this.getterG(formArray.at(index)));
-						formArray?.controls?.forEach(array => {
-							if (array instanceof FormGroup && Object.keys(value).join() == this.translate_keys) {
-								let new_lang = this._languages.filter((lang: any) => value.languages_id == lang.id)
-								this.add_lang_tab(tabs, new_lang[0], formGroup)
-							}
+				this.patch(data[key], control);
+			} 
+			
+			else if (control instanceof FormArray && Array.isArray(data[key])) {
+				const formArray = control as FormArray;
+				const dataArray = data[key];
+
+				if (formArray.length < dataArray.length) {
+					for (let i = formArray.length; i < dataArray.length; i++) {
+						const subGroup = new FormGroup({});
+						Object.keys(data).forEach((key) => {
+							subGroup.addControl(key, new FormControl(data[key]));
 						});
-					});
-
-					if (currentLength > dataLength) {
-						for (let i = currentLength - 1; i >= dataLength; i--) {
-							formArray.removeAt(i);
-						}
+						formArray.push(subGroup);
 					}
 				}
-			});
+
+				dataArray.forEach((value: any, index: number) => {
+					const subGroup = formArray.at(index) as FormGroup;
+					this.patch(value, subGroup);
+					formArray?.controls?.forEach(array => {
+						if (array instanceof FormGroup && Object.keys(value).join() == this.translate_keys) {
+							let new_lang = this._languages.filter((lang: any) => value.languages_id == lang.id)
+							this.add_lang_tab(tabs, new_lang[0], formGroup)
+						}
+					});
+				});
+
+				if (formArray.length > dataArray.length) {
+					for (let i = formArray.length - 1; i >= dataArray.length; i--) {
+						formArray.removeAt(i);
+					}
+				}
+			}
+		});
 	}
 
 
+	/* 
+		patch(data: any, formGroup: FormGroup, tabs?: any) {
+			// console.log(Object.keys(data).join(), Object.keys(formGroup.value).join());
+			if (data)
+				Object.keys(data)?.forEach((key) => {
+					
+					const control = formGroup?.get(key);
+	
+					if (control instanceof FormControl) {					
+						control.patchValue(data[key]);
+						if(key == 'video_gallery')
+							console.log(key);
+					} else if (control instanceof FormGroup) {					
+						while (typeof data?.[key] == 'string')
+							data[key] = JSON.parse(data?.[key])
+							
+						this.patch(data?.[key], control);
+					} else if (control instanceof FormArray && Array.isArray(data[key]) && data[key] != null) {					
+						
+							
+						let formArray = this.getterA(control);
+						let currentLength = formArray.length;
+						let dataLength = data[key].length;
+	
+						let _fg = new FormGroup({})
+						 if (currentLength < dataLength) {
+							// console.log('a');
+							
+							for (let i = currentLength; i < dataLength; i++) {
+								// console.log(data);
+								// console.log(Object.keys(data[key][i]));
+								
+	
+								
+								formArray.push(_fg);
+							}
+						} 
+						console.log(formArray);
+						
+						
+						data[key].forEach((value: any, index: number) => {
+							formArray.push(_fg);
+							
+							Object.keys(value).forEach(array_key => {
+								this.getterG(formArray.at(index)).addControl(array_key, new FormControl())
+							});
+							this.patch(value, this.getterG(formArray.at(index)));
+							formArray?.controls?.forEach(array => {
+								if (array instanceof FormGroup && Object.keys(value).join() == this.translate_keys) {
+									let new_lang = this._languages.filter((lang: any) => value.languages_id == lang.id)
+									this.add_lang_tab(tabs, new_lang[0], formGroup)
+								}
+							});
+								
+						});
+						let _currentLength = formArray.length;
+						let _dataLength = data[key].length;
+						console.log(key, _currentLength, _dataLength);
+						
+						if (_currentLength > _dataLength) {
+							for (let i = _currentLength - 1; i >= _dataLength; i--) {
+								formArray.removeAt(i);
+							}
+						}
+					}
+				});
+		}
+	
+	 */
 	/* Función para hacer un Patch de un JSON a un formulario. Si hay checkbox, convierte a true o false, según sea el caso */
 	patchForm(data: any, form: FormGroup, check?: any): any {
 
@@ -97,7 +169,7 @@ export class MasterService {
 					if (form.get(keys_form[index]) instanceof FormArray) {
 						let key = keys_form?.[index] || '';
 						let index_data = Object?.keys(data?.[keys_form?.[index]] || {});
-						
+
 						let index_form = Object.keys(this.getterA(form.controls[key])?.controls)
 
 						for (let index3 = 0; index3 < index_data.length; index3++) {
@@ -214,6 +286,17 @@ export class MasterService {
 		return control as FormGroup
 	}
 
+	createCertificate(name_id: any, name?: any): FormGroup {
+      return this.formBuilder.group({
+         id: [null],
+         name: [name, Validators.required],
+         name_id: [name_id, Validators.required],
+         // file_name: [''],
+         url: [null, Validators.required],
+         active: ['1', Validators.required]
+      });
+   }
+
 	createTranslation(languages_id: any): FormGroup {
 		return this.formBuilder.group({
 			id: [null, Validators.required],
@@ -224,11 +307,18 @@ export class MasterService {
 		});
 	}
 
-	createGallery(url: string, identifier: any): FormGroup {
+	createSimpleTranslation(): FormGroup {
+		return this.formBuilder.group({
+			EN: [null],
+			ES: [null],
+		});
+	}
+
+	createGallery(url: any, identifier: any): FormGroup {
 		return this.formBuilder.group({
 			id: [null],
 			identifier: [identifier],
-			url: [url],
+			url: [url, Validators.required],
 			active: ['1']
 		})
 	}
@@ -267,17 +357,17 @@ export class MasterService {
 		});
 	}
 
-	turn_check(controls: FormControl[]): boolean {
-		return controls.some(control => control.value !== null && control.value !== undefined && control.value !== '' && control.value !== "");
+	turn_check(form: FormGroup, controls: string[]): boolean {
+		console.log(controls.some(control => form.get(control)?.value !== null && form.get(control)?.value !== undefined && form.get(control)?.value !== '' && form.get(control)?.value !== ""));
+		
+		return controls.some(control => form.get(control)?.value !== null && form.get(control)?.value !== undefined && form.get(control)?.value !== '' && form.get(control)?.value !== "");
 	}
 
-	turn_check_array(formArrays: FormArray[]): boolean {
-		return formArrays.some(formArray => {
-			return formArray.controls.some(control => {
-				const textControl = control.get('text') as FormControl;
-				return textControl.value !== null && textControl.value !== undefined;
-			});
-		});
+	turn_check_array(form:FormGroup, controlNames: string[]): boolean {
+		return controlNames.some(controlName => {
+			const control = form.get(controlName) as FormControl;
+			return control.value !== null && control.value !== undefined;
+		 });
 	}
 
 	addslashes(string: any) {
@@ -372,9 +462,9 @@ export class MasterService {
 			let form_array = this.getterA(this.getterA(form.controls[array]).at(item_index)).controls[element];
 			console.log(element);
 			console.log(form_array);
-			
-			
-			
+
+
+
 			if (form_array instanceof FormArray)
 				this.getterA(form_array).push(this.createTranslation(language.id))
 		})

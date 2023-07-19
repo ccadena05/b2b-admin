@@ -221,16 +221,12 @@ export class MasterComponent implements OnInit {
 
 
    edit(row?: any): void {
-      console.log(row.ID, btoa(row.ID));
+      console.log([this.router.url, 'detail', btoa(row.ID), row.ID]);
 
       this.router.navigate([this.router.url, 'detail', btoa(row.ID)])
    }
 
    add(): void {
       this.router.navigate([this.router.url, 'add'])
-   }
-
-   viewCompany() {
-      this.router.navigate([this.router.url, 'detail'])
    }
 }

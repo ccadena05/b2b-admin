@@ -26,17 +26,11 @@ const routes: Routes = [
         path: 'dashboard',
         loadChildren: () =>
           import('./dashboard/dashboard.module').then((m) => m.DashboardModule),
-        //  data: { title: 'Dashboard', breadcrumb: 'DASHBOARD' },
       },
-      {
-        path: 'm/events/detail/:id',
-        component: EventsFormComponent
-        //   data: { title: 'Alumnos', breadcrumb: 'ALUMNOS' },
-      },
+      
       {
         path: 'm/events/add',
         component: EventsFormComponent
-        //   data: { title: 'Alumnos', breadcrumb: 'ALUMNOS' },
       },
       {
         path: 'm/blogs/add',
@@ -47,16 +41,25 @@ const routes: Routes = [
         component: RfqFormComponent
       },
       {
+        path: 'm/companies/add',
+        component: CompaniesDetailComponent
+      },
+
+      {
+        path: 'm/events/detail/:id',
+        component: EventsFormComponent
+      },
+      {
         path: 'm/blogs/detail/:id',
         component: BlogFormComponent
       },
       {
-        path: 'm/companies/detail',
-        component: CompaniesDetailComponent
-      },
-      {
         path: 'm/rfq/detail/:id',
         component: RfqEditComponent
+      },
+      {
+        path: 'm/companies/detail/:id',
+        component: CompaniesDetailComponent
       },
       {
         path: 'm/:modulo',

@@ -175,6 +175,9 @@ module.exports = {
             "gradient-horizontal-light":
                "linear-gradient(90deg,transparent,rgba(0,0,0,.1),transparent)",
          }),
+         opacity: {
+            '15': '0.15'
+         }
       },
    },
    plugins: [

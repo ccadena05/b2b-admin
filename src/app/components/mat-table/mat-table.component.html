@@ -31,7 +31,7 @@
             <p class="h-6 w-6 rounded-full flex justify-center items-center" [ngStyle]="{'background': apd[column?.cell(row)]?.hex}" *ngIf="column?.header.includes('APPROVED')">
                <i class="fa-solid fa-{{apd[column?.cell(row)]?.icon}}"  [ngStyle]="{'color': apd[column?.cell(row)]?.color}"></i>
             </p>
-            <img *ngIf="column?.header.includes('00') && column?.cell(row)" (error)="img[column?.cell(row)] = true" [ngClass]="img[column?.cell(row)] == true ? 'hidden' : ''" [src]="column?.cell(row)" alt="" class="h-8 w-6 object-cover rounded-lg scale-110">
+            <img *ngIf="column?.header.includes('00') && column?.cell(row) && column?.cell(row) != null" (error)="img[column?.cell(row)] = true" [ngClass]="img[column?.cell(row)] == true ? 'hidden' : ''" [src]="column?.cell(row)" alt="" class="h-8 w-6 object-cover rounded-lg scale-110">
             <mat-icon class="text-slate-400" *ngIf="column?.header.includes('00') && (column?.cell(row) == 'null' || column?.cell(row) == null)">image</mat-icon>
          </td>
       </div>
@@ -40,7 +40,8 @@
    <!-- <a [routerLink]=" '/m/' + row.link_id + '/detail/' + row.id" *matRowDef="let row; columns: displayedColumns;"> -->
       <tr mat-row (click)="action(row)" *matRowDef="let row; columns: displayedColumns;"
          class="hover:!bg-slate-50 dark:hover:!bg-slate-100/10 cursor-pointer duration-300">
-         {{row}}</tr>
+         {{row}}
+      </tr>
    <!-- </a> -->
    <tr class="mat-row block text-center justify-center !w-full" *matNoDataRow>
       <td class="mat-cell block !py-4 text-center !w-full dark:text-slate-300" [attr.colspan]="displayedColumns.length">

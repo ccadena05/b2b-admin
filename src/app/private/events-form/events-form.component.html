@@ -1,6 +1,10 @@
 <form #cc [formGroup]="form" (ngSubmit)="save()" id="company-form" class="bg-slate-100 rounded-2xl shadow-lg p-6">
    <div
       class="sticky top-0 right-0 left-full w-[7.5rem] z-50 justify-end text-slate-100 rounded-2xl flex gap-x-2 group">
+      <button *ngIf="router.url.includes('detail')" type="button" class="btn-del" (click)="null">
+         <mat-icon>delete</mat-icon>
+      </button>  
+
       <button type="submit" class="rounded-2xl p-3 h-12 bg-b2b-2">
          <mat-icon>publish</mat-icon>
       </button>
@@ -50,32 +54,16 @@
                   </div>
                </div>
 
-               <!-- 
-               <div
-                  [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"
-                  class="grow" formArrayName="description">
-                  <div *ngFor="let item of master.getterA(form.controls['description']).controls; let i = index"
-                     [formGroupName]="i">
-                     <mat-form-field class="w-full" appearance="outline" *ngIf="item.value.languages_id == tab.id">
-                        <mat-label>Descripción</mat-label>
-                        <textarea formControlName="text" type="text" matInput></textarea>
-                     </mat-form-field>
+               <div (click)="uploadPDF(form.get('image_url'))" class="file-field" *ngIf="i == 0"
+                  [ngClass]="form.controls['image_url'].invalid && save_button ? 'field-error' : ''">
+                  <mat-icon *ngIf="!form.value.image_url" class="text-[rgba(0,0,0,.54)]">upload_file</mat-icon>
+                  <img *ngIf="form.value.image_url" [src]="form.value.image_url" alt=""
+                     class="h-8 rounded-lg aspect-square grow-0 object-contain">
+                  <div class="absolute left-11" [ngClass]="form.value.image_url ? 'top-0 text-xs' : ''">
+                     Portada
                   </div>
-               </div>
- -->
-               <div class="flex gap-x-3">
-                  <!-- <img *ngIf="form.value.image_url" [src]="form.value.image_url" alt="" class="h-10 mt-1 rounded-lg aspect-square grow-0"> -->
-                  <div (click)="uploadPDF(form.get('image_url'))" class="file-field" *ngIf="i == 0"
-                     [ngClass]="form.controls['image_url'].invalid && form.controls['image_url'].touched ? 'border-red-500 text-red-500' : ''">
-                     <mat-icon *ngIf="!form.value.image_url" class="text-[rgba(0,0,0,.54)]">upload_file</mat-icon>
-                     <img *ngIf="form.value.image_url" [src]="form.value.image_url" alt=""
-                        class="h-8 rounded-lg aspect-square grow-0">
-                     <div class="absolute left-11" [ngClass]="form.value.image_url ? 'top-0 text-xs' : ''">
-                        Portada
-                     </div>
-                     <div class="max-w-[12rem] overflow-hidden whitespace-nowrap">
-                        {{form.value.image_url ?? ''}}
-                     </div>
+                  <div class="max-w-[12rem] overflow-hidden whitespace-nowrap">
+                     {{form.value.image_url ?? ''}}
                   </div>
                </div>
 
@@ -85,17 +73,14 @@
                <search-select [label]="'Privacidad'" [select]="sel['event_privacy']" [rq]="true" *ngIf="i == 0"
                   [control]="form.controls['event_privacy']" class="w-full"></search-select>
 
-               <!-- <search-select [label]="'Categoría del evento'" [select]="sel['category']" [rq]="true" *ngIf="i == 0"
-                  [control]="form.controls['category']" class="w-full"></search-select> -->
-
                <div class="flex gap-x-3" *ngIf="i == 0">
-                  <mat-form-field appearance="outline" class="w-full max-w-[50%]">
+                  <mat-form-field appearance="outline" class="w-full duration-300" [ngClass]="form.value.cost == 0 ? 'max-w-full' : 'max-w-[50%]'">
                      <mat-label>Costo</mat-label>
                      <input formControlName="cost" type="text" matInput>
                      <mat-error>Ingresa un valor válido</mat-error>
                   </mat-form-field>
                   <search-select [label]="'Moneda'" [select]="sel['coin']" [rq]="true" [control]="form.controls['coin']"
-                     class="w-full max-w-[calc(50%-0.75rem)]"></search-select>
+                     class="w-full max-w-[calc(50%-0.75rem)] duration-300" [ngClass]="form.value.cost == 0 ? 'hidden' : ''"></search-select>
                </div>
 
                <mat-form-field appearance="outline" class="basis-64 grow" *ngIf="i == 0">
@@ -114,39 +99,35 @@
                <search-select [label]="'Empresa'" [select]="sel['companies']" *ngIf="i == 0"
                   [control]="form.controls['profile_company_id']" class="w-full"></search-select>
 
-                  <mat-form-field appearance="outline">
-                     <mat-label>Organizador</mat-label>
-                     <input formControlName="organizer" type="text" matInput>
-                     <mat-error>Ingresa un valor válido</mat-error>
-                  </mat-form-field>
+               <mat-form-field appearance="outline" *ngIf="i == 0">
+                  <mat-label>Organizador</mat-label>
+                  <input formControlName="organizer" type="text" matInput>
+                  <mat-error>Ingresa un valor válido</mat-error>
+               </mat-form-field>
                
-                  <div class="flex gap-x-6 w-full" [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                  <div class="flex gap-x-6 w-full" [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'" *ngIf="i == 0">
                      <recursive-select [select]="sel['category']" label="Categoría" class="w-full flex basis-1/3 gap-x-6"
                          [control]="form.controls['category']" [rq]="true" [generation]="0"
                          (categorySelected)="onCategorySelected($event)"></recursive-select>
                  </div>
 
-               <div class="flex flex-col mb-6 file-field !justify-start" *ngIf="i == 0"
-                  [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
-                  <mat-radio-group formControlName="form" class="flex gap-x-3">
-                     <mat-radio-button class="!text-slate-800" [value]="1"
-                        [checked]="form.value.url_form  && router.url.includes('detail')">Formulario de registro
-                        externo</mat-radio-button>
-                     <mat-radio-button class="!text-slate-800" [value]="2"
-                        [checked]="!form.value.url_form  && router.url.includes('detail')">Formulario de registro
-                        B2B</mat-radio-button>
-                  </mat-radio-group>
+               <div *ngIf="i == 0" [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                  <div class="flex flex-col mb-6 file-field !justify-start">
+                     <mat-radio-group formControlName="form" class="flex gap-x-3">
+                        <mat-radio-button #external class="!text-slate-800" [value]="1"
+                           [checked]="form.value.url_form != null">Formulario de registro externo</mat-radio-button>
+                        <mat-radio-button class="!text-slate-800" [value]="2"
+                           [checked]="form.value.url_form == null">Formulario de registro B2B</mat-radio-button>
+                     </mat-radio-group>
+                  </div>
+                  <mat-form-field *ngIf="form.value.form == 1 || external.checked" appearance="outline" class="w-full">
+                     <mat-label>Enlace a formulario</mat-label>
+                     <input formControlName="url_form" type="text" matInput>
+                     <mat-error>Ingresa un valor válido</mat-error>
+                  </mat-form-field>
                </div>
 
-               <mat-form-field *ngIf="form.value.form === 1" appearance="outline"
-                  [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
-                  <mat-label>Enlace a formulario</mat-label>
-                  <input formControlName="url_form" type="text" matInput>
-                  <mat-error>Ingresa un valor válido</mat-error>
-               </mat-form-field>
-
-               <div
-                  [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+               <div class="mb-6" [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
                   <div formArrayName="description"
                      *ngFor="let item of master.getterA(form.controls['description']).controls; let i = index;">
                      <div [formGroupName]="i">
@@ -155,25 +136,14 @@
                   </div>
                </div>
 
-               <div class="grow" formArrayName="description"
-                  [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"
-                  class="quill_editor mb-6 border-2 border-[rgba(0,0,0,0.12)] hover:border-slate-900 focus:border-slate-900 duration-300 rounded-2xl">
-                  <div *ngFor="let item of master.getterA(form.controls['description']).controls; let i = index"
-                     [formGroupName]="i">
-                     <div id="editor" *ngIf="item.value.languages_id == tab.id">
-                     </div>
-                  </div>
-               </div>
-
-               <mat-form-field *ngIf="router.url.includes('detail')">
+               <mat-form-field appearance="outline" *ngIf="router.url.includes('detail')" [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
                   <mat-label>Resumen</mat-label>
                   <textarea matInput formControlName="event_summary"></textarea>
                   <mat-error>Ingresa un valor válido.</mat-error>
                </mat-form-field>
 
-               <mat-form-field class="w-full"
-                  [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"
-                  appearance="outline" *ngIf="i == 0">
+               <mat-form-field class="w-full" appearance="outline" *ngIf="i == 0"
+                  [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
                   <mat-label>Etiquetas</mat-label>
                   <mat-chip-list #chipList formControlName="tags">
                      <mat-chip *ngFor="let tag of form.value.tags?.split(',')" (removed)="removeTag(tag)">
@@ -187,53 +157,53 @@
                   </mat-chip-list>
                </mat-form-field>
 
-               <!-- <mat-form-field *ngIf="i == 0 && router.url.includes('detail')" appearance="outline">
-                  <mat-label>Vídeo URL</mat-label>
-                  <input formControlName="video_url" type="text" matInput>
-                  <mat-error>Ingresa un valor válido</mat-error>
-               </mat-form-field> -->
 
-
-                  <div formArrayName="video_gallery" *ngIf="router.url.includes('detail')">
-                     <div *ngFor="let item of master.getterA(form.controls['video_gallery']).controls; let i = index"
-                        [formGroupName]="i"  class="flex gap-x-3 items-center">
-                        <div *ngIf="i == 0" (click)="master.getterA(form.controls['video_gallery']).push(master.createGallery('', item.value.identifier))">
-                           <mat-icon>add</mat-icon>
-                        </div>
-                        <mat-form-field class="w-full" appearance="outline">
-                           <mat-label>URL</mat-label>
-                           <input formControlName="url" type="text" matInput [pattern]="video_rexexp">
-                           <mat-error>Ingresa un valor válido</mat-error>
-                        </mat-form-field>
-                        <div (click)="master.getterA(form.controls['video_gallery']).length > 1 ? master.getterA(form.controls['video_gallery']).removeAt(i) : null">
-                           <mat-icon>delete</mat-icon>
-                        </div>
-                        
+               <div *ngIf="router.url.includes('detail') && i == 0" [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                  <div class="flex gap-x-3 justify-between items-center w-full file-field">
+                     <div class="flex gap-x-3">
+                        <mat-icon class="text-[rgba(0,0,0,.54)]">video_library</mat-icon>
+                        Agregar nuevo enlace para galería de vídeo
+                     </div>
+                     <div class="btn-1" (click)="master.getterA(form.controls['video_gallery']).push(master.createGallery('', master.getterA(form.controls['video_gallery'])?.at(0)?.value?.identifier))">
+                        <mat-icon>add</mat-icon>
                      </div>
                   </div>
+                  <div formArrayName="video_gallery">
+                     <div *ngFor="let item of master.getterA(form.controls['video_gallery']).controls; let i = index"
+                     [formGroupName]="i"  class="flex gap-x-3 items-start">
+                     
+                     <mat-form-field class="w-full" appearance="outline">
+                        <mat-label>Url para galería de vídeos</mat-label>
+                        <input formControlName="url" type="text" matInput [pattern]="video_rexexp">
+                        <mat-error>Ingresa un valor válido</mat-error>
+                        <mat-hint>Link de youtube</mat-hint>
+                     </mat-form-field>
+                     <button type="button" class="btn-del mt-1" [disabled]="master.getterA(form.controls['video_gallery']).length == 1" (click)="master.getterA(form.controls['video_gallery']).length > 1 ? master.getterA(form.controls['video_gallery']).removeAt(i) : null">
+                        <mat-icon>delete</mat-icon>
+                     </button>   
+                  </div>
+               </div>
+               </div>
                   
                  
 
-               <ng-container class="flex basis-full" *ngIf="i == 0 && router.url.includes('detail')"
+               <div class="flex basis-full" *ngIf="i == 0 && router.url.includes('detail')"
                   [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
-                  <div (click)="uploadGallery(form.controls['image_gallery'])" class="file-field w-full !h-20">
-                     <mat-icon class="text-[rgba(0,0,0,.54)]">image</mat-icon>
+                  <div (click)="uploadGallery(form.controls['image_gallery'])" class="file-field !w-full !h-20">
+                     <mat-icon class="text-[rgba(0,0,0,.54)]">photo_library</mat-icon>
                      <div class="absolute left-11 duration-300"
-                        [ngClass]="form.value.image_gallery.length > 0 ? 'top-0 text-xs' : ''">
+                        [ngClass]="form.value?.image_gallery?.length > 0 ? 'top-0 text-xs' : ''">
                         Galería de imágenes
                      </div>
 
                      <div cdkDropList class="flex gap-x-3 mt-3" (cdkDropListDropped)="drop($event)">
-                        <div class="cursor-move" *ngFor="let item of form.value.image_gallery" cdkDrag>
+                        <div class="cursor-move" *ngFor="let image of form.value?.image_gallery" cdkDrag>
                            <div class="example-custom-placeholder" *cdkDragPlaceholder></div>
-                           <img class="h-10 aspect-square object-cover rounded-lg" [src]="item.url" alt="">
+                           <img class="h-10 aspect-square object-cover rounded-lg" *ngIf="image?.url" [src]="image?.url" alt="">
                         </div>
                      </div>
                   </div>
-               </ng-container>
-
-               
-               
+               </div>
             </div>
          </div>
       </mat-tab>
