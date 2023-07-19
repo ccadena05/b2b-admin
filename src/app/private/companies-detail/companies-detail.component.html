@@ -119,14 +119,17 @@
                                 <search-select *ngIf="i == 0" [label]="'País de origen'" [select]="sel['all_countrys']"
                                     [rq]="true" [control]="form.controls['country_origin']"
                                     class="w-full"></search-select>
+
                                 <div class="title" class="title w-full"
                                     [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"
                                     *ngIf="i == 0">
                                     Ubicación
                                 </div>
+
                                 <div *ngIf="i == 0" class="title w-full"
                                     [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"
                                     id="map" #map class="aspect-[3/1] basis-full mb-4 rounded-2xl"></div>
+
                                 <div *ngIf="i == 0" class="title w-full"
                                     [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"
                                     class="flex justify-center items-center mb-6">
@@ -134,6 +137,7 @@
                                         Obtener Información
                                     </div>
                                 </div>
+
                                 <location [form]="form" *ngIf="i == 0"
                                     [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
                                 </location>
@@ -538,13 +542,13 @@
                             </div>
                         </mat-tab>
                         <mat-tab label="Productos">
-                            <app-products-table></app-products-table>
+                            <app-mat-table [dataToDisplay]="products"></app-mat-table>
                         </mat-tab>
                         <mat-tab label="Servicios">
-                            <app-services-table></app-services-table>
+                            <app-mat-table [dataToDisplay]="products"></app-mat-table>
                         </mat-tab>
                         <mat-tab label="RFQ">
-                            <app-rfq-table></app-rfq-table>
+                            <app-mat-table [dataToDisplay]="requierements"></app-mat-table>
                         </mat-tab>
                     </form>
                 </mat-tab-group>
