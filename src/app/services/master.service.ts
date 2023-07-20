@@ -9,6 +9,9 @@ import { MatCheckbox } from '@angular/material/checkbox';
 import { config } from 'src/config';
 import { ProviderService } from './provider/provider.service';
 import { Response } from '../models/response.model';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogoConfirmacionComponent } from '../components/dialogo-confirmacion/dialogo-confirmacion.component';
+import { Location } from '@angular/common';
 // import { CloudinaryWidgetManager } from 'ngx-cloudinary-upload-widget';
 
 @Injectable({
@@ -19,10 +22,12 @@ export class MasterService {
 	translate_keys = "id,text,active,identifier,languages_id";
 
 	constructor(
-		private snackbar: MatSnackBar,
-		private formBuilder: FormBuilder,
+		private dialog: MatDialog,
+		private location: Location,
 		private jwt: JwtAuthService,
+		private snackbar: MatSnackBar,
 		private sanitizer: DomSanitizer,
+		private formBuilder: FormBuilder,
 		private provider: ProviderService
 		// private manager: CloudinaryWidgetManager
 	) {
@@ -34,7 +39,7 @@ export class MasterService {
 		Object.keys(data).forEach((key) => {
 			const control = formGroup.get(key);
 
-			if (control  instanceof FormArray && data[key] == null) 
+			if (control instanceof FormArray) 
 				this.getterA(control).clear()
 
 			if (control instanceof FormControl) {
@@ -55,9 +60,12 @@ export class MasterService {
 				if (formArray.length < dataArray.length) {
 					for (let i = formArray.length; i < dataArray.length; i++) {
 						const subGroup = new FormGroup({});
-						Object.keys(data).forEach((key) => {
-							subGroup.addControl(key, new FormControl(data[key]));
+						dataArray.forEach((array: any) => {
+							Object.keys(array).forEach((sub_key: any) => {
+								subGroup.addControl(sub_key, new FormControl(data[sub_key]));
+							});
 						});
+
 						formArray.push(subGroup);
 					}
 				}
@@ -80,162 +88,6 @@ export class MasterService {
 				}
 			}
 		});
-	}
-
-
-	/* 
-		patch(data: any, formGroup: FormGroup, tabs?: any) {
-			// console.log(Object.keys(data).join(), Object.keys(formGroup.value).join());
-			if (data)
-				Object.keys(data)?.forEach((key) => {
-					
-					const control = formGroup?.get(key);
-	
-					if (control instanceof FormControl) {					
-						control.patchValue(data[key]);
-						if(key == 'video_gallery')
-							console.log(key);
-					} else if (control instanceof FormGroup) {					
-						while (typeof data?.[key] == 'string')
-							data[key] = JSON.parse(data?.[key])
-							
-						this.patch(data?.[key], control);
-					} else if (control instanceof FormArray && Array.isArray(data[key]) && data[key] != null) {					
-						
-							
-						let formArray = this.getterA(control);
-						let currentLength = formArray.length;
-						let dataLength = data[key].length;
-	
-						let _fg = new FormGroup({})
-						 if (currentLength < dataLength) {
-							// console.log('a');
-							
-							for (let i = currentLength; i < dataLength; i++) {
-								// console.log(data);
-								// console.log(Object.keys(data[key][i]));
-								
-	
-								
-								formArray.push(_fg);
-							}
-						} 
-						console.log(formArray);
-						
-						
-						data[key].forEach((value: any, index: number) => {
-							formArray.push(_fg);
-							
-							Object.keys(value).forEach(array_key => {
-								this.getterG(formArray.at(index)).addControl(array_key, new FormControl())
-							});
-							this.patch(value, this.getterG(formArray.at(index)));
-							formArray?.controls?.forEach(array => {
-								if (array instanceof FormGroup && Object.keys(value).join() == this.translate_keys) {
-									let new_lang = this._languages.filter((lang: any) => value.languages_id == lang.id)
-									this.add_lang_tab(tabs, new_lang[0], formGroup)
-								}
-							});
-								
-						});
-						let _currentLength = formArray.length;
-						let _dataLength = data[key].length;
-						console.log(key, _currentLength, _dataLength);
-						
-						if (_currentLength > _dataLength) {
-							for (let i = _currentLength - 1; i >= _dataLength; i--) {
-								formArray.removeAt(i);
-							}
-						}
-					}
-				});
-		}
-	
-	 */
-	/* Función para hacer un Patch de un JSON a un formulario. Si hay checkbox, convierte a true o false, según sea el caso */
-	patchForm(data: any, form: FormGroup, check?: any): any {
-
-		if (check) {
-			check.forEach((el: any) => {
-				data[el] = data[el] == 1 ? true : false
-			});
-		}
-		let keys_form = Object.keys(form.value)
-		let keys_data = Object.keys(data)
-
-		for (let index = 0; index < keys_form.length; index++) {
-			for (let index2 = 0; index2 < keys_data.length; index2++) {
-				if (keys_form[index] == keys_data[index2]) {
-					if (form.get(keys_form[index]) instanceof FormArray) {
-						let key = keys_form?.[index] || '';
-						let index_data = Object?.keys(data?.[keys_form?.[index]] || {});
-
-						let index_form = Object.keys(this.getterA(form.controls[key])?.controls)
-
-						for (let index3 = 0; index3 < index_data.length; index3++) {
-							for (let index4 = 0; index4 < index_form.length; index4++) {
-								if (index_data[index3] == index_form[index4]) {
-									let subkey_data = Object.keys(data[keys_form[index]][index3])
-									let subkey_form = Object.keys(this.getterA(form?.controls[keys_form[index]]).at(index3).value)
-
-									for (let index5 = 0; index5 < subkey_data.length; index5++) {
-										for (let index6 = 0; index6 < subkey_form.length; index6++) {
-											if (subkey_data[index5] == subkey_form[index6]) {
-												let fc = this.getterC(this.getterG(this.getterA(form?.controls[keys_form[index]]).at(index3)).controls[subkey_data[index5]])
-												fc?.patchValue(data[keys_form[index]][index3][subkey_data[index5]].toString())
-											}
-										}
-
-									}
-								}
-							}
-						}
-					} else if (keys_form[index] == 'schedule_week' && form.get(keys_form[index]) instanceof FormGroup) {
-
-						// console.log(JSON.parse(JSON.parse(data[keys_form[index].replace(/\\\\\\/g, '\\')])));
-						// console.log(Object.keys(form.get(keys_form[index])?.value));
-						let subkey_form_g = Object.keys(form.get(keys_form[index])?.value)
-						let subkey_data_g = Object.keys(JSON.parse(JSON.parse(data[keys_form[index].replace(/\\\\\\/g, '\\')])))
-						console.log(subkey_form_g, subkey_data_g);
-						for (let index7 = 0; index7 < subkey_form_g.length; index7++) {
-							for (let index8 = 0; index8 < subkey_data_g.length; index8++) {
-								if (subkey_data_g[index8] == subkey_form_g[index7]) {
-									let fc = this.getterG(form.controls[keys_form[index]]).controls[subkey_form_g[index7]]
-									fc.patchValue(JSON.parse(JSON.parse(data[keys_form[index].replace(/\\\\\\/g, '\\')]))[subkey_data_g[index8]])
-								}
-
-							}
-
-						}
-
-					}
-
-					else if (keys_form[index] == 'schedule_week' || keys_form[index] == 'tags') {
-						try {
-							// console.log(JSON.parse(data[keys_form[index].replace(/\\\\\\/g, '\\')]));
-							// console.log(data[keys_form[index]].replace(/\\\\\\/g, '\\'));
-
-							form.patchValue({
-								[keys_form[index]]: JSON.parse(data[keys_form[index].replace(/\\\\\\/g, '\\')])
-							})
-						} catch (error) {
-							form.patchValue({
-								[keys_form[index]]: data[keys_form[index]]
-							})
-						}
-					}
-
-					else {
-
-
-						let value = typeof data[keys_form[index]] == 'number' ? data[keys_form[index]].toString() : data[keys_form[index]]
-						form.patchValue({
-							[keys_form[index]]: value
-						})
-					}
-				}
-			}
-		}
 	}
 
 	concat(data: any, array: any, key: any) {
@@ -297,10 +149,10 @@ export class MasterService {
       });
    }
 
-	createTranslation(languages_id: any): FormGroup {
+	createTranslation(languages_id: any, identifier?: any): FormGroup {
 		return this.formBuilder.group({
-			id: [null, Validators.required],
-			identifier: [null, Validators.required],
+			id: [null, identifier ? Validators.required : null],
+			identifier: [null, identifier ? Validators.required : null],
 			languages_id: [languages_id, Validators.required],
 			text: [null, Validators.required],
 			active: ['1', Validators.required],
@@ -433,12 +285,13 @@ export class MasterService {
 
 			Object.keys(form.controls).forEach(element => {
 				if (form.controls[element] instanceof FormArray)
-					this.getterA(form.controls[element]).push(this.createTranslation(language.id))
+					this.getterA(form.controls[element]).push(this.createTranslation(language.id,  form.value?.[element]?.[0]?.['identifier'] ?? null))
 			})
 		}
 	}
 
 	del_lang_tab(tabs: any, languages_id: any, form: FormGroup, tab_index: any) {
+
 		if (tabs.length > 1) {
 			tabs.splice(tab_index, 1)
 
@@ -453,6 +306,7 @@ export class MasterService {
 				}
 			});
 		}
+
 	}
 
 	add_lang_tab_array(tabs: any, language: any, form: FormGroup, array: any, item_index: any) {
@@ -466,7 +320,7 @@ export class MasterService {
 
 
 			if (form_array instanceof FormArray)
-				this.getterA(form_array).push(this.createTranslation(language.id))
+				this.getterA(form_array).push(this.createTranslation(language.id,this.getterA(this.getterA(form.controls[array]).at(item_index)).value[element]?.[0]?.['identifier'] ?? null))
 		})
 	}
 
@@ -509,4 +363,48 @@ export class MasterService {
 			}
 		)
 	}
+
+	save(model: string, action: string, data: any) {
+      this.dialog.open(DialogoConfirmacionComponent).afterClosed().subscribe(
+         confirm => {
+            if (confirm)
+               this.provider[action.includes('update') ? 'BD_ActionAdminPut' : 'BD_ActionAdminPost'](model, action, data).subscribe(
+                  (data: Response) => {
+							console.log(data);
+							
+                     if(!data.error) { // Se completó
+								this.location.back()
+                        this.snack(2)
+							}
+                     else // Error
+                        this.snack(0)	
+                  }
+               )
+            else
+               this.snack(1, 'El elemento sigue visible')
+         }
+      )
+   }
+
+
+
+	delete(model: string, action: string, data: any) {
+      this.dialog.open(DialogoConfirmacionComponent).afterClosed().subscribe(
+         confirm => {
+            if (confirm)
+               this.provider.BD_ActionAdminDel(model, action, data).subscribe(
+                  (data: Response) => {
+                     if(!data.error) {// Se completó
+								this.location.back()
+                        this.snack(2)
+							}
+                     else // Error
+                        this.snack(0)	
+                  }
+               )
+            else
+               this.snack(1, 'El elemento sigue visible')
+         }
+      )
+   }
 }

@@ -134,15 +134,15 @@ body {
 
 @layer components {
    .btn-1 {
-      @apply flex justify-center items-center bg-b2b-2 hover:bg-[#2491ff] disabled:bg-[#57abff] text-white disabled:text-slate-300 h-12 w-12 rounded-xl shrink-0 grow-0 duration-300 cursor-pointer; 
+      @apply flex justify-center items-center bg-b2b-2 hover:bg-[#2491ff] disabled:bg-[#57abff] disabled:cursor-not-allowed text-white disabled:text-slate-300 h-12 w-12 rounded-xl shrink-0 grow-0 duration-300 cursor-pointer shadow-lg; 
    }
 
    .btn-2 {
-      @apply flex justify-center items-center bg-slate-100/15 hover:bg-[#cddbea]/15 disabled:bg-[#a9c1db]/15 text-white disabled:text-slate-300 h-12 w-12 rounded-xl shrink-0 grow-0 duration-300 cursor-pointer; 
+      @apply flex justify-center items-center bg-slate-200 hover:bg-slate-100 disabled:bg-slate-50 text-b2b-2 disabled:text-[#57abff] disabled:cursor-not-allowed h-12 w-12 rounded-xl shrink-0 grow-0 duration-300 cursor-pointer shadow-lg; 
    }
 
    .btn-del {
-      @apply flex justify-center items-center bg-[#ef0076] hover:bg-[#ff2491] disabled:bg-[#ff57ab] text-white disabled:text-slate-300 h-12 w-12 rounded-xl shrink-0 grow-0 duration-300 cursor-pointer; 
+      @apply flex justify-center items-center bg-[#ef0076] hover:bg-[#ff2491] disabled:bg-[#ff57ab] disabled:cursor-not-allowed text-white disabled:text-slate-300 h-12 w-12 rounded-xl shrink-0 grow-0 duration-300 cursor-pointer shadow-lg; 
    }
 
    .btn-p {
@@ -328,7 +328,7 @@ input, textarea {
 
 .mat-dialog-container {
    border-radius: 0.75rem !important;
-   background: $bblue !important;
+   background: #fff !important;
 }
 
 mat-tab-group {
@@ -572,9 +572,9 @@ mat-radio-button .mat-ripple-element {
 }
 
 .mat-snack-bar-container {
-   border-radius: 1rem;
-   background: rgba(15, 23, 42, 0.33);
-   backdrop-filter: blur(8px);
+   border-radius: 1rem !important;
+   background: rgba(241, 245, 249, 0.33) !important;
+   backdrop-filter: blur(8px) !important;
 }
 
 form {

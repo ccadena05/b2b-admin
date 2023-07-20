@@ -35,8 +35,8 @@ export class RfqEditComponent implements OnInit {
          approved: [null],
          profile_company_id: [null],
          rfc: [this.ls.getItem("B2B_RFC")],
-         title: this.formBuilder.array([this.master.createTranslation('1')]),
-         description: this.formBuilder.array([this.master.createTranslation('1')]),
+         title: this.formBuilder.array([this.master.createTranslation('1', null)]),
+         description: this.formBuilder.array([this.master.createTranslation('1', null)]),
          country: [null],
          state: [null],
          city: [null],
@@ -44,7 +44,7 @@ export class RfqEditComponent implements OnInit {
          image_url: [null],
          is_rfq: [0],
          activity: [null],
-         materials: this.formBuilder.array([this.master.createTranslation('1')]),
+         materials: this.formBuilder.array([this.master.createTranslation('1', null)]),
          volumes: [null],
          budget: [null],
          simple_isos: [null],
@@ -169,6 +169,10 @@ export class RfqEditComponent implements OnInit {
             console.log(data)
          }
       )
+   }
+
+   delete() {
+      this.master.delete('rfq', 'delete_rfq', { id: this.form.value.id })
    }
 
    uploadPDF(control: any) {

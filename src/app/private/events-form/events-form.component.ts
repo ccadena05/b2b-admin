@@ -19,6 +19,8 @@ import Quill from 'quill';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { JwtAuthService } from 'src/app/services/auth/jwt-auth.service';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogoConfirmacionComponent } from 'src/app/components/dialogo-confirmacion/dialogo-confirmacion.component';
 
 @Component({
    selector: 'app-events-form',
@@ -69,6 +71,7 @@ export class EventsFormComponent implements OnInit {
       public router: Router,
       private ls: LocalStoreService,
       private jwt: JwtAuthService,
+      private dialog: MatDialog,
       private formBuilder: FormBuilder,
       private provider: ProviderService,
       private manager: CloudinaryWidgetManager,
@@ -78,8 +81,8 @@ export class EventsFormComponent implements OnInit {
    ) {
       this.form = this.formBuilder.group({
          id: [null],
-         title: this.formBuilder.array([this.master.createTranslation('1')]),
-         description: this.formBuilder.array([this.master.createTranslation('1')]),
+         title: this.formBuilder.array([this.master.createTranslation('1', null)]),
+         description: this.formBuilder.array([this.master.createTranslation('1', null)]),
          image_url: [null, Validators.required],
          cost: [null, Validators.required],
          coin: [null, Validators.required],
@@ -145,7 +148,7 @@ export class EventsFormComponent implements OnInit {
                this.sel['coin'] = [{ name: 'MXN', id: 0 }, { name: 'USD', id: 1 }]
                this.sel['event_privacy'] = [{ name: 'Público', id: 0 }, { name: 'Registrado', id: 1 }, { name: 'Premium', id: 2 }]
 
-               this.provider.BD_ActionGet('general', 'get_category_events', { tree_size: -1 }).subscribe(
+               this.provider.BD_ActionGet('general', 'get_category_events', { tree_size: 0, id_category: 643 }).subscribe(
                   (category: Response) => {
                      console.log(category.msg);
                      this.sel['category'] = category.msg
@@ -164,7 +167,7 @@ export class EventsFormComponent implements OnInit {
                                     this.provider.BD_ActionAdminGet('events', 'get_event_by_id', { event_id: id }).subscribe(
                                        (event: Response) => {
                                           if (!event.error) {
-                                             console.log('DB',event.msg);
+                                             console.log('DB', event.msg);
                                              this.ls.update('bc', [
                                                 {
                                                    item: 'Eventos',
@@ -205,19 +208,11 @@ export class EventsFormComponent implements OnInit {
    save() {
       this.save_button = true;
       this.form.controls['user_update'].patchValue(this.jwt.getUser())
-      this.form.controls['category'].patchValue(this.selected_all[0])
-      this.form.controls['sub_category'].patchValue(this.selected_all[this.selected_all.length - 1])
-      if (this.router.url.includes('detail')) {
-         this.provider.BD_ActionAdminPut('events', 'update_event', this.form.value).subscribe(
-            data => console.log(data)
-         )
-      } else {
-         this.provider.BD_ActionAdminPost('events', 'insert_event', this.form.value).subscribe(
-            data => console.log(data)
-         )
-      }
-      console.log(this.form.value)
+      this.master.save('events', this.router.url.includes('detail') ? 'update_event' : 'insert_event', this.form.value)
+   }
 
+   delete() {
+      this.master.delete('events', 'delete_event', { id: this.form.value.id })
    }
 
    onCategorySelected(category: any): void {
@@ -227,46 +222,13 @@ export class EventsFormComponent implements OnInit {
       console.log(this.selected_all);
 
       const categoryId = category.id;
+      this.form.controls['category'].patchValue(this.selected_all[0])
+      this.form.controls['sub_category'].patchValue(this.selected_all[this.selected_all.length - 1])
 
       this.provider.BD_ActionGet('general', 'get_category_events', { tree_size: 0, id_category: categoryId })
          .subscribe((category_blogs: Response) => {
             category.children = category_blogs.msg;
          });
-   }
-
-   // deltaToHtml(delta: any): string {
-   //    this._ql = new Quill(document.createElement('div'));
-   //    this._ql.setContents(delta);
-   //    return this._ql?.root.innerHTML;
-   //  }
-
-   addTab(language: any) {
-      if (!this.tabs.some((item: any) => item.id == language.id) && (language.id != '1' || language.id != 1)) {
-         this.tabs.push(language);
-         Object.keys(this.form.controls).forEach(element => {
-            if (this.form.controls[element] instanceof FormArray)
-               this.master.getterA(this.form.controls[element]).push(this.master.createTranslation(language.id))
-         })
-      }
-   }
-
-   deleteTab(index: any, languages_id: any) {
-      if (this.tabs.length > 1) {
-         this.tabs.splice(index, 1)
-
-         Object.keys(this.form.controls).forEach(element => {
-            if (this.form.controls[element] instanceof FormArray) {
-               const formArray = this.master.getterA(this.form.controls[element]);
-               const indexToRemove = formArray.controls.findIndex(
-                  control => control.value.languages_id == languages_id
-               )
-               if (indexToRemove >= 0) {
-                  formArray.at(indexToRemove).get('active')?.patchValue('0')
-               }
-               // formArray.removeAt(indexToRemove)
-            }
-         });
-      }
    }
 
    uploadGallery(control: any) {

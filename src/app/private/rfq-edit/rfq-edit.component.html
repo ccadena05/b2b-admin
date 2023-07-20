@@ -2,18 +2,18 @@
 class=" w-full overflow-scroll rfq relative p-6 rounded-2xl bg-white">
 <div class="title">Editar requerimiento</div>
    <div class="sticky top-0 right-10 left-full w-[7.5rem] z-50 justify-end text-slate-100 rounded-2xl flex gap-x-2">
-      <div (click)="approved_rfq()" class="rounded-2xl p-3 h-12 bg-b2b-2 cursor-pointer">
+      <div type="button" class="btn-del" (click)="delete()">
+         <mat-icon>delete</mat-icon>
+      </div>  
+      <div (click)="approved_rfq()" class="btn-1">
          <mat-icon>{{form.value.approved == 1 ? 'visibility' : 'visibility_off'}}</mat-icon>
       </div>
-      <span class="relative flex h-12 w-12">
-         <span #ping class="absolute inline-flex h-full w-full rounded-2xl bg-sky-400 opacity-75"></span>
-         <button type="submit" class="relative rounded-2xl p-3 h-12 bg-b2b-2">
-            <mat-icon>save</mat-icon>
-         </button>
-      </span>
-      <div [matMenuTriggerFor]="addLang" class="rounded-2xl p-3 h-12 bg-b2b-2 cursor-pointer">
+      <button type="submit" class="btn-1" [disabled]="form.invalid">
+         <mat-icon>edit</mat-icon>
+     </button>
+      <div [matMenuTriggerFor]="addLang" class="btn-2">
          <mat-icon>translate</mat-icon>
-      </div>
+     </div>
 
       <mat-menu #addLang="matMenu">
          <div class="text-slate-100 disabled:text-slate-500" mat-menu-item

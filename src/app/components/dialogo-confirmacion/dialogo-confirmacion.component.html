@@ -1,12 +1,12 @@
-<div class="w-48">
-   <h1 mat-dialog-title>Confirmación</h1>
+<div class="!w-48 bg-white">
+   <h1 mat-dialog-title class="title">Confirmación</h1>
    <div mat-dialog-content>
       <p>{{data}}</p>
       ¿Deseas proceder?
    </div>
-   <div mat-dialog-actions class="flex justify-between">
-      <button class="t-btn-secondary" (click)="cerrarDialogo()">No</button>
-      <button class="t-btn-primary" (click)="confirmado()" cdkFocusInitial>Sí</button>
+   <div mat-dialog-actions class="flex justify-between gap-x-3">
+      <button class="btn-2 !w-[90px]" (click)="cerrarDialogo()">No</button>
+      <button class="btn-1 !w-[90px]" (click)="confirmado()" cdkFocusInitial>Sí</button>
    </div>
 
 </div>

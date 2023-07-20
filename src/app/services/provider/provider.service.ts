@@ -56,7 +56,7 @@ export class ProviderService {
    }
 
    BD_ActionAdminPost( modelo: any, action: any, data?: any ) {
-      // console.log(this.urlAdmin + modelo + this._url + action, data, {headers: this.headers()});
+      console.log(this.urlAdmin + modelo + this._url + action, data, {headers: this.headers()});
       return this.http.post(this.urlAdmin + modelo + this._url + action, data, {
          headers: this.headers()
       });
@@ -73,6 +73,12 @@ export class ProviderService {
       console.log(this.urlAdmin + modelo + this._url + action, data, { headers: this.headers()});
       let put = this.http.put(this.urlAdmin + modelo + this._url + action, data, { headers: this.headers()})
 
+      return put;
+   }
+
+   BD_ActionAdminDel( modelo: any, action: any, params: any ) {
+      console.log(this.urlAdmin + modelo + this._url + action, { headers: this.headers(), params: this.params(params)});
+      let put = this.http.delete(this.urlAdmin + modelo + this._url + action, { headers: this.headers(), params: this.params(params)})
       return put;
    }
 

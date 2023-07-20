@@ -60,8 +60,8 @@ export class BlogFormComponent implements OnInit {
          id: [null],
          user_create: [this.jwt.getUser()],
          user_update: [this.jwt.getUser()],
-         title: this.formBuilder.array([this.master.createTranslation('1')]),
-         description: this.formBuilder.array([this.master.createTranslation('1')]),
+         title: this.formBuilder.array([this.master.createTranslation('1',  null)]),
+         description: this.formBuilder.array([this.master.createTranslation('1',  null)]),
          image_url: [null, Validators.required],
          image_gallery: this.formBuilder.array([]),
          video_url: [null],
@@ -69,13 +69,17 @@ export class BlogFormComponent implements OnInit {
          tags: [null, Validators.required],
          category: [null, Validators.required],
          sub_category: [null, Validators.required],
-         profile_company_id: [this.ls.getItem(config.APP_COMPANY)],
+         profile_company_id: [null],
          released: [null]
       })
+      console.log(this.form);
+
    }
 
    ngOnInit(): void {
       this.get();
+      console.log(this.form);
+
    }
 
    ngAfterViewInit() {
@@ -84,7 +88,7 @@ export class BlogFormComponent implements OnInit {
    uploadPDF(control: any,) {
       this.manager.open(config.upload_config).subscribe(
          data => {
-            if (data.event == 'success') 
+            if (data.event == 'success')
                control?.patchValue(data.info.secure_url)
          }
       )
@@ -94,39 +98,11 @@ export class BlogFormComponent implements OnInit {
       this.manager.open(config.upload_config).subscribe(
          data => {
             if (data.event == 'success')
-               this.master.getterA(this.form.controls['image_gallery']).push(this.master.createGallery(data.info.secure_url, this.form.value['image_gallery'][0]['identifier'] ?? null))
+               this.master.getterA(this.form.controls['image_gallery']).push(this.master.createGallery(data.info.secure_url, this.form.value?.['image_gallery']?.[0]?.['identifier'] ?? null))
          }
       )
    }
 
-   addTab(language: any) {
-      if (!this.tabs.some((item: any) => item.id == language.id) && (language.id != '1' || language.id != 1)) {
-         this.tabs.push(language);
-         Object.keys(this.form.controls).forEach(element => {
-            if (this.form.controls[element] instanceof FormArray)
-               this.master.getterA(this.form.controls[element]).push(this.master.createTranslation(language.id))
-         })
-      }
-   }
-
-   deleteTab(index: any, languages_id: any) {
-      if (this.tabs.length > 1) {
-         this.tabs.splice(index, 1)
-
-         Object.keys(this.form.controls).forEach(element => {
-            if (this.form.controls[element] instanceof FormArray) {
-               const formArray = this.master.getterA(this.form.controls[element]);
-               const indexToRemove = formArray.controls.findIndex(
-                  control => control.value.languages_id == languages_id
-               )
-               if (indexToRemove >= 0) {
-                  formArray.at(indexToRemove).get('active')?.patchValue('0')
-               }
-               // formArray.removeAt(indexToRemove)
-            }
-         });
-      }
-   }
 
    drop(event: any) {
       moveItemInArray(this.form.value.img, event.previousIndex, event.currentIndex);
@@ -140,55 +116,49 @@ export class BlogFormComponent implements OnInit {
                this.available_langs = languages.msg;
                this.provider.BD_ActionGet('general', 'get_category_blogs', { tree_size: 0 }).subscribe(
                   (category_blogs: Response) => {
-                     // this.sel['category_blogs'] = {}
+                     console.log(category_blogs.msg);
+
                      this.sel['category_blogs'] = category_blogs.msg;
-                     if (this.router.url.includes('detail')) {
-                        let id = atob(this.__id)
+                     this.provider.BD_ActionAdminGet('companies', 'get').subscribe(
+                        (companies: Response) => {
+                           // console.log(companies.msg);
 
-                        this.provider.BD_ActionAdminGet('blogs', 'get_blog_by_id', { blog_id: id }).subscribe(
-                           (blog: Response) => {
-                              if (!blog.error) {
-                                 // console.log(blog.msg);
-                                 blog?.msg?.description.forEach((element: any) => {
+                           if (!companies.error) {
+                              this.sel['companies'] = this.master?.changeKey({ 'ID': 'id', '01_TITLE': 'name' }, companies.msg.approved)
 
-                                    if (element.languages_id != 1) {
-                                       this.master.createTranslation(element.languages_id)
-                                       this.addTab(this.language_index(element.languages_id))
-                                    }
-
-                                    blog.msg.image_gallery?.forEach((element: any) => {
-                                       this.master.getterA(this.form.controls['image_gallery']).push(this.master.createGallery('', null))          
-                                    });
-
-                                    this.ls.update('bc', [
-                                       {
-                                          item: 'Blog',
-                                          link: '/m/blogs'
-                                       },
-                                       {
-                                          item: blog.msg.title[0].text,
-                                          link: null
+                              if (this.router.url.includes('detail')) {
+                                 this.provider.BD_ActionAdminGet('blogs', 'get_blog_by_id', { blog_id: atob(this.__id) }).subscribe(
+                                    (blog: Response) => {
+                                       if (!blog.error) {
+                                          this.ls.update('bc', [
+                                             {
+                                                item: 'Blog',
+                                                link: '/m/blogs'
+                                             },
+                                             {
+                                                item: blog.msg.title[0].text,
+                                                link: null
+                                             }
+                                          ])
+                                          this.master.patch(blog.msg, this.form, this.tabs)
                                        }
-                                    ])
-
-                                    this.master.patchForm(blog.msg, this.form)
-
-                                 });
+                                    }
+                                 )
+                              } else {
+                                 this.ls.update('bc', [
+                                    {
+                                       item: 'Blog',
+                                       link: '/m/blogs'
+                                    },
+                                    {
+                                       item: 'Agregar',
+                                       link: null
+                                    }
+                                 ])
                               }
                            }
-                        )
-                     } else {
-                        this.ls.update('bc', [
-                           {
-                              item: 'Blog',
-                              link: '/m/blogs'
-                           },
-                           {
-                              item: 'Agregar',
-                              link: null
-                           }
-                        ])
-                     }
+                        }
+                     )
                   }
                )
 
@@ -202,10 +172,11 @@ export class BlogFormComponent implements OnInit {
       this.selected_all[category.generation] = category.id;
       while (this.selected_all[category.generation + 1])
          this.selected_all.pop()
-      console.log(this.selected_all);
-      
-      const categoryId = category.id;
 
+      const categoryId = category.id;
+      this.form.controls['category'].patchValue(this.selected_all[0])
+      this.form.controls['sub_category'].patchValue(this.selected_all[this.selected_all.length - 1])
+      
       this.provider.BD_ActionGet('general', 'get_category_blogs', { tree_size: 0, id_category: categoryId })
          .subscribe((category_blogs: Response) => {
             category.children = category_blogs.msg;
@@ -214,30 +185,11 @@ export class BlogFormComponent implements OnInit {
 
 
    save() {
-      this.form.controls['category'].patchValue(this.selected_all[0])
-      this.form.controls['sub_category'].patchValue(this.selected_all[this.selected_all.length - 1])
-      if (this.router.url.includes('detail')) {
-         this.form.controls['user_update'].patchValue(this.jwt.getUser())
-         this.provider.BD_ActionAdminPut('blogs', 'update_blog', this.form.value).subscribe(
-            (data: Response) => {
-               console.log(data)
-               if(!data.error) {
-                  this.master.snack(2);
-                  this.router.navigate(['m', 'blogs'])
-               }
-            }
-         )
-      } else {
-         this.provider.BD_ActionAdminPost('blogs', 'insert_blog', this.form.value).subscribe(
-            (data: Response) => {console.log(data)
-               if(!data.error) {
-                  this.master.snack(2);
-                  this.router.navigate(['m', 'blogs'])
-               }
-            }
-         )
-      }
-      console.log('save', this.form.value)
+      this.master.save('blogs', this.router.url.includes('detail') ? 'update_blog' : 'insert_blog', this.form.value)
+   }
+
+   delete() {
+      this.master.delete('blogs', 'delete_blog', { id: this.form.value.id })
    }
 
    draft() {
@@ -272,7 +224,7 @@ export class BlogFormComponent implements OnInit {
       const value = (event.value || '').trim();
 
       if (value) {
-         if (this.form.value.tags != null) 
+         if (this.form.value.tags != null)
             this.form.controls['tags'].patchValue(this.form.value.tags + ', ' + value);
          else
             this.form.controls['tags'].patchValue(value);
