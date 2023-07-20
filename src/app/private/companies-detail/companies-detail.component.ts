@@ -41,6 +41,98 @@ export class CompaniesDetailComponent implements OnInit {
    @ViewChild('consi') consi!: MatRadioButton
    @ViewChild('ping') ping!: ElementRef;
 
+   products: any = [
+      {
+         '01_NOMBRE': 'Caretas con diadema inyectada Modelo CCtr',
+         '02_DESCRIPCIÓN BREVE': 'Careta protectora ante contingencia COVID19.',
+         '03_DESCRIPCIÓN DETALLADA': 'Una careta protectora es un tipo de equipo de protección personal que se utiliza para proteger la cara de una persona de posibles riesgos durante la contingencia del COVID-19. Está diseñada para cubrir la cara completa y se usa comúnmente en combinación con otros equipos de protección personal, como mascarillas faciales y guantes, para proporcionar una protección adicional contra el virus.'
+      },
+      {
+         '01_NOMBRE': 'Careta con soporte Modelo FKI',
+         '02_DESCRIPCIÓN BREVE': 'Careta con diadema inyectada, fabricada en PET transparente, reutilizable y sanitizable.',
+         '03_DESCRIPCIÓN DETALLADA': 'La careta con diadema inyectada es un tipo de equipo de protección personal que se utiliza para proteger la cara de una persona de posibles riesgos durante situaciones como la pandemia del COVID-19.'
+      },
+      {
+         '01_NOMBRE': 'Mascarilla Termoformada Modelo MC',
+         '02_DESCRIPCIÓN BREVE': 'Mascarilla termoformada, fabricada en PET transparente, reutilizable y sanitizable.',
+         '03_DESCRIPCIÓN DETALLADA': 'La mascarilla termoformada es un tipo de mascarilla facial que se utiliza como equipo de protección personal durante situaciones como la pandemia del COVID-19. Está fabricada en PET transparente, lo que permite una visibilidad clara sin comprometer la seguridad de la persona que la usa.'
+      },
+      {
+         '01_NOMBRE': 'Caretas con diadema inyectada Modelo CCtr',
+         '02_DESCRIPCIÓN BREVE': 'Careta protectora ante contingencia COVID19.',
+         '03_DESCRIPCIÓN DETALLADA': 'Una careta protectora es un tipo de equipo de protección personal que se utiliza para proteger la cara de una persona de posibles riesgos durante la contingencia del COVID-19. Está diseñada para cubrir la cara completa y se usa comúnmente en combinación con otros equipos de protección personal, como mascarillas faciales y guantes, para proporcionar una protección adicional contra el virus.'
+      },
+      {
+         '01_NOMBRE': 'Careta con soporte Modelo FKI',
+         '02_DESCRIPCIÓN BREVE': 'Careta con diadema inyectada, fabricada en PET transparente, reutilizable y sanitizable.',
+         '03_DESCRIPCIÓN DETALLADA': 'La careta con diadema inyectada es un tipo de equipo de protección personal que se utiliza para proteger la cara de una persona de posibles riesgos durante situaciones como la pandemia del COVID-19.'
+      },
+      {
+         '01_NOMBRE': 'Mascarilla Termoformada Modelo MC',
+         '02_DESCRIPCIÓN BREVE': 'Mascarilla termoformada, fabricada en PET transparente, reutilizable y sanitizable.',
+         '03_DESCRIPCIÓN DETALLADA': 'La mascarilla termoformada es un tipo de mascarilla facial que se utiliza como equipo de protección personal durante situaciones como la pandemia del COVID-19. Está fabricada en PET transparente, lo que permite una visibilidad clara sin comprometer la seguridad de la persona que la usa.'
+      },
+      {
+         '01_NOMBRE': 'Caretas con diadema inyectada Modelo CCtr',
+         '02_DESCRIPCIÓN BREVE': 'Careta protectora ante contingencia COVID19.',
+         '03_DESCRIPCIÓN DETALLADA': 'Una careta protectora es un tipo de equipo de protección personal que se utiliza para proteger la cara de una persona de posibles riesgos durante la contingencia del COVID-19. Está diseñada para cubrir la cara completa y se usa comúnmente en combinación con otros equipos de protección personal, como mascarillas faciales y guantes, para proporcionar una protección adicional contra el virus.'
+      },
+      {
+         '01_NOMBRE': 'Careta con soporte Modelo FKI',
+         '02_DESCRIPCIÓN BREVE': 'Careta con diadema inyectada, fabricada en PET transparente, reutilizable y sanitizable.',
+         '03_DESCRIPCIÓN DETALLADA': 'La careta con diadema inyectada es un tipo de equipo de protección personal que se utiliza para proteger la cara de una persona de posibles riesgos durante situaciones como la pandemia del COVID-19.'
+      },
+      {
+         '01_NOMBRE': 'Mascarilla Termoformada Modelo MC',
+         '02_DESCRIPCIÓN BREVE': 'Mascarilla termoformada, fabricada en PET transparente, reutilizable y sanitizable.',
+         '03_DESCRIPCIÓN DETALLADA': 'La mascarilla termoformada es un tipo de mascarilla facial que se utiliza como equipo de protección personal durante situaciones como la pandemia del COVID-19. Está fabricada en PET transparente, lo que permite una visibilidad clara sin comprometer la seguridad de la persona que la usa.'
+      },
+   ];
+
+   requierements = [
+      {
+         '01_TITULO': 'Titulo del Requerimiento',
+         '02_DESCRIPCION': 'Descripción del Requerimiento',
+         '03_FECHA': '2023-06-10'
+      },
+      {
+         '01_TITULO': 'Titulo del Requerimiento',
+         '02_DESCRIPCION': 'Descripción del Requerimiento',
+         '03_FECHA': '2023-06-10'
+      },
+      {
+         '01_TITULO': 'Titulo del Requerimiento',
+         '02_DESCRIPCION': 'Descripción del Requerimiento',
+         '03_FECHA': '2023-06-10'
+      },
+      {
+         '01_TITULO': 'Titulo del Requerimiento',
+         '02_DESCRIPCION': 'Descripción del Requerimiento',
+         '03_FECHA': '2023-06-10'
+      },
+      {
+         '01_TITULO': 'Titulo del Requerimiento',
+         '02_DESCRIPCION': 'Descripción del Requerimiento',
+         '03_FECHA': '2023-06-10'
+      },
+      {
+         '01_TITULO': 'Titulo del Requerimiento',
+         '02_DESCRIPCION': 'Descripción del Requerimiento',
+         '03_FECHA': '2023-06-10'
+      },
+      {
+         '01_TITULO': 'Titulo del Requerimiento',
+         '02_DESCRIPCION': 'Descripción del Requerimiento',
+         '03_FECHA': '2023-06-10'
+      },
+      {
+         '01_TITULO': 'Titulo del Requerimiento',
+         '02_DESCRIPCION': 'Descripción del Requerimiento',
+         '03_FECHA': '2023-06-10'
+      },
+   ];
+
+
 
    certifications: any = [];
 
@@ -249,14 +341,14 @@ export class CompaniesDetailComponent implements OnInit {
                                        /* comp?.categories_company?.forEach((element: any) => {
                                           this.master.getterA(this.form.controls['categories_company'])?.push(this.master.createSimpleTranslation())
                                        }); */
-                                       
+
                                        this.master.patch(comp, this.form, this.tabs)
-                                       
+
                                        Object.keys(this.master.getterG(this.form.controls['schedule_week']).controls).forEach(element => this.slideHasValue('schedule_week', element));
 
                                        this.form.controls['consi']?.patchValue(this.master.turn_check(this.form, ['support_clients', 'service_cluster']))
-                                       this.form.controls['pisi']?.patchValue(this.master.turn_check_array(this.form,['main_processes', 'production_capacity']))
-                                       
+                                       this.form.controls['pisi']?.patchValue(this.master.turn_check_array(this.form, ['main_processes', 'production_capacity']))
+
                                        this.ls.update('bc', [
                                           {
                                              item: 'Empresas',
@@ -267,7 +359,7 @@ export class CompaniesDetailComponent implements OnInit {
                                              link: null
                                           }
                                        ])
-                                       
+
                                        this.output.ready.next(true)
                                        this.createPIN((comp.latitude || this.lat), (comp.longitude || this.lng))
 
@@ -392,6 +484,7 @@ export class CompaniesDetailComponent implements OnInit {
       this.map.setCenter(latLng);
       this.map.setZoom(16);
    }
+
    cargarMapa() {
       const options = {
          mapId: '9e4275548a62443e',
