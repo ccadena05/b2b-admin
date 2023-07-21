@@ -15,7 +15,7 @@ import { MatOptionSelectionChange } from '@angular/material/core';
 import { Response } from 'src/app/models/response.model';
 import { MatRadioButton } from '@angular/material/radio';
 import { cloneDeep } from 'lodash';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 declare var google: any;
 
@@ -25,10 +25,11 @@ declare var google: any;
    styleUrls: ['./companies-detail.component.scss']
 })
 export class CompaniesDetailComponent implements OnInit {
+
    private typingTimer: any;
    tabs: any = [{ id: '1', name: 'English', language: 'EN', emoji: '🇺🇸' }];
    available_langs: any = [];
-   all_countrys: any = [];
+   all_countries: any = [];
 
    form: FormGroup;
    sel: any = [];
@@ -36,105 +37,22 @@ export class CompaniesDetailComponent implements OnInit {
    selectedState: any;
    fullLanguage: any;
    readonly separatorKeysCodes = [ENTER, COMMA] as const;
-
+   profile_company_id: string = this.ls.getItem("B2B_PROFILE_COMPANY");
    @ViewChild('a') slide_dia!: MatSlideToggle;
    @ViewChild('consi') consi!: MatRadioButton
    @ViewChild('ping') ping!: ElementRef;
+   cat: any[] = [
+      "Components, parts and systems",
+      "Smart manufacturing and Industry 4.0",
+      "Manufacturing and fabrication processes",
+      "Original equipment assembly/manufacturing",
+      "Products",
+      "Raw Materials",
+      "Services",
+      "Levels",
+   ]
 
-   products: any = [
-      {
-         '01_NOMBRE': 'Caretas con diadema inyectada Modelo CCtr',
-         '02_DESCRIPCIÓN BREVE': 'Careta protectora ante contingencia COVID19.',
-         '03_DESCRIPCIÓN DETALLADA': 'Una careta protectora es un tipo de equipo de protección personal que se utiliza para proteger la cara de una persona de posibles riesgos durante la contingencia del COVID-19. Está diseñada para cubrir la cara completa y se usa comúnmente en combinación con otros equipos de protección personal, como mascarillas faciales y guantes, para proporcionar una protección adicional contra el virus.'
-      },
-      {
-         '01_NOMBRE': 'Careta con soporte Modelo FKI',
-         '02_DESCRIPCIÓN BREVE': 'Careta con diadema inyectada, fabricada en PET transparente, reutilizable y sanitizable.',
-         '03_DESCRIPCIÓN DETALLADA': 'La careta con diadema inyectada es un tipo de equipo de protección personal que se utiliza para proteger la cara de una persona de posibles riesgos durante situaciones como la pandemia del COVID-19.'
-      },
-      {
-         '01_NOMBRE': 'Mascarilla Termoformada Modelo MC',
-         '02_DESCRIPCIÓN BREVE': 'Mascarilla termoformada, fabricada en PET transparente, reutilizable y sanitizable.',
-         '03_DESCRIPCIÓN DETALLADA': 'La mascarilla termoformada es un tipo de mascarilla facial que se utiliza como equipo de protección personal durante situaciones como la pandemia del COVID-19. Está fabricada en PET transparente, lo que permite una visibilidad clara sin comprometer la seguridad de la persona que la usa.'
-      },
-      {
-         '01_NOMBRE': 'Caretas con diadema inyectada Modelo CCtr',
-         '02_DESCRIPCIÓN BREVE': 'Careta protectora ante contingencia COVID19.',
-         '03_DESCRIPCIÓN DETALLADA': 'Una careta protectora es un tipo de equipo de protección personal que se utiliza para proteger la cara de una persona de posibles riesgos durante la contingencia del COVID-19. Está diseñada para cubrir la cara completa y se usa comúnmente en combinación con otros equipos de protección personal, como mascarillas faciales y guantes, para proporcionar una protección adicional contra el virus.'
-      },
-      {
-         '01_NOMBRE': 'Careta con soporte Modelo FKI',
-         '02_DESCRIPCIÓN BREVE': 'Careta con diadema inyectada, fabricada en PET transparente, reutilizable y sanitizable.',
-         '03_DESCRIPCIÓN DETALLADA': 'La careta con diadema inyectada es un tipo de equipo de protección personal que se utiliza para proteger la cara de una persona de posibles riesgos durante situaciones como la pandemia del COVID-19.'
-      },
-      {
-         '01_NOMBRE': 'Mascarilla Termoformada Modelo MC',
-         '02_DESCRIPCIÓN BREVE': 'Mascarilla termoformada, fabricada en PET transparente, reutilizable y sanitizable.',
-         '03_DESCRIPCIÓN DETALLADA': 'La mascarilla termoformada es un tipo de mascarilla facial que se utiliza como equipo de protección personal durante situaciones como la pandemia del COVID-19. Está fabricada en PET transparente, lo que permite una visibilidad clara sin comprometer la seguridad de la persona que la usa.'
-      },
-      {
-         '01_NOMBRE': 'Caretas con diadema inyectada Modelo CCtr',
-         '02_DESCRIPCIÓN BREVE': 'Careta protectora ante contingencia COVID19.',
-         '03_DESCRIPCIÓN DETALLADA': 'Una careta protectora es un tipo de equipo de protección personal que se utiliza para proteger la cara de una persona de posibles riesgos durante la contingencia del COVID-19. Está diseñada para cubrir la cara completa y se usa comúnmente en combinación con otros equipos de protección personal, como mascarillas faciales y guantes, para proporcionar una protección adicional contra el virus.'
-      },
-      {
-         '01_NOMBRE': 'Careta con soporte Modelo FKI',
-         '02_DESCRIPCIÓN BREVE': 'Careta con diadema inyectada, fabricada en PET transparente, reutilizable y sanitizable.',
-         '03_DESCRIPCIÓN DETALLADA': 'La careta con diadema inyectada es un tipo de equipo de protección personal que se utiliza para proteger la cara de una persona de posibles riesgos durante situaciones como la pandemia del COVID-19.'
-      },
-      {
-         '01_NOMBRE': 'Mascarilla Termoformada Modelo MC',
-         '02_DESCRIPCIÓN BREVE': 'Mascarilla termoformada, fabricada en PET transparente, reutilizable y sanitizable.',
-         '03_DESCRIPCIÓN DETALLADA': 'La mascarilla termoformada es un tipo de mascarilla facial que se utiliza como equipo de protección personal durante situaciones como la pandemia del COVID-19. Está fabricada en PET transparente, lo que permite una visibilidad clara sin comprometer la seguridad de la persona que la usa.'
-      },
-   ];
-
-   requierements = [
-      {
-         '01_TITULO': 'Titulo del Requerimiento',
-         '02_DESCRIPCION': 'Descripción del Requerimiento',
-         '03_FECHA': '2023-06-10'
-      },
-      {
-         '01_TITULO': 'Titulo del Requerimiento',
-         '02_DESCRIPCION': 'Descripción del Requerimiento',
-         '03_FECHA': '2023-06-10'
-      },
-      {
-         '01_TITULO': 'Titulo del Requerimiento',
-         '02_DESCRIPCION': 'Descripción del Requerimiento',
-         '03_FECHA': '2023-06-10'
-      },
-      {
-         '01_TITULO': 'Titulo del Requerimiento',
-         '02_DESCRIPCION': 'Descripción del Requerimiento',
-         '03_FECHA': '2023-06-10'
-      },
-      {
-         '01_TITULO': 'Titulo del Requerimiento',
-         '02_DESCRIPCION': 'Descripción del Requerimiento',
-         '03_FECHA': '2023-06-10'
-      },
-      {
-         '01_TITULO': 'Titulo del Requerimiento',
-         '02_DESCRIPCION': 'Descripción del Requerimiento',
-         '03_FECHA': '2023-06-10'
-      },
-      {
-         '01_TITULO': 'Titulo del Requerimiento',
-         '02_DESCRIPCION': 'Descripción del Requerimiento',
-         '03_FECHA': '2023-06-10'
-      },
-      {
-         '01_TITULO': 'Titulo del Requerimiento',
-         '02_DESCRIPCION': 'Descripción del Requerimiento',
-         '03_FECHA': '2023-06-10'
-      },
-   ];
-
-
-
-   certifications: any = [];
+   certifications: any = []
 
    days: any[] = [
       {
@@ -165,31 +83,88 @@ export class CompaniesDetailComponent implements OnInit {
          id: 'saturday',
          name: 'Sábado'
       }
-   ];
+   ]
    cert: any;
    @ViewChild('map') mapaElement!: ElementRef;
    map!: any;
    lat: any = 19.4326806;
    lng: any = -99.1332704;
-   location: any
-   _id: any;
+   location: any;
+
+   products: any = [
+      {
+        '01_NOMBRE': 'Caretas con diadema inyectada Modelo CCtr',
+        '02_DESC_BREVE': 'Careta protectora ante contingencia COVID19.',
+        '03_DESC_DETALLADA': 'Una careta protectora es un tipo de equipo de protección personal que se utiliza para proteger la cara de una persona de posibles riesgos durante la contingencia del COVID-19. Está diseñada para cubrir la cara completa y se usa comúnmente en combinación con otros equipos de protección personal, como mascarillas faciales y guantes, para proporcionar una protección adicional contra el virus.'
+      },
+      {
+        '01_NOMBRE': 'Careta con soporte Modelo FKI',
+        '02_DESC_BREVE': 'Careta con diadema inyectada, fabricada en PET transparente, reutilizable y sanitizable.',
+        '03_DESC_DETALLADA': 'La careta con diadema inyectada es un tipo de equipo de protección personal que se utiliza para proteger la cara de una persona de posibles riesgos durante situaciones como la pandemia del COVID-19.'
+      },
+      {
+        '01_NOMBRE': 'Mascarilla Termoformada Modelo MC',
+        '02_DESC_BREVE': 'Mascarilla termoformada, fabricada en PET transparente, reutilizable y sanitizable.',
+        '03_DESC_DETALLADA': 'La mascarilla termoformada es un tipo de mascarilla facial que se utiliza como equipo de protección personal durante situaciones como la pandemia del COVID-19. Está fabricada en PET transparente, lo que permite una visibilidad clara sin comprometer la seguridad de la persona que la usa.'
+      },
+      {
+        '01_NOMBRE': 'Caretas con diadema inyectada Modelo CCtr',
+        '02_DESC_BREVE': 'Careta protectora ante contingencia COVID19.',
+        '03_DESC_DETALLADA': 'Una careta protectora es un tipo de equipo de protección personal que se utiliza para proteger la cara de una persona de posibles riesgos durante la contingencia del COVID-19. Está diseñada para cubrir la cara completa y se usa comúnmente en combinación con otros equipos de protección personal, como mascarillas faciales y guantes, para proporcionar una protección adicional contra el virus.'
+      },
+      {
+        '01_NOMBRE': 'Careta con soporte Modelo FKI',
+        '02_DESC_BREVE': 'Careta con diadema inyectada, fabricada en PET transparente, reutilizable y sanitizable.',
+        '03_DESC_DETALLADA': 'La careta con diadema inyectada es un tipo de equipo de protección personal que se utiliza para proteger la cara de una persona de posibles riesgos durante situaciones como la pandemia del COVID-19.'
+      },
+      {
+        '01_NOMBRE': 'Mascarilla Termoformada Modelo MC',
+        '02_DESC_BREVE': 'Mascarilla termoformada, fabricada en PET transparente, reutilizable y sanitizable.',
+        '03_DESC_DETALLADA': 'La mascarilla termoformada es un tipo de mascarilla facial que se utiliza como equipo de protección personal durante situaciones como la pandemia del COVID-19. Está fabricada en PET transparente, lo que permite una visibilidad clara sin comprometer la seguridad de la persona que la usa.'
+      }
+    ];
+
+   requierements = [
+      {
+         'ID': 'PTS130620I48202307111519489289C',
+         '01_TITLE': 'HDMI',
+         '02_EXPIRATION DATE': '2023-12-11',
+         '03_RFQ STATUS': 1,
+         '04_APROVED': 1,
+         '05_FRIENDLY NAME': 'PARQUE TECNOLÓGICO SANMIGUELENSE'
+      },
+      {
+         'ID': 'PTS130620I48202307111519489289C',
+         '01_TITLE': 'HDMI',
+         '02_EXPIRATION DATE': '2023-12-11',
+         '03_RFQ STATUS': 1,
+         '04_APROVED': 1,
+         '05_FRIENDLY NAME': 'PARQUE TECNOLÓGICO SANMIGUELENSE'
+      },
+      {
+         'ID': 'PTS130620I48202307111519489289C',
+         '01_TITLE': 'HDMI',
+         '02_EXPIRATION DATE': '2023-12-11',
+         '03_RFQ STATUS': 1,
+         '04_APROVED': 1,
+         '05_FRIENDLY NAME': 'PARQUE TECNOLÓGICO SANMIGUELENSE'
+      }
+   ];
+
    constructor(
       public master: MasterService,
       public provider: ProviderService,
       public ls: LocalStoreService,
-      private router: Router,
-      private output: OutputService,
       private formBuilder: FormBuilder,
+      private output: OutputService,
       private manager: CloudinaryWidgetManager,
-      private activatedRoute: ActivatedRoute
+      public router: Router
    ) {
-      this.activatedRoute.params.subscribe(params => this._id = params['id'])
-
       this.form = this.formBuilder.group({
-         profile_company_id: [this._id ? atob(this._id) : null, Validators.required],
+         profile_company_id: [this.profile_company_id, Validators.required],
          legal_name: this.formBuilder.array([this.master.createTranslation('1')]),
          friendly_name: [null, Validators.required],
-         rfc: [null, Validators.required],
+         rfc: [null, Validators.required], //QUITAR TRADUCCION
          email_company: [null, [Validators.required, Validators.email]],
          phone_code: [null, Validators.required],
          phone: [null, Validators.required],
@@ -204,8 +179,8 @@ export class CompaniesDetailComponent implements OnInit {
          state: [null, Validators.required],
          city: [null, Validators.required],
          zip: [null, Validators.required],
-         address_1: [null, Validators.required],
-         address_2: [null, Validators.required],
+         address_1: [null, Validators.required], // Calle
+         address_2: [null, Validators.required], // Colonia
          latitude: [null, Validators.required],
          longitude: [null, Validators.required],
          branch: [null, Validators.required],
@@ -216,23 +191,24 @@ export class CompaniesDetailComponent implements OnInit {
          description: this.formBuilder.array([this.master.createTranslation('1')]),
          description_detail: this.formBuilder.array([this.master.createTranslation('1')]),
          schedule_week: this.formBuilder.group({
-            sunday: [null, Validators.required],
-            monday: [null, Validators.required],
-            tuesday: [null, Validators.required],
-            wednesday: [null, Validators.required],
-            thursday: [null, Validators.required],
-            friday: [null, Validators.required],
-            saturday: [null, Validators.required],
-            sunday_tg: [null, Validators.required],
-            monday_tg: [null, Validators.required],
-            tuesday_tg: [null, Validators.required],
-            wednesday_tg: [null, Validators.required],
-            thursday_tg: [null, Validators.required],
-            friday_tg: [null, Validators.required],
-            saturday_tg: [null, Validators.required],
+            sunday: [null],
+            monday: [null],
+            tuesday: [null],
+            wednesday: [null],
+            thursday: [null],
+            friday: [null],
+            saturday: [null],
+            sunday_tg: [null],
+            monday_tg: [null],
+            tuesday_tg: [null],
+            wednesday_tg: [null],
+            thursday_tg: [null],
+            friday_tg: [null],
+            saturday_tg: [null],
          }),
          consi: [null],
          pisi: [null],
+         categories_company: this.formBuilder.array([]),
          company_payment: this.formBuilder.array([this.master.createTranslation('1')]),
          support_clients: [null],
          service_cluster: [null],
@@ -245,14 +221,23 @@ export class CompaniesDetailComponent implements OnInit {
          isos: this.formBuilder.array([]),
          facebook: [null, Validators.pattern(/^(https?:\/\/)?(www\.)?facebook.com\/[a-zA-Z0-9.]+(\/)?$/)],
          twitter: [null, Validators.pattern(/^(https?:\/\/)?(www\.)?twitter.com\/[a-zA-Z0-9_]+(\/)?$/)],
-         linkedin: [null, Validators.pattern(/^(https?:\/\/)?(www\.)?linkedin.com\/company\/[a-zA-Z0-9-]+(\/)?$/)],
+         linkedin: [null, Validators.pattern(/^https?:\/\/(?:www\.)?linkedin\.com\/company\/.+$/)],
          youtube: [null, Validators.pattern(/^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtube\.com\/embed\/|youtu\.be\/)[a-zA-Z0-9_-]+(\/)?(\?[\w=&]*)?(#([\w-]+))?$/i)],
          number_employees: [null, Validators.required],
          turnover: [null, Validators.required],
          specialization: this.formBuilder.array([this.master.createTranslation('1')]),
          another_sector: this.formBuilder.array([this.master.createTranslation('1')]),
          relevant_products: this.formBuilder.array([this.master.createTranslation('1')]),
-      });
+         image_url: [null, Validators.required]
+      })
+
+
+      // this.output.image_url.subscribe(
+      //    data => {
+      //       this.form.patchValue({ image_url: data })
+      //       this.ls.setItem('B2B_IMAGE_URL', data)
+      //    }
+      // )
 
       this.get()
 
@@ -278,7 +263,7 @@ export class CompaniesDetailComponent implements OnInit {
       if (_cert.length > _isos.length) { // Se añadió un nuevo ISO
          for (const iso of _cert) {
             if (!_isos.includes(iso))  // No estaba antes, hacer push
-               isos_array.push(this.master.createCertificate(iso, this.findCert(iso).name))
+               isos_array.push(this.createCertificate(iso, this.findCert(iso).name))
 
          }
       } else if ((_cert.length < _isos.length)) { // Se quitó un ISO
@@ -313,76 +298,89 @@ export class CompaniesDetailComponent implements OnInit {
       this.countries();
       this.provider.BD_ActionGet('general', 'get_languages').subscribe(
          (languages: Response) => {
+            // console.log(languages.msg);
             this.available_langs = languages.msg
 
             this.provider.BD_ActionGet('general', 'get_isos').subscribe(
                (isos: Response) => {
+                  // console.log(isos);
                   this.cert = this.certifications = isos?.msg
 
                   this.provider.BD_ActionGet('general', 'get_type_company').subscribe(
                      (type_company: Response) => {
-                        if (!type_company.error) {
+                        // console.log(type_company);
+                        
+                        if (!type_company.error) 
                            this.sel['type_company'] = type_company.msg
 
-                           if (this.router.url.includes('detail')) {
-                              this.provider.BD_ActionGet('profile_company', 'get_profile', { profile_company_id: atob(this._id), user_id: this.ls.getItem("B2B_USER") }).subscribe(
-                                 (company: Response) => {
-                                    console.log('Viene de DB', company);
-                                    if (!company.error) {
-                                       let comp = company?.msg;
+                        this.provider.BD_ActionGet('profile_company', 'get_profile', { profile_company_id: this.profile_company_id, user_id: this.ls.getItem("B2B_USER")}).subscribe(
+                           (company: Response) => {
+                              console.log('Viene de DB', company);
+                              if (!company.error) {
+                                 let comp = company?.msg;
+                                 // comp = this.ls.getItem('COMPANY_FORM');
+                                 let _isos: any = []
+                                 comp?.isos?.forEach((element: any) => {
+                                    _isos?.push(element?.name_id.toString())
+                                    let qawards = this.master.getterA(this.form.controls['isos']);
+                                    qawards.push(this.createCertificate(null))
+                                 })
+                                 // console.log();
 
-                                       let _isos: any = []
-                                       comp?.isos?.forEach((element: any) => {
-                                          _isos?.push(element?.name_id.toString())
-                                       })
+                                 // comp.tags = comp.tags.split(',')
 
-                                       this.form.get('cert')?.patchValue(_isos)
+                                 this.form.get('cert')?.patchValue(_isos)
+                                 /* comp?.legal_name?.forEach((element: any) => {
 
-                                       /* comp?.categories_company?.forEach((element: any) => {
-                                          this.master.getterA(this.form.controls['categories_company'])?.push(this.master.createSimpleTranslation())
-                                       }); */
-
-                                       this.master.patch(comp, this.form, this.tabs)
-
-                                       Object.keys(this.master.getterG(this.form.controls['schedule_week']).controls).forEach(element => this.slideHasValue('schedule_week', element));
-
-                                       this.form.controls['consi']?.patchValue(this.master.turn_check(this.form, ['support_clients', 'service_cluster']))
-                                       this.form.controls['pisi']?.patchValue(this.master.turn_check_array(this.form, ['main_processes', 'production_capacity']))
-
-                                       this.ls.update('bc', [
-                                          {
-                                             item: 'Empresas',
-                                             link: '/m/companies'
-                                          },
-                                          {
-                                             item: comp.friendly_name.toLowerCase(),
-                                             link: null
-                                          }
-                                       ])
-
-                                       this.output.ready.next(true)
-                                       this.createPIN((comp.latitude || this.lat), (comp.longitude || this.lng))
-
+                                    if (element.languages_id != 1) {
+                                       this.master.createTranslation(element.languages_id)
+                                       this.addTab(this.language_index(element.languages_id))
                                     }
-                                 }
-                              )
-                           } else {
-                              this.ls.update('bc', [
-                                 {
-                                    item: 'Empresas',
-                                    link: '/m/companies'
-                                 },
-                                 {
-                                    item: 'Agregar',
-                                    link: null
-                                 }
-                              ])
+                                 }); */
+
+                                 comp?.categories_company?.forEach((element: any) => {
+                                       this.master.getterA(this.form.controls['categories_company']).push(this.master.createSimpleTranslation())
+                                 });
+
+                                 if (this.ls.getItem('COMPANY_FORM'))
+                                    this.master.patch(this.master.compare_object(comp, this.ls.getItem('COMPANY_FORM')), this.form, this.tabs)
+                                 else
+                                    this.master.patch(comp, this.form, this.tabs)
+
+                                    console.log(this.form.value);
+                                    
+                                 // console.log('FORM VALUE', this.form.value);
+                                 
+                                 this.createPIN((comp.latitude || this.lat), (comp.longitude || this.lng))
+                                 Object.keys(this.master.getterG(this.form.controls['schedule_week']).controls).forEach(element => {
+                                    this.slideHasValue('schedule_week', element)
+                                 });
+
+                                 // this.form.controls['consi']?.patchValue(this.master.turn_check([this.master.getterC(this.form.controls['support_clients']), this.master.getterC(this.form.controls['service_cluster'])]) || this.ls.getItem('COMPANY_FORM')?.consi)
+                                 // this.form.controls['pisi']?.patchValue(this.master.turn_check_array([this.master.getterA(this.form.controls['main_processes']), this.master.getterA(this.form.controls['production_capacity'])]) || this.ls.getItem('COMPANY_FORM')?.pisi)
+
+                                 this.output.ready.next(true)
+
+
+                              }
                            }
-                        }
+                        )
                      }
                   )
                }
+
             )
+         }
+      )
+   }
+
+   countries() {
+      this.provider.BD_ActionGet('general', 'get_countries').subscribe(
+         (countries: any) => {
+            console.log(countries.msg)
+            if (!countries.error)
+               this.sel['countries'] = this.master.concat(countries?.msg, ['e', 'n'], 'name');
+
          }
       )
    }
@@ -402,7 +400,7 @@ export class CompaniesDetailComponent implements OnInit {
       if (!this.tabs.some((item: any) => item.id == language.id) && (language.id != '1' || language.id != 1)) {
          this.tabs.push(language);
          Object.keys(this.form.controls).forEach(element => {
-            if (this.form.controls[element] instanceof FormArray && element !== 'isos' && element !== 'schedule_week')
+            if (this.form.controls[element] instanceof FormArray && element !== 'isos' && element !== 'schedule_week' && element != 'categories_company')
                this.master.getterA(this.form.controls[element]).push(this.master.createTranslation(language.id))
          })
       }
@@ -410,22 +408,26 @@ export class CompaniesDetailComponent implements OnInit {
 
    deleteTab(index: any, languages_id: any) {
       if (this.tabs.length > 1) {
-         this.tabs.splice(index, 1);
+         this.tabs.splice(index, 1)
+
          Object.keys(this.form.controls).forEach(element => {
-            if (this.form.controls[element] instanceof FormArray && element !== 'isos' && element !== 'schedule_week') {
+            if (this.form.controls[element] instanceof FormArray && element !== 'isos' && element !== 'schedule_week' && element != 'categories_company') {
                const formArray = this.master.getterA(this.form.controls[element]);
                const indexToRemove = formArray.controls.findIndex(
                   control => control.value.languages_id == languages_id
-               );
+               )
                if (indexToRemove >= 0) {
                   formArray.at(indexToRemove).get('active')?.patchValue('0')
                }
+               // formArray.removeAt(indexToRemove)
             }
          });
       }
    }
 
    save() {
+      // console.log(this.form.value.tags.toString());
+      
       this.ping.nativeElement.classList.remove('animate-ping');
       this.form.value.schedule_week = JSON.stringify(this.form.value.schedule_week)
 
@@ -433,8 +435,9 @@ export class CompaniesDetailComponent implements OnInit {
          this.provider.BD_ActionPut('profile_company', 'update_profile', this.form.value).subscribe(
             (data: Response) => {
                console.log(data);
-
-               if (!data.error) {
+   
+               if (!data.error){
+                  this.ls.setItem('COMPANY_FORM', this.form.value)
                   setTimeout(() => {
                      this.form.reset()
                      setTimeout(() => {
@@ -442,26 +445,44 @@ export class CompaniesDetailComponent implements OnInit {
                         this.get()
                      }, 500);
                   }, 500);
-
+                  
                }
                else
                   this.master.snack(0)
-
+   
             }
          )
       } else {
          this.master.invalid_form('company-form')
       }
+      // this.form.value.tags = this.form.value.tags.toString()
+      // console.log(this.form.value);
+      /*  
+ 
+       ) */
    }
 
-   countries() {
-      this.provider.BD_ActionGet('general', 'get_all_countrys').subscribe(
-         (all_countrys: any) => {
-            if (!all_countrys.error)
-               this.sel['all_countrys'] = this.sel['all_countrys'] = this.master.concat(all_countrys.msg, ['e', 'n'], 'name');
-         }
-      )
+   /*    createTranslation(languages_id: any): FormGroup {
+         return this.formBuilder.group({
+            id: [null, Validators.required],
+            identifier: [null, Validators.required],
+            languages_id: [languages_id, Validators.required],
+            text: [null, Validators.required],
+            active: ['1', Validators.required],
+         });
+      } */
+
+   createCertificate(name_id: any, name?: any): FormGroup {
+      return this.formBuilder.group({
+         id: [null],
+         name: [name, Validators.required],
+         name_id: [name_id, Validators.required],
+         // file_name: [''],
+         url: [null, Validators.required],
+         active: ['1', Validators.required]
+      });
    }
+
 
    order(object: any) {
       return object.sort((a: any, b: any) => a.name < b.name ? -1 : a.name > b.name ? 1 : 0);
@@ -484,7 +505,6 @@ export class CompaniesDetailComponent implements OnInit {
       this.map.setCenter(latLng);
       this.map.setZoom(16);
    }
-
    cargarMapa() {
       const options = {
          mapId: '9e4275548a62443e',
@@ -501,6 +521,7 @@ export class CompaniesDetailComponent implements OnInit {
       this.provider.BD_ActionGetGeolocalizacion(this.lat, this.lng).subscribe(
          (location: any) => {
             let r = this.location = location.response;
+
             this.form.patchValue({
                zip: r.cp ?? '',
                address1: (r.calle ?? '') + ' ' + (r.numero ?? ''),
@@ -516,7 +537,7 @@ export class CompaniesDetailComponent implements OnInit {
       const value = (event.value || '').trim();
 
       if (value) {
-         if (this.form.value.tags != null)
+         if (this.form.value.tags != null) 
             this.form.controls['tags'].patchValue(this.form.value.tags + ', ' + value);
          else
             this.form.controls['tags'].patchValue(value);
@@ -527,7 +548,7 @@ export class CompaniesDetailComponent implements OnInit {
    removeTag(tag: any): void {
       const tagToRemove = tag + ', ';
       this.form.value.tags = this.form.value.tags.replace(tagToRemove, '');
-   }
+    }
 
    uploadPDF(control: any, name_control?: any) {
       this.manager.open(config.upload_config).subscribe(
@@ -551,8 +572,27 @@ export class CompaniesDetailComponent implements OnInit {
       }
    }
 
-   findCert(id: string) {
-      return this.certifications.find((cert: any) => cert.id == id)
+   /* 
+      toggleCertification(event: any, name: any) {
+         let qawards = this.master.getterA(this.form.controls['isos']);
+   
+         if (event.source._selected) {
+            qawards.push(this.createCertificate(name))
+         } else {
+            let qawards = this.master.getterA(this.form.controls['isos']);
+   
+            const indexToRemove = qawards.controls.findIndex(
+               control => control.value.name == name
+            )
+            // qawards.removeAt(indexToRemove)
+               console.log(name, indexToRemove);
+            
+               qawards.at(indexToRemove).get('active')?.patchValue('0')
+         }
+      } */
+
+   findCert(name_id: string) {
+      return this.certifications.find((cert: any) => cert.name_id == name_id)
    }
 
    toogleValidators(action: boolean, controls: string[]) {
@@ -564,7 +604,11 @@ export class CompaniesDetailComponent implements OnInit {
          this.form.controls[control].updateValueAndValidity()
       });
    }
-
+   /* 
+      filterSelect(v: any) {
+         console.log(v);
+         this.cert = this.certifications.filter((row: any) => (row.name).toLowerCase().includes(v.toLowerCase()))
+      } */
 
    @HostListener('document:keyup', ['$event'])
    backup_form(event: KeyboardEvent) {
@@ -581,5 +625,9 @@ export class CompaniesDetailComponent implements OnInit {
       this.typingTimer = setTimeout(() => {
          this.ping.nativeElement.classList.add('animate-ping');
       }, 5000);
+   }
+
+   edit(row?: any): void {
+      this.router.navigate(['/m/rfq', 'detail', btoa(row.ID)])
    }
 }
