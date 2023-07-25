@@ -148,6 +148,8 @@ export class JwtAuthService {
 
    setUserAndToken(user: any) {
       const u = user.msg
+      console.log(u);
+      
       this.isAuthenticated = !!user.error;
       this.token = u.token;
       this.user = user;

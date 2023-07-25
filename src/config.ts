@@ -19,13 +19,13 @@ export const config = {
    apiAdminProdUrl:  PROTOCOL + '//' + PORD_DOMINIO + '/' + WSERVICE + '/controllers_admin/',
    apiAdminUrlMobile: PROTOCOL + '//' + DOMINIO + '/' + WSERVICE + '/controllers_admin/',
 
-   APP_TOKEN: "B2B_TOKEN",
-   APP_USER: "B2B_USER",
-   APP_PROFILE: "B2B_PROFILE_USER",
-   APP_COMPANY: "B2B_PROFILE_COMPANY",
-   APP_USER_PHOTO: "B2B_USER_PHOTO",
-   APP_COLOR: "B2B_COLOR",
-   APP_LANG: "B2B_LANG",
+   APP_TOKEN: "B2B_ADMN_TOKEN",
+   APP_USER: "B2B_ADMN_USER",
+   APP_PROFILE: "B2B_ADMN_PROFILE_USER",
+   APP_COMPANY: "B2B_ADMN_PROFILE_COMPANY",
+   APP_USER_PHOTO: "B2B_ADMN_USER_PHOTO",
+   APP_COLOR: "B2B_ADMN_COLOR",
+   APP_LANG: "B2B_ADMN_LANG",
 
    authRoles: {
       sa: ['SA'], // Only Super Admin has access

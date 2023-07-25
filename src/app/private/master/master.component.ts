@@ -71,10 +71,10 @@ export class MasterComponent implements OnInit {
       this.output.table_ready.next(false);
 
       this.provider.BD_ActionAdminGet(this._modulo, 'get').subscribe((data) => {
+         console.log(data);
          switch (this._modulo) {
             case 'events':
                this.dataToDisplay = data.msg;
-               console.log(data.msg);
                break;
 
             case 'blogs':
@@ -92,7 +92,7 @@ export class MasterComponent implements OnInit {
 
             case 'companies':
                this.dataToDisplay = data.msg.approved;
-               this.dataToDisplay1 = data.msg.pending;
+               this.dataToDisplay1 = data.msg.no_approved;
                break;
 
             default:
