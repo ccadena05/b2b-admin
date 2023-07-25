@@ -15,7 +15,7 @@ import { MatOptionSelectionChange } from '@angular/material/core';
 import { Response } from 'src/app/models/response.model';
 import { MatRadioButton } from '@angular/material/radio';
 import { cloneDeep } from 'lodash';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 declare var google: any;
 
@@ -37,7 +37,6 @@ export class CompaniesDetailComponent implements OnInit {
    selectedState: any;
    fullLanguage: any;
    readonly separatorKeysCodes = [ENTER, COMMA] as const;
-   profile_company_id: string = this.ls.getItem("B2B_PROFILE_COMPANY");
    @ViewChild('a') slide_dia!: MatSlideToggle;
    @ViewChild('consi') consi!: MatRadioButton
    @ViewChild('ping') ping!: ElementRef;
@@ -158,10 +157,11 @@ export class CompaniesDetailComponent implements OnInit {
       private formBuilder: FormBuilder,
       private output: OutputService,
       private manager: CloudinaryWidgetManager,
+      private activatedRoute: ActivatedRoute,
       public router: Router
    ) {
       this.form = this.formBuilder.group({
-         profile_company_id: [this.profile_company_id, Validators.required],
+         profile_company_id: [this.__id, Validators.required],
          legal_name: this.formBuilder.array([this.master.createTranslation('1')]),
          friendly_name: [null, Validators.required],
          rfc: [null, Validators.required], //QUITAR TRADUCCION
@@ -313,7 +313,7 @@ export class CompaniesDetailComponent implements OnInit {
                         if (!type_company.error) 
                            this.sel['type_company'] = type_company.msg
 
-                        this.provider.BD_ActionGet('profile_company', 'get_profile', { profile_company_id: this.profile_company_id, user_id: this.ls.getItem("B2B_USER")}).subscribe(
+                        this.provider.BD_ActionAdminGet('companies', 'get_company_by_id', { id: atob(this.__id)}).subscribe(
                            (company: Response) => {
                               console.log('Viene de DB', company);
                               if (!company.error) {
@@ -629,5 +629,16 @@ export class CompaniesDetailComponent implements OnInit {
 
    edit(row?: any): void {
       this.router.navigate(['/m/rfq', 'detail', btoa(row.ID)])
+   }
+
+   get __id() {
+      let m = ''
+      this.activatedRoute.params.subscribe(params => {
+
+         m = params['id'];
+      });
+
+
+      return m
    }
 }
