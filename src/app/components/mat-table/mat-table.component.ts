@@ -76,9 +76,7 @@ export class MatTableComponent implements OnInit, OnChanges {
       private output: OutputService
    ) {
       this.generateRandomPaddings();
-      this.output.table_ready.subscribe(
-         (ready) => this.table_ready = ready
-      )
+      this.output.table_ready.subscribe((ready) => this.table_ready = ready)
    }
 
    ngOnInit(): void {
@@ -86,20 +84,22 @@ export class MatTableComponent implements OnInit, OnChanges {
    }
 
    ngOnChanges(changes: SimpleChanges) {
+      this.output.table_ready.next(false);
 
-      this.columns = this.datos = [];
-      if (changes['dataToDisplay']) {
-         // this.displayedColumns = this.renderTable(changes['dataToDisplay'].currentValue)
-         this.renderTable(changes['dataToDisplay'].currentValue).then((data) => {
-            this.displayedColumns = data;
-            this.dataSource.paginator = this.paginator;
-            this.dataSource.sort = this.sort;
+      this.columns = this.datos = this.displayedColumns = [];
+      
+         if (changes['dataToDisplay']) {
+            // this.displayedColumns = this.renderTable(changes['dataToDisplay'].currentValue)
+            this.renderTable(changes['dataToDisplay']?.currentValue).then((data) => {
+               this.displayedColumns = data;
+               this.dataSource.paginator = this.paginator;
+               this.dataSource.sort = this.sort;
 
-            if (data.length > 0) {
-               this.output.table_ready.next(true);
-            }
-         })
-      }
+               if (data.length > 0) {
+                  this.output.table_ready.next(true);
+               }
+            })
+         }
    }
 
    ngAfterViewInit() {
@@ -112,33 +112,31 @@ export class MatTableComponent implements OnInit, OnChanges {
       const filterValue = (event.target as HTMLInputElement)?.value;
       this.dataSource.filter = filterValue.trim().toLowerCase();
 
-      if (this.dataSource?.paginator) {
+      if (this.dataSource?.paginator)
          this.dataSource?.paginator.firstPage();
-      }
    }
 
    announceSortChange({ sortState }: { sortState: Sort; }) {
-      if (sortState?.direction) {
+      if (sortState?.direction)
          this._liveAnnouncer.announce(`Sorted ${sortState.direction}ending`);
-      } else {
+      else
          this._liveAnnouncer.announce('Sorting cleared');
-      }
    }
 
    renderTable(data: any): Promise<any> {
       return new Promise<any>((resolve) => {
-         this.dataSource = new MatTableDataSource(data);
+            this.dataSource = new MatTableDataSource(data);
 
-         if (data && data.length > 0) {
-            this.keyvalue.transform(data[0] ?? data[1])?.forEach((column: any, index: any) => {
-               this.columns?.push({
-                  columnDef: column?.key,
-                  header: column?.key.replace(/_/g, " "),
-                  cell: (data: any) => `${data[column?.key]}`
+            if (data && data.length > 0) {
+               this.keyvalue.transform(data[0] ?? data[1])?.forEach((column: any, index: any) => {
+                  this.columns?.push({
+                     columnDef: column?.key,
+                     header: column?.key.replace(/_/g, " "),
+                     cell: (data: any) => `${data?.[column?.key]}`
+                  });
                });
-            });
-         }
-         resolve(this.columns?.map((c: any) => c?.columnDef))
+            }
+            resolve(this.columns?.map((c: any) => c?.columnDef))
       })
    }
 
@@ -147,7 +145,7 @@ export class MatTableComponent implements OnInit, OnChanges {
    }
 
    generateRandomPaddings(): void {
-      for (let i = 0; i < 5; i++) { 
+      for (let i = 0; i < 5; i++) {
          for (let j = 0; j < 6; j++) {
             const randomPadding = Math.floor(Math.random() * (100 - 20 + 1)) + 20;
             this.randomPaddings.push(`12px ${randomPadding}px`);

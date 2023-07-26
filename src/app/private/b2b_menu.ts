@@ -28,5 +28,11 @@ export const b2b_menu = [
       link: '/m/companies',
       icon: 'domain',
       bg: 'bg-b2b-2'
+   },
+   {
+      label: 'Usuarios',
+      link: '/m/users',
+      icon: 'group',
+      bg: 'bg-b2b-2'
    }
 ]

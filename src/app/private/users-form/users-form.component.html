@@ -1,0 +1,102 @@
+<form #cc [formGroup]="form" (ngSubmit)="save()" id="company-form" class="bg-white rounded-2xl shadow-lg p-6">
+   <div
+      class="sticky top-0 right-0 left-full w-[7.5rem] z-50 justify-end text-slate-100 rounded-2xl flex gap-x-2 group">
+      <div *ngIf="router.url.includes('detail')" type="button" class="btn-del" (click)="delete()">
+         <mat-icon>delete</mat-icon>
+      </div>
+      <button type="submit" class="btn-1" [disabled]="form.invalid">
+         <i class="fa-solid {{router.url.includes('detail') ? 'fa-user-pen' : 'fa-user-plus'}}"></i>
+         <!-- <mat-icon>{{router.url.includes('detail') ? 'edit' : 'post_add'}}</mat-icon> -->
+      </button>
+   </div>
+
+   <div class="flex flex-col gap-y-6 overflow-x-hidden">
+
+      <div
+         [ngClass]="cc.offsetWidth <= 640 ? 'grid-cols-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'grid-cols-2' : 'grid-cols-3'"
+         class="grid gap-x-6 w-full">
+
+         <div class="title w-full"
+            [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+            Información del usuario
+         </div>
+
+         <mat-slide-toggle class="mb-6 min-w-[8rem]" formControlName="hidden">Oculto</mat-slide-toggle>
+         <mat-slide-toggle class="mb-6 min-w-[8rem]" formControlName="active">Activo</mat-slide-toggle>
+         <mat-slide-toggle class="mb-6 min-w-[8rem]" formControlName="confirmed">Correo validado</mat-slide-toggle>
+
+         <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Nombre de usuario</mat-label>
+            <mat-icon matPrefix class="scale-75">alternate_email</mat-icon>
+            <input formControlName="username" type="text" matInput>
+            <mat-error>Ingresa un valor válido</mat-error>
+         </mat-form-field>
+
+         <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Nombre(s)</mat-label>
+            <input formControlName="first_name" type="text" matInput>
+            <mat-error>Ingresa un valor válido</mat-error>
+         </mat-form-field>
+
+         <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Apellido(s)</mat-label>
+            <input formControlName="last_name" type="text" matInput>
+            <mat-error>Ingresa un valor válido</mat-error>
+         </mat-form-field>
+
+
+
+         <mat-form-field appearance="outline" class="">
+            <mat-label>Email</mat-label>
+            <input formControlName="email" type="text" matInput>
+            <mat-error>Ingresa un valor válido</mat-error>
+         </mat-form-field>
+
+
+         <div #phone class="w-full flex gap-x-3">
+            <div #pc class="w-full max-w-[6rem]">
+               <search-select [label]="'Código'" [select]="sel['countries']" [control]="form.controls['phone_code']"
+                  class="w-full"></search-select>
+            </div>
+
+            <mat-form-field appearance="outline" class="w-full"
+               [ngStyle]="{'max-width.px' : phone.offsetWidth - pc.offsetWidth - 12}">
+               <mat-label>Teléfono</mat-label>
+               <input formControlName="phone" type="text" matInput>
+               <mat-error>Ingresar un valor válido *</mat-error>
+            </mat-form-field>
+         </div>
+
+         <search-select [label]=" 'Idioma' " [select]="sel['languages']" [control]="form.controls['languages']"
+            class="w-full"></search-select>
+         <location [form]="form"
+            [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+         </location>
+
+         <div class="title w-full"
+            [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+            Información laboral
+         </div>
+
+         <search-select [label]="'Empresa'" [select]="sel['companies']"
+                  [control]="form.controls['profile_company_id']" class="w-full"></search-select>
+
+         <mat-form-field appearance="outline" class="basis-full grow">
+            <mat-label>Puesto</mat-label>
+            <input formControlName="job" type="text" matInput>
+            <mat-error>Ingresa un valor válido</mat-error>
+         </mat-form-field>
+
+         <mat-form-field appearance="outline" class="">
+            <mat-label>Departamento</mat-label>
+            <input formControlName="departament" type="text" matInput>
+            <mat-error>Ingresa un valor válido</mat-error>
+         </mat-form-field>
+
+         <search-select [label]="'Permisos'" [select]="sel['countries']" [control]="form.controls['phone_code']"
+                  class="w-full"></search-select>
+
+         
+      </div>
+   </div>
+</form>

@@ -71,7 +71,7 @@ export class MasterComponent implements OnInit {
       this.output.table_ready.next(false);
 
       this.provider.BD_ActionAdminGet(this._modulo, 'get').subscribe((data) => {
-         console.log(data);
+         // console.log(data);
          switch (this._modulo) {
             case 'events':
                this.dataToDisplay = data.msg;
@@ -83,11 +83,11 @@ export class MasterComponent implements OnInit {
                break;
 
             case 'rfq':
-               console.log(data.msg);
+               // console.log(data.msg);
 
                this.dataToDisplay = data.msg.no_rfq;
                this.dataToDisplay1 = data.msg.is_rfq;
-               console.log(data.msg);
+               // console.log(data.msg);
                break;
 
             case 'companies':

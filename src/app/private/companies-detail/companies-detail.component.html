@@ -42,156 +42,207 @@
                                 class="grid gap-x-6 w-full">
 
                                 <div class="title w-full"
+                                    [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                                    Información de la empresa
+                                </div>
+
+                                <div class="flex gap-x-6" [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                                    <mat-slide-toggle class="mb-6 w-full" formControlName="hidden">Oculto</mat-slide-toggle>
+                                    <mat-slide-toggle class="mb-6 w-full" formControlName="validated">Validado</mat-slide-toggle>
+                                </div>
+
+                                <div class="grow" formArrayName="legal_name"
                                 [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
-                                Información de la empresa
-                             </div>
-              
-                             <div
-                                [ngClass]="cc.offsetWidth <= 640 ? 'basis-1/2' : cc.offsetWidth > 640 && cc.offsetWidth <= 768 ? 'basis-1/3' : 'basis-1/4'"
-                                class="grow" formArrayName="legal_name">
-                                <div *ngFor="let item of master.getterA(form.controls['legal_name']).controls; let i = index"
-                                   [formGroupName]="i">
-                                   <mat-form-field class="w-full" appearance="outline" *ngIf="item.value.languages_id == tab.id">
-                                      <mat-label>Razón social</mat-label>
-                                      <input formControlName="text" type="text" matInput>
-                                      <mat-error>Ingresar un valor válido *</mat-error>
-                                   </mat-form-field>
+                                    <div *ngFor="let item of master.getterA(form.controls['legal_name']).controls; let i = index"
+                                        [formGroupName]="i">
+                                        <mat-form-field class="w-full" appearance="outline"
+                                            *ngIf="item.value.languages_id == tab.id">
+                                            <mat-label>Razón social</mat-label>
+                                            <input formControlName="text" type="text" matInput>
+                                            <mat-error>Ingresar un valor válido *</mat-error>
+                                        </mat-form-field>
+                                    </div>
                                 </div>
-                             </div>
-              
-                             <mat-form-field appearance="outline" class="w-full" *ngIf="i == 0">
-                                <mat-label>Nombre comercial</mat-label>
-                                <input formControlName="friendly_name" type="text" matInput>
-                                <mat-error>Ingresar un valor válido *</mat-error>
-                             </mat-form-field>
-              
-                             <mat-form-field appearance="outline" class="w-full" *ngIf="i == 0">
-                                <mat-label>RFC</mat-label>
-                                <input formControlName="rfc" type="text" matInput>
-                                <mat-error>Ingresar un valor válido *</mat-error>
-                             </mat-form-field>
-              
-                             <mat-form-field appearance="outline" class="w-full" *ngIf="i == 0">
-                                <mat-label>Email</mat-label>
-                                <input formControlName="email_company" type="text" matInput>
-                                <mat-error>Ingresar un valor válido *</mat-error>
-                             </mat-form-field>
-              
-                             <div #phone class="w-full flex gap-x-3" *ngIf="i == 0">
-                                <div #pc class="w-full max-w-[6rem]">
-                                   <search-select [label]="'Código'" [select]="sel['countries']" [rq]="true"
-                                      [control]="form.controls['phone_code']" class="w-full"></search-select>
-                                </div>
-              
-                                <mat-form-field appearance="outline" class="w-full"
-                                   [ngStyle]="{'max-width.px' : phone.offsetWidth - pc.offsetWidth - 12}">
-                                   <mat-label>Teléfono</mat-label>
-                                   <input formControlName="phone" type="text" matInput>
-                                   <mat-error>Ingresar un valor válido *</mat-error>
+
+                                <mat-form-field appearance="outline" class="w-full" *ngIf="i == 0">
+                                    <mat-label>Nombre comercial</mat-label>
+                                    <input formControlName="friendly_name" type="text" matInput>
+                                    <mat-error>Ingresar un valor válido *</mat-error>
                                 </mat-form-field>
-                             </div>
-              
-                             <mat-form-field appearance="outline" class="w-full" *ngIf="i == 0">
-                                <mat-label>Ext</mat-label>
-                                <input formControlName="ext" type="text" matInput>
-                                <mat-error>Ingresar un valor válido *</mat-error>
-                             </mat-form-field>
-              
-                             <mat-form-field appearance="outline" class="w-full" *ngIf="i == 0">
-                                <mat-label>Conmutador</mat-label>
-                                <input formControlName="phone_switch" type="text" matInput>
-                                <mat-error>Ingresar un valor válido *</mat-error>
-                             </mat-form-field>
-              
-                             <mat-form-field appearance="outline" class="w-full" *ngIf="i == 0">
-                                <mat-label>Fax</mat-label>
-                                <input formControlName="phone_fax" type="text" matInput>
-                                <mat-error>Ingresar un valor válido *</mat-error>
-                             </mat-form-field>
-              
-                             <div class="w-full" formArrayName="main_activity">
-                                <div *ngFor="let item of master.getterA(form.controls['main_activity']).controls; let i = index"
-                                   [formGroupName]="i">
-                                   <mat-form-field class="w-full" appearance="outline" *ngIf="item.value.languages_id == tab.id">
-                                      <mat-label>Productos y servicios principales</mat-label>
-                                      <input formControlName="text" type="text" matInput>
-                                      <mat-error>Ingresar un valor válido *</mat-error>
-                                   </mat-form-field>
+
+                                <mat-form-field appearance="outline" class="w-full" *ngIf="i == 0">
+                                    <mat-label>RFC</mat-label>
+                                    <input formControlName="rfc" type="text" matInput>
+                                    <mat-error>Ingresar un valor válido *</mat-error>
+                                </mat-form-field>
+
+                                <mat-form-field appearance="outline" class="w-full" *ngIf="i == 0">
+                                    <mat-label>Email</mat-label>
+                                    <input formControlName="email_company" type="text" matInput>
+                                    <mat-error>Ingresar un valor válido *</mat-error>
+                                </mat-form-field>
+
+                                <div #phone class="w-full flex gap-x-3" *ngIf="i == 0">
+                                    <div #pc class="w-full max-w-[6rem]">
+                                        <search-select [label]="'Código'" [select]="sel['countries']"
+                                            [control]="form.controls['phone_code']" class="w-full"></search-select>
+                                    </div>
+
+                                    <mat-form-field appearance="outline" class="w-full"
+                                        [ngStyle]="{'max-width.px' : phone.offsetWidth - pc.offsetWidth - 12}">
+                                        <mat-label>Teléfono</mat-label>
+                                        <input formControlName="phone" type="text" matInput>
+                                        <mat-error>Ingresar un valor válido *</mat-error>
+                                    </mat-form-field>
                                 </div>
-                             </div>
-              
-                             <mat-form-field appearance="outline" class="w-full" *ngIf="i == 0">
-                                <mat-label>Creación empresa</mat-label>
-                                <input formControlName="start_year" type="text" matInput>
-                                <mat-error>Ingresar un valor válido *</mat-error>
-                             </mat-form-field>
-              
-                             <search-select [label]="'Giro de empresa'" [select]="sel['type_company']" [rq]="true"
-                                [control]="form.controls['type_company_id']" class="w-full"></search-select>
-              
-                             <search-select *ngIf="i == 0" [label]="'País de origen'" [select]="sel['countries']" [rq]="true"
-                                [control]="form.controls['country_origin']" class="w-full"></search-select>
-              
-                             <mat-divider class="title w-full"
-                                [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"
-                                *ngIf="i == 0"></mat-divider>
-              
-                             <div class="title" class="title w-full"
-                                [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"
-                                *ngIf="i == 0">
-                                Ubicación
-                             </div>
-              
-                             <div *ngIf="i == 0" class="title w-full"
-                                [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"
-                                id="map" #map class="aspect-[3/1] basis-full mb-4 rounded-2xl"></div>
-                             <div *ngIf="i == 0" class="title w-full"
-                                [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"
-                                class="flex justify-center items-center mb-6">
-                                <div class="btn-p mx-auto" (click)="getLocation()">
-                                   Obtener Información
+
+                                <mat-form-field appearance="outline" class="w-full" *ngIf="i == 0">
+                                    <mat-label>Ext</mat-label>
+                                    <input formControlName="ext" type="text" matInput>
+                                    <mat-error>Ingresar un valor válido *</mat-error>
+                                </mat-form-field>
+
+                                <mat-form-field appearance="outline" class="w-full" *ngIf="i == 0">
+                                    <mat-label>Conmutador</mat-label>
+                                    <input formControlName="phone_switch" type="text" matInput>
+                                    <mat-error>Ingresar un valor válido *</mat-error>
+                                </mat-form-field>
+
+                                <mat-form-field appearance="outline" class="w-full" *ngIf="i == 0">
+                                    <mat-label>Fax</mat-label>
+                                    <input formControlName="phone_fax" type="text" matInput>
+                                    <mat-error>Ingresar un valor válido *</mat-error>
+                                </mat-form-field>
+
+                                <div class="w-full" formArrayName="main_activity">
+                                    <div *ngFor="let item of master.getterA(form.controls['main_activity']).controls; let i = index"
+                                        [formGroupName]="i">
+                                        <mat-form-field class="w-full" appearance="outline"
+                                            *ngIf="item.value.languages_id == tab.id">
+                                            <mat-label>Productos y servicios principales</mat-label>
+                                            <input formControlName="text" type="text" matInput>
+                                            <mat-error>Ingresar un valor válido *</mat-error>
+                                        </mat-form-field>
+                                    </div>
                                 </div>
-                             </div>
-              
-                             <location [form]="form" *ngIf="i == 0" [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"></location>
-              
-                            <!--  <search-select *ngIf="i == 0" [label]="'País'" [select]="sel['all_countries']" [rq]="true"
-                                [control]="form.controls['country']" class="w-full"></search-select>
-              
-                             <search-select *ngIf="i == 0" [label]="'Estado'" [select]="sel['all_states']" [rq]="true"
-                                [control]="form.controls['state']" class="w-full"></search-select>
-              
-                             <search-select *ngIf="i == 0" [label]="'Ciudad'" [select]="sel['all_cities']" [rq]="true"
-                                [control]="form.controls['city']" class="w-full"></search-select> -->
-              
-                             <mat-form-field appearance="outline" class="w-full" *ngIf="i == 0">
-                                <mat-label>Código Postal </mat-label>
-                                <input formControlName="zip" type="text" matInput>
-                                <mat-error>Ingresar un valor válido *</mat-error>
-                             </mat-form-field>
-              
-                             <mat-form-field appearance="outline" class="w-full" *ngIf="i == 0">
-                                <mat-label>Colonia</mat-label>
-                                <input formControlName="address_2" type="text" matInput [matAutocomplete]="auto">
-                                <mat-autocomplete #auto="matAutocomplete">
-                                   <mat-option *ngFor="let item of location?.asentamientos_cp" [value]="item">{{item}}</mat-option>
-                                </mat-autocomplete>
-                                <mat-error>Ingresar un valor válido *</mat-error>
-                             </mat-form-field>
-              
-                             <mat-form-field appearance="outline" class="w-full" *ngIf="i == 0">
-                                <mat-label>Cobertura</mat-label>
-                                <input formControlName="branch" type="text" matInput>
-                                <mat-error>Ingresar un valor válido *</mat-error>
-                             </mat-form-field>
-              
-                             <mat-form-field appearance="outline" class="w-full"
-                                [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"
-                                *ngIf="i == 0">
-                                <mat-label>Calle</mat-label>
-                                <textarea formControlName="address_1" type="text" matInput></textarea>
-                                <mat-error>Ingresar un valor válido *</mat-error>
-                             </mat-form-field>
+
+                                <mat-form-field appearance="outline" class="w-full" *ngIf="i == 0">
+                                    <mat-label>Creación empresa</mat-label>
+                                    <input formControlName="start_year" type="text" matInput>
+                                    <mat-error>Ingresar un valor válido *</mat-error>
+                                </mat-form-field>
+
+                                <search-select [label]="'Giro de empresa'" [select]="sel['type_company']"
+                                    [control]="form.controls['type_company_id']" class="w-full"></search-select>
+
+                                <search-select *ngIf="i == 0" [label]="'País de origen'" [select]="sel['countries']"
+                                    [control]="form.controls['country_origin']"
+                                    class="w-full"></search-select>
+
+                                <search-select [label]="'Mebresía'" [select]="sel['type_company']"
+                                    [control]="form.controls['membership']" class="w-full"></search-select>
+
+                                <mat-form-field appearance="outline" class="" *ngIf="i == 0">
+                                    <mat-label>Fechas de membresía</mat-label>
+                                    <mat-date-range-input [rangePicker]="picker">
+                                       <input matStartDate formControlName="membership_start_date" placeholder="Inicio">
+                                       <input matEndDate formControlName="membership_end_date" placeholder="Fin">
+                                    </mat-date-range-input>
+                                    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                                    <mat-date-range-picker #picker></mat-date-range-picker>
+                  
+                                    <mat-error>Ingresa un valor válido</mat-error>
+                  
+                                 </mat-form-field>
+
+
+                                <mat-form-field appearance="outline" class="w-full" *ngIf="i == 0">
+                                    <mat-label>Límite de usuarios</mat-label>
+                                    <mat-icon class="text-slate-900" matPrefix
+                                       (click)="user_limit.valueAsNumber = user_limit.valueAsNumber - 1">remove</mat-icon>
+               
+                                    <input #user_limit formControlName="user_limit" type="number" matInput [value]="0">
+                                    <mat-icon class="text-slate-900" matSuffix
+                                       (click)="user_limit.valueAsNumber = user_limit.valueAsNumber + 1">add</mat-icon>
+                                    <mat-error>Ingresa un valor válido</mat-error>
+                                </mat-form-field>
+
+                                <mat-form-field appearance="outline" class="w-full" *ngIf="i == 0">
+                                    <mat-label>Límite de productos</mat-label>
+                                    <mat-icon class="text-slate-900" matPrefix
+                                       (click)="product_limit.valueAsNumber = product_limit.valueAsNumber - 1">remove</mat-icon>
+               
+                                    <input #product_limit formControlName="product_limit" type="number" matInput [value]="0">
+                                    <mat-icon class="text-slate-900" matSuffix
+                                       (click)="product_limit.valueAsNumber = product_limit.valueAsNumber + 1">add</mat-icon>
+                                    <mat-error>Ingresa un valor válido</mat-error>
+                                </mat-form-field>
+
+                                <mat-form-field appearance="outline" class="w-full" *ngIf="i == 0">
+                                    <mat-label>Límite de usuarios activos</mat-label>
+                                    <mat-icon class="text-slate-900" matPrefix
+                                       (click)="active_user_limit.valueAsNumber = active_user_limit.valueAsNumber - 1">remove</mat-icon>
+               
+                                    <input #active_user_limit formControlName="active_user_limit" type="number" matInput [value]="0">
+                                    <mat-icon class="text-slate-900" matSuffix
+                                       (click)="active_user_limit.valueAsNumber = active_user_limit.valueAsNumber + 1">add</mat-icon>
+                                    <mat-error>Ingresa un valor válido</mat-error>
+                                </mat-form-field>
+
+                                <mat-divider class="title w-full"
+                                    [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"
+                                    *ngIf="i == 0"></mat-divider>
+
+                                <div class="title" class="title w-full"
+                                    [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"
+                                    *ngIf="i == 0">
+                                    Ubicación
+                                </div>
+
+                                <div *ngIf="i == 0" class="title w-full"
+                                    [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"
+                                    id="map" #map class="aspect-[3/1] basis-full mb-4 rounded-2xl"></div>
+                                <div *ngIf="i == 0" class="title w-full"
+                                    [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"
+                                    class="flex justify-center items-center mb-6">
+                                    <div class="btn-p mx-auto" (click)="getLocation()">
+                                        Obtener Información
+                                    </div>
+                                </div>
+
+                                <location [form]="form" *ngIf="i == 0"
+                                    [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                                </location>
+
+                                <mat-form-field appearance="outline" class="w-full" *ngIf="i == 0">
+                                    <mat-label>Código Postal </mat-label>
+                                    <input formControlName="zip" type="text" matInput>
+                                    <mat-error>Ingresar un valor válido *</mat-error>
+                                </mat-form-field>
+
+                                <mat-form-field appearance="outline" class="w-full" *ngIf="i == 0">
+                                    <mat-label>Colonia</mat-label>
+                                    <input formControlName="address_2" type="text" matInput [matAutocomplete]="auto">
+                                    <mat-autocomplete #auto="matAutocomplete">
+                                        <mat-option *ngFor="let item of location?.asentamientos_cp"
+                                            [value]="item">{{item}}</mat-option>
+                                    </mat-autocomplete>
+                                    <mat-error>Ingresar un valor válido *</mat-error>
+                                </mat-form-field>
+
+                                <mat-form-field appearance="outline" class="w-full" *ngIf="i == 0">
+                                    <mat-label>Cobertura</mat-label>
+                                    <input formControlName="branch" type="text" matInput>
+                                    <mat-error>Ingresar un valor válido *</mat-error>
+                                </mat-form-field>
+
+                                <mat-form-field appearance="outline" class="w-full"
+                                    [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"
+                                    *ngIf="i == 0">
+                                    <mat-label>Calle</mat-label>
+                                    <textarea formControlName="address_1" type="text" matInput></textarea>
+                                    <mat-error>Ingresar un valor válido *</mat-error>
+                                </mat-form-field>
 
                             </div>
 

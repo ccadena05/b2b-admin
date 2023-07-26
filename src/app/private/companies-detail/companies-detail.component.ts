@@ -126,7 +126,7 @@ export class CompaniesDetailComponent implements OnInit {
    requierements = [
       {
          'ID': 'PTS130620I48202307111519489289C',
-         '01_TITLE': 'HDMI',
+         '01_TITLE': 'HDMIaaa',
          '02_EXPIRATION DATE': '2023-12-11',
          '03_RFQ STATUS': 1,
          '04_APROVED': 1,
@@ -161,30 +161,30 @@ export class CompaniesDetailComponent implements OnInit {
       public router: Router
    ) {
       this.form = this.formBuilder.group({
-         profile_company_id: [this.__id, Validators.required],
+         profile_company_id: [this.__id],
          legal_name: this.formBuilder.array([this.master.createTranslation('1')]),
-         friendly_name: [null, Validators.required],
+         friendly_name: [null],
          rfc: [null, Validators.required], //QUITAR TRADUCCION
          email_company: [null, [Validators.required, Validators.email]],
-         phone_code: [null, Validators.required],
-         phone: [null, Validators.required],
+         phone_code: [null],
+         phone: [null],
          ext: [null],
          phone_switch: [null],
          phone_fax: [null],
          main_activity: this.formBuilder.array([this.master.createTranslation('1')]),
-         start_year: [null, Validators.required],
-         type_company_id: [null, Validators.required],
-         country_origin: [null, Validators.required],
-         country: [null, Validators.required],
-         state: [null, Validators.required],
-         city: [null, Validators.required],
-         zip: [null, Validators.required],
-         address_1: [null, Validators.required], // Calle
-         address_2: [null, Validators.required], // Colonia
-         latitude: [null, Validators.required],
-         longitude: [null, Validators.required],
-         branch: [null, Validators.required],
-         web_page: [null, Validators.required],
+         start_year: [null],
+         type_company_id: [null],
+         country_origin: [null],
+         country: [null],
+         state: [null],
+         city: [null],
+         zip: [null],
+         address_1: [null], // Calle
+         address_2: [null], // Colonia
+         latitude: [null],
+         longitude: [null],
+         branch: [null],
+         web_page: [null],
          tags: [null],
          brochure_name: [null],
          brochure_url: [null],
@@ -223,12 +223,20 @@ export class CompaniesDetailComponent implements OnInit {
          twitter: [null, Validators.pattern(/^(https?:\/\/)?(www\.)?twitter.com\/[a-zA-Z0-9_]+(\/)?$/)],
          linkedin: [null, Validators.pattern(/^https?:\/\/(?:www\.)?linkedin\.com\/company\/.+$/)],
          youtube: [null, Validators.pattern(/^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtube\.com\/embed\/|youtu\.be\/)[a-zA-Z0-9_-]+(\/)?(\?[\w=&]*)?(#([\w-]+))?$/i)],
-         number_employees: [null, Validators.required],
-         turnover: [null, Validators.required],
+         number_employees: [null],
+         turnover: [null],
          specialization: this.formBuilder.array([this.master.createTranslation('1')]),
          another_sector: this.formBuilder.array([this.master.createTranslation('1')]),
          relevant_products: this.formBuilder.array([this.master.createTranslation('1')]),
-         image_url: [null, Validators.required]
+         image_url: [null],
+         hidden: [null],
+         validated: [null],
+         membership: [null],
+         membership_start_date: [null],
+         membership_end_date: [null],
+         user_limit: [0],
+         product_limit: [0],
+         active_user_limit: [0],
       })
 
 
@@ -318,6 +326,8 @@ export class CompaniesDetailComponent implements OnInit {
                               console.log('Viene de DB', company);
                               if (!company.error) {
                                  let comp = company?.msg;
+                                 comp.state = comp.state.toString()
+                                 comp.city = comp.city.toString()
                                  // comp = this.ls.getItem('COMPANY_FORM');
                                  let _isos: any = []
                                  comp?.isos?.forEach((element: any) => {

@@ -6,6 +6,7 @@ import { BlogFormComponent } from './blog-form/blog-form.component';
 import { CompaniesDetailComponent } from './companies-detail/companies-detail.component';
 import { RfqFormComponent } from './rfq-form/rfq-form.component';
 import { RfqEditComponent } from './rfq-edit/rfq-edit.component';
+import { UsersFormComponent } from './users-form/users-form.component';
 const routes: Routes = [
   {
     path: '',
@@ -43,6 +44,10 @@ const routes: Routes = [
       {
         path: 'm/companies/add',
         component: CompaniesDetailComponent
+      },
+      {
+        path: 'm/users/add',
+        component: UsersFormComponent
       },
 
       {
