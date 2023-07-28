@@ -14,8 +14,8 @@ import { from, lastValueFrom, map, take } from 'rxjs';
 })
 
 export class ProviderService {
-/*    JWT_TOKEN = "B2B_TOKEN";
-   APP_USER = "B2B_TOKEN_USER"; */
+   /*    JWT_TOKEN = "B2B_TOKEN";
+      APP_USER = "B2B_TOKEN_USER"; */
    public _url = '/_api.php?opcion=';
    public _urlMobile = '/_api.php?Funcion=';
    public mentores: any;
@@ -23,9 +23,9 @@ export class ProviderService {
    urlAdmin = config.apiAdminProdUrl;
    url = config.apiProdUrl;
 
-   resultadoHTML: any;   
+   resultadoHTML: any;
 
-   
+
    constructor(
       private http: HttpClient,
       //private cookies: CookieService,
@@ -34,51 +34,51 @@ export class ProviderService {
       private jwt: JwtAuthService
    ) { }
 
-   BD_ActionPost( modelo: any, action: any, data?: any ) {
+   BD_ActionPost(modelo: any, action: any, data?: any) {
       // console.log(this.url + modelo + this._url + action, data, {headers: this.headers()});
       return this.http.post(this.url + modelo + this._url + action, data, {
          headers: this.headers()
       });
    }
 
-   BD_ActionGet( modelo: any, action: any, params?: any ) {
-      console.log(this.url + modelo + this._url + action, { headers: this.headers(), params: this.params(params)});
-      let get = this.http.get<Response>(this.url + modelo + this._url + action, { headers: this.headers(), params: this.params(params)})
+   BD_ActionGet(modelo: any, action: any, params?: any) {
+      console.log(this.url + modelo + this._url + action, { headers: this.headers(), params: this.params(params) });
+      let get = this.http.get<Response>(this.url + modelo + this._url + action, { headers: this.headers(), params: this.params(params) })
 
       return get;
    }
 
-   BD_ActionPut( modelo: any, action: any, data?: any ) {
-      console.log(this.url + modelo + this._url + action, data, { headers: this.headers()});
-      let put = this.http.put(this.url + modelo + this._url + action, data, { headers: this.headers()})
+   BD_ActionPut(modelo: any, action: any, data?: any) {
+      console.log(this.url + modelo + this._url + action, data, { headers: this.headers() });
+      let put = this.http.put(this.url + modelo + this._url + action, data, { headers: this.headers() })
 
       return put;
    }
 
-   BD_ActionAdminPost( modelo: any, action: any, data?: any ) {
-      console.log(this.urlAdmin + modelo + this._url + action, data, {headers: this.headers()});
+   BD_ActionAdminPost(modelo: any, action: any, data?: any) {
+      console.log(this.urlAdmin + modelo + this._url + action, data, { headers: this.headers() });
       return this.http.post(this.urlAdmin + modelo + this._url + action, data, {
          headers: this.headers()
       });
    }
 
-   BD_ActionAdminGet( modelo: any, action: any, params?: any ) {
-      console.log(this.urlAdmin + modelo + this._url + action, { headers: this.headers(), params: this.params(params)});
-      let get = this.http.get<Response>(this.urlAdmin + modelo + this._url + action, { headers: this.headers(), params: this.params(params)})
+   BD_ActionAdminGet(modelo: any, action: any, params?: any) {
+      console.log(this.urlAdmin + modelo + this._url + action, { headers: this.headers(), params: this.params(params) });
+      let get = this.http.get<Response>(this.urlAdmin + modelo + this._url + action, { headers: this.headers(), params: this.params(params) })
 
       return get;
    }
 
-   BD_ActionAdminPut( modelo: any, action: any, data?: any ) {
-      console.log(this.urlAdmin + modelo + this._url + action, data, { headers: this.headers()});
-      let put = this.http.put(this.urlAdmin + modelo + this._url + action, data, { headers: this.headers()})
+   BD_ActionAdminPut(modelo: any, action: any, data?: any) {
+      console.log(this.urlAdmin + modelo + this._url + action, data, { headers: this.headers() });
+      let put = this.http.put(this.urlAdmin + modelo + this._url + action, data, { headers: this.headers() })
 
       return put;
    }
 
-   BD_ActionAdminDel( modelo: any, action: any, params: any ) {
-      console.log(this.urlAdmin + modelo + this._url + action, { headers: this.headers(), params: this.params(params)});
-      let put = this.http.delete(this.urlAdmin + modelo + this._url + action, { headers: this.headers(), params: this.params(params)})
+   BD_ActionAdminDel(modelo: any, action: any, params: any) {
+      console.log(this.urlAdmin + modelo + this._url + action, { headers: this.headers(), params: this.params(params) });
+      let put = this.http.delete(this.urlAdmin + modelo + this._url + action, { headers: this.headers(), params: this.params(params) })
       return put;
    }
 
@@ -87,9 +87,9 @@ export class ProviderService {
       return this.http.get(url, data);
    }
 
-/*    Geocoding(lat: any, lon: any){
-      return this.http.get('https://geocode.maps.co/reverse?lat=' + lat + '&lon=' + lon);
-   } */
+   /*    Geocoding(lat: any, lon: any){
+         return this.http.get('https://geocode.maps.co/reverse?lat=' + lat + '&lon=' + lon);
+      } */
 
    BD_ActionUpload(data: any) {
       //console.log(this.url + modelo + this._url + action);

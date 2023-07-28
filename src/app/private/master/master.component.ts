@@ -53,52 +53,38 @@ export class MasterComponent implements OnInit {
    }
 
    getData() {
-      /* // this.output.ready.next(false);
-      this.dataToDisplay = []
-      this.provider.BD_ActionPost(this.modulo, 'index').subscribe(
-          (index: any) => {
-            console.log(index);
-            index.forEach((el: any) => {
-               el.link_id = this.modulo;
-            });
-            this.dataToDisplay = index;
-            console.log(this.dataToDisplay);
-            
-            // this.output.ready.next(true);
-         }
-      ) */
       this.output.ready.next(false);
-      this.output.table_ready.next(false);
+      this.output.table_ready.next(false)
 
       this.provider.BD_ActionAdminGet(this._modulo, 'get').subscribe((data) => {
-         // console.log(data);
-         switch (this._modulo) {
-            case 'events':
-               this.dataToDisplay = data.msg;
-               break;
+         if (!data.error) {
+            switch (this._modulo) {
+               case 'events':
+                  this.dataToDisplay = data.msg;
+                  break;
 
-            case 'blogs':
-               this.dataToDisplay = data.msg;
-               console.log(data.msg);
-               break;
+               case 'blogs':
+                  this.dataToDisplay = data.msg;
+                  break;
 
-            case 'rfq':
-               // console.log(data.msg);
+               case 'rfq':
+                  this.dataToDisplay = data.msg.no_rfq;
+                  this.dataToDisplay1 = data.msg.is_rfq;
+                  break;
 
-               this.dataToDisplay = data.msg.no_rfq;
-               this.dataToDisplay1 = data.msg.is_rfq;
-               // console.log(data.msg);
-               break;
+               case 'companies':
+                  this.dataToDisplay = data.msg.approved;
+                  this.dataToDisplay1 = data.msg.no_approved;
+                  break;
 
-            case 'companies':
-               this.dataToDisplay = data.msg.approved;
-               this.dataToDisplay1 = data.msg.no_approved;
-               break;
-
-            default:
-               break;
+               default:
+                  break;
+            }
+         } else {
+            this.dataToDisplay = []
+            this.dataToDisplay1 = []
          }
-      });
+      })
 
       // this.provider.BD_ActionAdminGet(this._modulo, 'get').subscribe((data) => {
       //    this.dataToDisplay = data.msg.approved.is_rfq;

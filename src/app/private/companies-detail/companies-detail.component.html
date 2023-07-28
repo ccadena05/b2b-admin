@@ -46,13 +46,16 @@
                                     Información de la empresa
                                 </div>
 
-                                <div class="flex gap-x-6" [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
-                                    <mat-slide-toggle class="mb-6 w-full" formControlName="hidden">Oculto</mat-slide-toggle>
-                                    <mat-slide-toggle class="mb-6 w-full" formControlName="validated">Validado</mat-slide-toggle>
+                                <div class="flex gap-x-6"
+                                    [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                                    <mat-slide-toggle class="mb-6 w-full"
+                                        formControlName="hidden">Oculto</mat-slide-toggle>
+                                    <mat-slide-toggle class="mb-6 w-full"
+                                        formControlName="validated">Validado</mat-slide-toggle>
                                 </div>
 
                                 <div class="grow" formArrayName="legal_name"
-                                [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                                    [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
                                     <div *ngFor="let item of master.getterA(form.controls['legal_name']).controls; let i = index"
                                         [formGroupName]="i">
                                         <mat-form-field class="w-full" appearance="outline"
@@ -136,8 +139,7 @@
                                     [control]="form.controls['type_company_id']" class="w-full"></search-select>
 
                                 <search-select *ngIf="i == 0" [label]="'País de origen'" [select]="sel['countries']"
-                                    [control]="form.controls['country_origin']"
-                                    class="w-full"></search-select>
+                                    [control]="form.controls['country_origin']" class="w-full"></search-select>
 
                                 <search-select [label]="'Mebresía'" [select]="sel['type_company']"
                                     [control]="form.controls['membership']" class="w-full"></search-select>
@@ -145,47 +147,50 @@
                                 <mat-form-field appearance="outline" class="" *ngIf="i == 0">
                                     <mat-label>Fechas de membresía</mat-label>
                                     <mat-date-range-input [rangePicker]="picker">
-                                       <input matStartDate formControlName="membership_start_date" placeholder="Inicio">
-                                       <input matEndDate formControlName="membership_end_date" placeholder="Fin">
+                                        <input matStartDate formControlName="membership_start_date"
+                                            placeholder="Inicio">
+                                        <input matEndDate formControlName="membership_end_date" placeholder="Fin">
                                     </mat-date-range-input>
                                     <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
                                     <mat-date-range-picker #picker></mat-date-range-picker>
-                  
+
                                     <mat-error>Ingresa un valor válido</mat-error>
-                  
-                                 </mat-form-field>
+
+                                </mat-form-field>
 
 
                                 <mat-form-field appearance="outline" class="w-full" *ngIf="i == 0">
                                     <mat-label>Límite de usuarios</mat-label>
                                     <mat-icon class="text-slate-900" matPrefix
-                                       (click)="user_limit.valueAsNumber = user_limit.valueAsNumber - 1">remove</mat-icon>
-               
+                                        (click)="user_limit.valueAsNumber = user_limit.valueAsNumber - 1">remove</mat-icon>
+
                                     <input #user_limit formControlName="user_limit" type="number" matInput [value]="0">
                                     <mat-icon class="text-slate-900" matSuffix
-                                       (click)="user_limit.valueAsNumber = user_limit.valueAsNumber + 1">add</mat-icon>
+                                        (click)="user_limit.valueAsNumber = user_limit.valueAsNumber + 1">add</mat-icon>
                                     <mat-error>Ingresa un valor válido</mat-error>
                                 </mat-form-field>
 
                                 <mat-form-field appearance="outline" class="w-full" *ngIf="i == 0">
                                     <mat-label>Límite de productos</mat-label>
                                     <mat-icon class="text-slate-900" matPrefix
-                                       (click)="product_limit.valueAsNumber = product_limit.valueAsNumber - 1">remove</mat-icon>
-               
-                                    <input #product_limit formControlName="product_limit" type="number" matInput [value]="0">
+                                        (click)="product_limit.valueAsNumber = product_limit.valueAsNumber - 1">remove</mat-icon>
+
+                                    <input #product_limit formControlName="product_limit" type="number" matInput
+                                        [value]="0">
                                     <mat-icon class="text-slate-900" matSuffix
-                                       (click)="product_limit.valueAsNumber = product_limit.valueAsNumber + 1">add</mat-icon>
+                                        (click)="product_limit.valueAsNumber = product_limit.valueAsNumber + 1">add</mat-icon>
                                     <mat-error>Ingresa un valor válido</mat-error>
                                 </mat-form-field>
 
                                 <mat-form-field appearance="outline" class="w-full" *ngIf="i == 0">
                                     <mat-label>Límite de usuarios activos</mat-label>
                                     <mat-icon class="text-slate-900" matPrefix
-                                       (click)="active_user_limit.valueAsNumber = active_user_limit.valueAsNumber - 1">remove</mat-icon>
-               
-                                    <input #active_user_limit formControlName="active_user_limit" type="number" matInput [value]="0">
+                                        (click)="active_user_limit.valueAsNumber = active_user_limit.valueAsNumber - 1">remove</mat-icon>
+
+                                    <input #active_user_limit formControlName="active_user_limit" type="number" matInput
+                                        [value]="0">
                                     <mat-icon class="text-slate-900" matSuffix
-                                       (click)="active_user_limit.valueAsNumber = active_user_limit.valueAsNumber + 1">add</mat-icon>
+                                        (click)="active_user_limit.valueAsNumber = active_user_limit.valueAsNumber + 1">add</mat-icon>
                                     <mat-error>Ingresa un valor válido</mat-error>
                                 </mat-form-field>
 
@@ -625,6 +630,12 @@
                             <app-mat-table [dataToDisplay]="products"></app-mat-table>
                         </mat-tab>
                         <mat-tab label="RFQ">
+                            <div class="w-full flex items-end justify-end">
+                                <button (click)="addrfq()"
+                                    class="bg-b2b-2 text-white h-12 w-12 shrink-0 grow-0 flex justify-center items-center rounded-xl">
+                                    <mat-icon class="m-auto">add</mat-icon>
+                                </button>
+                            </div>
                             <app-mat-table [dataToDisplay]="requierements" [action]="edit"></app-mat-table>
                         </mat-tab>
                     </form>

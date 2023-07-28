@@ -92,36 +92,36 @@ export class CompaniesDetailComponent implements OnInit {
 
    products: any = [
       {
-        '01_NOMBRE': 'Caretas con diadema inyectada Modelo CCtr',
-        '02_DESC_BREVE': 'Careta protectora ante contingencia COVID19.',
-        '03_DESC_DETALLADA': 'Una careta protectora es un tipo de equipo de protección personal que se utiliza para proteger la cara de una persona de posibles riesgos durante la contingencia del COVID-19. Está diseñada para cubrir la cara completa y se usa comúnmente en combinación con otros equipos de protección personal, como mascarillas faciales y guantes, para proporcionar una protección adicional contra el virus.'
+         '01_NOMBRE': 'Caretas con diadema inyectada Modelo CCtr',
+         '02_DESC_BREVE': 'Careta protectora ante contingencia COVID19.',
+         '03_DESC_DETALLADA': 'Una careta protectora es un tipo de equipo de protección personal que se utiliza para proteger la cara de una persona de posibles riesgos durante la contingencia del COVID-19. Está diseñada para cubrir la cara completa y se usa comúnmente en combinación con otros equipos de protección personal, como mascarillas faciales y guantes, para proporcionar una protección adicional contra el virus.'
       },
       {
-        '01_NOMBRE': 'Careta con soporte Modelo FKI',
-        '02_DESC_BREVE': 'Careta con diadema inyectada, fabricada en PET transparente, reutilizable y sanitizable.',
-        '03_DESC_DETALLADA': 'La careta con diadema inyectada es un tipo de equipo de protección personal que se utiliza para proteger la cara de una persona de posibles riesgos durante situaciones como la pandemia del COVID-19.'
+         '01_NOMBRE': 'Careta con soporte Modelo FKI',
+         '02_DESC_BREVE': 'Careta con diadema inyectada, fabricada en PET transparente, reutilizable y sanitizable.',
+         '03_DESC_DETALLADA': 'La careta con diadema inyectada es un tipo de equipo de protección personal que se utiliza para proteger la cara de una persona de posibles riesgos durante situaciones como la pandemia del COVID-19.'
       },
       {
-        '01_NOMBRE': 'Mascarilla Termoformada Modelo MC',
-        '02_DESC_BREVE': 'Mascarilla termoformada, fabricada en PET transparente, reutilizable y sanitizable.',
-        '03_DESC_DETALLADA': 'La mascarilla termoformada es un tipo de mascarilla facial que se utiliza como equipo de protección personal durante situaciones como la pandemia del COVID-19. Está fabricada en PET transparente, lo que permite una visibilidad clara sin comprometer la seguridad de la persona que la usa.'
+         '01_NOMBRE': 'Mascarilla Termoformada Modelo MC',
+         '02_DESC_BREVE': 'Mascarilla termoformada, fabricada en PET transparente, reutilizable y sanitizable.',
+         '03_DESC_DETALLADA': 'La mascarilla termoformada es un tipo de mascarilla facial que se utiliza como equipo de protección personal durante situaciones como la pandemia del COVID-19. Está fabricada en PET transparente, lo que permite una visibilidad clara sin comprometer la seguridad de la persona que la usa.'
       },
       {
-        '01_NOMBRE': 'Caretas con diadema inyectada Modelo CCtr',
-        '02_DESC_BREVE': 'Careta protectora ante contingencia COVID19.',
-        '03_DESC_DETALLADA': 'Una careta protectora es un tipo de equipo de protección personal que se utiliza para proteger la cara de una persona de posibles riesgos durante la contingencia del COVID-19. Está diseñada para cubrir la cara completa y se usa comúnmente en combinación con otros equipos de protección personal, como mascarillas faciales y guantes, para proporcionar una protección adicional contra el virus.'
+         '01_NOMBRE': 'Caretas con diadema inyectada Modelo CCtr',
+         '02_DESC_BREVE': 'Careta protectora ante contingencia COVID19.',
+         '03_DESC_DETALLADA': 'Una careta protectora es un tipo de equipo de protección personal que se utiliza para proteger la cara de una persona de posibles riesgos durante la contingencia del COVID-19. Está diseñada para cubrir la cara completa y se usa comúnmente en combinación con otros equipos de protección personal, como mascarillas faciales y guantes, para proporcionar una protección adicional contra el virus.'
       },
       {
-        '01_NOMBRE': 'Careta con soporte Modelo FKI',
-        '02_DESC_BREVE': 'Careta con diadema inyectada, fabricada en PET transparente, reutilizable y sanitizable.',
-        '03_DESC_DETALLADA': 'La careta con diadema inyectada es un tipo de equipo de protección personal que se utiliza para proteger la cara de una persona de posibles riesgos durante situaciones como la pandemia del COVID-19.'
+         '01_NOMBRE': 'Careta con soporte Modelo FKI',
+         '02_DESC_BREVE': 'Careta con diadema inyectada, fabricada en PET transparente, reutilizable y sanitizable.',
+         '03_DESC_DETALLADA': 'La careta con diadema inyectada es un tipo de equipo de protección personal que se utiliza para proteger la cara de una persona de posibles riesgos durante situaciones como la pandemia del COVID-19.'
       },
       {
-        '01_NOMBRE': 'Mascarilla Termoformada Modelo MC',
-        '02_DESC_BREVE': 'Mascarilla termoformada, fabricada en PET transparente, reutilizable y sanitizable.',
-        '03_DESC_DETALLADA': 'La mascarilla termoformada es un tipo de mascarilla facial que se utiliza como equipo de protección personal durante situaciones como la pandemia del COVID-19. Está fabricada en PET transparente, lo que permite una visibilidad clara sin comprometer la seguridad de la persona que la usa.'
+         '01_NOMBRE': 'Mascarilla Termoformada Modelo MC',
+         '02_DESC_BREVE': 'Mascarilla termoformada, fabricada en PET transparente, reutilizable y sanitizable.',
+         '03_DESC_DETALLADA': 'La mascarilla termoformada es un tipo de mascarilla facial que se utiliza como equipo de protección personal durante situaciones como la pandemia del COVID-19. Está fabricada en PET transparente, lo que permite una visibilidad clara sin comprometer la seguridad de la persona que la usa.'
       }
-    ];
+   ];
 
    requierements = [
       {
@@ -317,11 +317,11 @@ export class CompaniesDetailComponent implements OnInit {
                   this.provider.BD_ActionGet('general', 'get_type_company').subscribe(
                      (type_company: Response) => {
                         // console.log(type_company);
-                        
-                        if (!type_company.error) 
+
+                        if (!type_company.error)
                            this.sel['type_company'] = type_company.msg
 
-                        this.provider.BD_ActionAdminGet('companies', 'get_company_by_id', { id: atob(this.__id)}).subscribe(
+                        this.provider.BD_ActionAdminGet('companies', 'get_company_by_id', { id: atob(this.__id) }).subscribe(
                            (company: Response) => {
                               console.log('Viene de DB', company);
                               if (!company.error) {
@@ -349,7 +349,7 @@ export class CompaniesDetailComponent implements OnInit {
                                  }); */
 
                                  comp?.categories_company?.forEach((element: any) => {
-                                       this.master.getterA(this.form.controls['categories_company']).push(this.master.createSimpleTranslation())
+                                    this.master.getterA(this.form.controls['categories_company']).push(this.master.createSimpleTranslation())
                                  });
 
                                  if (this.ls.getItem('COMPANY_FORM'))
@@ -357,10 +357,10 @@ export class CompaniesDetailComponent implements OnInit {
                                  else
                                     this.master.patch(comp, this.form, this.tabs)
 
-                                    console.log(this.form.value);
-                                    
+                                 console.log(this.form.value);
+
                                  // console.log('FORM VALUE', this.form.value);
-                                 
+
                                  this.createPIN((comp.latitude || this.lat), (comp.longitude || this.lng))
                                  Object.keys(this.master.getterG(this.form.controls['schedule_week']).controls).forEach(element => {
                                     this.slideHasValue('schedule_week', element)
@@ -437,7 +437,7 @@ export class CompaniesDetailComponent implements OnInit {
 
    save() {
       // console.log(this.form.value.tags.toString());
-      
+
       this.ping.nativeElement.classList.remove('animate-ping');
       this.form.value.schedule_week = JSON.stringify(this.form.value.schedule_week)
 
@@ -445,8 +445,8 @@ export class CompaniesDetailComponent implements OnInit {
          this.provider.BD_ActionPut('profile_company', 'update_profile', this.form.value).subscribe(
             (data: Response) => {
                console.log(data);
-   
-               if (!data.error){
+
+               if (!data.error) {
                   this.ls.setItem('COMPANY_FORM', this.form.value)
                   setTimeout(() => {
                      this.form.reset()
@@ -455,11 +455,11 @@ export class CompaniesDetailComponent implements OnInit {
                         this.get()
                      }, 500);
                   }, 500);
-                  
+
                }
                else
                   this.master.snack(0)
-   
+
             }
          )
       } else {
@@ -547,7 +547,7 @@ export class CompaniesDetailComponent implements OnInit {
       const value = (event.value || '').trim();
 
       if (value) {
-         if (this.form.value.tags != null) 
+         if (this.form.value.tags != null)
             this.form.controls['tags'].patchValue(this.form.value.tags + ', ' + value);
          else
             this.form.controls['tags'].patchValue(value);
@@ -558,7 +558,7 @@ export class CompaniesDetailComponent implements OnInit {
    removeTag(tag: any): void {
       const tagToRemove = tag + ', ';
       this.form.value.tags = this.form.value.tags.replace(tagToRemove, '');
-    }
+   }
 
    uploadPDF(control: any, name_control?: any) {
       this.manager.open(config.upload_config).subscribe(
@@ -650,5 +650,9 @@ export class CompaniesDetailComponent implements OnInit {
 
 
       return m
+   }
+
+   addrfq() {
+      this.router.navigate(['/m/rfq', 'add'])
    }
 }
