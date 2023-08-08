@@ -25,6 +25,7 @@ import { MatTableModule } from 'src/app/components/mat-table/mat-table.module';
 import { RfqFormComponent } from './rfq-form/rfq-form.component';
 import { RfqEditComponent } from './rfq-edit/rfq-edit.component';
 import { UsersFormComponent } from './users-form/users-form.component';
+import { CategoriesFormComponent } from './categories-form/categories-form.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { UsersFormComponent } from './users-form/users-form.component';
     RfqFormComponent,
     RfqEditComponent,
     UsersFormComponent,
+    CategoriesFormComponent,
 
   ],
   imports: [

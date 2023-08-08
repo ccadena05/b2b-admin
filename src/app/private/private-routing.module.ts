@@ -7,6 +7,7 @@ import { CompaniesDetailComponent } from './companies-detail/companies-detail.co
 import { RfqFormComponent } from './rfq-form/rfq-form.component';
 import { RfqEditComponent } from './rfq-edit/rfq-edit.component';
 import { UsersFormComponent } from './users-form/users-form.component';
+import { CategoriesFormComponent } from './categories-form/categories-form.component';
 const routes: Routes = [
   {
     path: '',
@@ -49,6 +50,10 @@ const routes: Routes = [
         path: 'm/users/add',
         component: UsersFormComponent
       },
+      {
+        path: 'm/categories/add',
+        component: CategoriesFormComponent
+      },
 
       {
         path: 'm/events/detail/:id',
@@ -65,6 +70,10 @@ const routes: Routes = [
       {
         path: 'm/companies/detail/:id',
         component: CompaniesDetailComponent
+      },
+      {
+        path: 'm/categories/detail/:id',
+        component: CategoriesFormComponent
       },
       {
         path: 'm/:modulo',

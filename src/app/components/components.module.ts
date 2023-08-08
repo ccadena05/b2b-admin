@@ -20,6 +20,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SnackbarComponent } from './snackbar/snackbar.component';
 import { RecursiveSelectComponent } from './recursive-select/recursive-select.component';
 import { LocationComponent } from './location/location.component';
+import { IconComponent } from './icon/icon.component';
 
 
 let components = [
@@ -30,7 +31,8 @@ let components = [
    PagosComponent,
    SearchSelectComponent,
    RecursiveSelectComponent,
-   LocationComponent
+   LocationComponent,
+   IconComponent
 ]
 
 @NgModule({
@@ -42,7 +44,7 @@ let components = [
     LineChartComponent, 
     NumberToRomanSymbolPipe, 
     MatTableGroupComponent, 
-    SnackbarComponent],
+    SnackbarComponent, ],
   imports: [
     CommonModule,
     RouterModule,

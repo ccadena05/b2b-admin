@@ -2,8 +2,10 @@
    <a *ngFor="let item of b2b_menu" class="rounded-xl p-2 group flex gap-x-2 items-center transition-colors text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-dark-blue-100 duration-300 group w-full"
       [routerLink]="[item.link]"
       routerLinkActive="bg-white shadow-lg dark:bg-dark-blue-50 hover:bg-white shadow-lg hover:dark:bg-dark-blue-50">
-      <div class="{{item.bg}} rounded-xl aspect-square w-10 h-10 flex text-white bg-clip-content border-2 border-transparent group-hover:bg-clip-text group-hover:text-transparent group-hover:border-b2b-2 duration-300">
-         <mat-icon class="m-auto">{{item.icon}}</mat-icon>
+      <div class="{{item.bg}} rounded-xl aspect-square w-10 h-10 flex justify-center items-center text-white bg-clip-content border-2 border-transparent group-hover:bg-clip-text group-hover:text-transparent group-hover:border-b2b-2 duration-300">
+         <!-- <mat-icon class="m-auto">{{item.icon}}</mat-icon> -->
+         <icon [i]="item.icon"></icon>
+
       </div>
       <div class="ease-soft font-semibold text-size-sm  duration-300">{{item.label}}</div>
    </a>

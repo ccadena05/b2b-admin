@@ -4,6 +4,7 @@ import { SidebarComponent } from './sidebar.component';
 import { MaterialModule } from '../../material/material.module';
 import { RouterModule } from '@angular/router';
 import {MouseEnterLeaveDebounceDirective} from 'src/app/directives/mouse-enter-leve-debounce.directive';
+import { ComponentsModule } from '../../components.module';
 
 
 @NgModule({
@@ -14,7 +15,8 @@ import {MouseEnterLeaveDebounceDirective} from 'src/app/directives/mouse-enter-l
   imports: [
     CommonModule,
     MaterialModule,
-    RouterModule
+    RouterModule,
+    ComponentsModule
   ],
   exports:[
     SidebarComponent

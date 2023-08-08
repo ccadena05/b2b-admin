@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
+import { MasterService } from 'src/app/services/master.service';
 
 @Component({
    selector: 'recursive-select',
@@ -13,6 +14,7 @@ export class RecursiveSelectComponent implements OnInit {
    @Input() rq: boolean = false;
    @Input() label: string = '';
    @Input() select: any = [];
+   @Input() value: any = [];
 
    selectedCategory: any;
    _control!: AbstractControl;
@@ -20,9 +22,12 @@ export class RecursiveSelectComponent implements OnInit {
    _rq: boolean = false;
    _label: string = '';
    _select: any = [];
+   _value: any = [];
    filtered: any = [];
 
-   constructor( ) {
+   constructor(
+      public master: MasterService
+    ) {
    }
 
    ngOnInit(): void {
@@ -35,9 +40,23 @@ export class RecursiveSelectComponent implements OnInit {
       this._select['children'] = changes['select']?.currentValue ?? this.select;
       this._label = changes['label']?.currentValue ?? this._label;
       this._rq = changes['rq']?.currentValue ?? this.rq;
+      this._value = changes['value']?.currentValue ?? this.value;
 
       this.filtered = this._select;
-      
+
+      if(this._value?.length > 0 && this.filtered['children'])
+      {
+         let event: any = {value: {id: this._value[this._generation]}};
+         this.selectedCategory = this.filtered['children'].find((child: any) => child.id == event.value.id)
+         this.onSelectionChange(event, this._control)
+      } else if(!this._value){
+         let event: any = {value: {id: null}};
+         this.selectedCategory = null
+         this.onSelectionChange(event, this._control)
+      }
+/*       console.log(this._control.value);
+      if(this._control.value.length > 0)
+         this._control.patchValue(this._control.value[this._generation]) */
       /* 
       console.log(changes);
       console.log('this._generation', this._generation);
@@ -51,7 +70,7 @@ export class RecursiveSelectComponent implements OnInit {
    }
 
    search(v: any) {
-      this.filtered['children'] = this._select['children'].filter((option: any) => this.transform(option?.EN).includes(this.transform(v)) || this.transform(option?.ES).includes(this.transform(v))).slice(0, 100);
+      this.filtered['children'] = this._select['children'].filter((option: any) => this.transform(option?.EN)?.includes(this.transform(v)) || this.transform(option?.ES)?.includes(this.transform(v))).slice(0, 100);
    }
 
    transform(value: any) {
@@ -61,6 +80,7 @@ export class RecursiveSelectComponent implements OnInit {
    
 
    onSelectionChange(event: any, control: AbstractControl): void {
+      
       if (this.selectedCategory) {
          this.selectedCategory.generation = this._generation;
          this.categorySelected.emit(this.selectedCategory);

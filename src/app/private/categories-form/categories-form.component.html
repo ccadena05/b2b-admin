@@ -1,0 +1,72 @@
+<form #cc [formGroup]="form" (ngSubmit)="save()" id="company-form" class="bg-white rounded-2xl shadow-lg p-6">
+   <div
+      class="sticky top-0 right-0 left-full w-[7.5rem] z-50 justify-end text-slate-100 rounded-2xl flex gap-x-2 group">
+      <div *ngIf="router.url.includes('detail')" type="button" class="btn-del" (click)="delete()">
+         <mat-icon>delete</mat-icon>
+      </div>
+      <button type="submit" class="btn-1" [disabled]="form.invalid">
+         <icon [i]="router.url.includes('detail') ? 'edit' : 'add'"></icon>
+      </button>
+
+   </div>
+
+
+   <div class="flex flex-col gap-y-6 overflow-x-hidden">
+
+      <div class="grid gap-x-6 w-full"
+         [ngClass]="cc.offsetWidth <= 640 ? 'grid-cols-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'grid-cols-2' : 'grid-cols-3'">
+
+         <div class="title w-full"
+            [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+            Información de la categoría
+         </div>
+
+         <mat-form-field appearance="outline" class="w-full duration-300">
+            <mat-label>Título Inglés</mat-label>
+            <input formControlName="title_en" type="text" matInput>
+            <mat-error>Ingresa un valor válido</mat-error>
+         </mat-form-field>
+
+         <mat-form-field appearance="outline" class="w-full duration-300">
+            <mat-label>Título Español</mat-label>
+            <input formControlName="title_es" type="text" matInput>
+            <mat-error>Ingresa un valor válido</mat-error>
+         </mat-form-field>
+
+         <div (click)="uploadPDF(form.get('image_url'))" class="file-field"
+            [ngClass]="form.controls['image_url'].invalid && save_button ? 'field-error' : ''">
+            <mat-icon *ngIf="!form.value.image_url" class="text-[rgba(0,0,0,.54)]">upload_file</mat-icon>
+            <img *ngIf="form.value.image_url" [src]="form.value.image_url" alt=""
+               class="h-8 rounded-lg aspect-square grow-0 object-contain">
+            <div class="absolute left-11" [ngClass]="form.value.image_url ? 'top-0 text-xs' : ''">
+               Portada
+            </div>
+            <div class="max-w-[12rem] overflow-hidden whitespace-nowrap">
+               {{form.value.image_url ?? ''}}
+            </div>
+         </div>
+
+         <div class="flex gap-x-3 items-start justify-between" [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+            <recursive-select [select]="sel['category']" label="Categoría" class="!w-full flex flex-wrap gap-x-6"
+               [control]="form.controls['parent_id']" [rq]="true" [generation]="0"
+               (categorySelected)="onCategorySelected($event)" [value]="form.value.category"></recursive-select>
+         </div>
+
+         <mat-form-field class="w-full" appearance="outline"
+            [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+            <mat-label>Etiquetas</mat-label>
+            <mat-chip-list #chipList formControlName="tags">
+               <mat-chip *ngFor="let tag of form.value.tags?.split(',')" (removed)="removeTag(tag)">
+                  {{tag}}
+                  <button matChipRemove>
+                     <mat-icon>cancel</mat-icon>
+                  </button>
+               </mat-chip>
+               <input [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                  [matChipInputAddOnBlur]="true" (matChipInputTokenEnd)="addTag($event)">
+            </mat-chip-list>
+         </mat-form-field>
+
+      </div>
+   </div>
+</form>
