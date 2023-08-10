@@ -30,6 +30,8 @@ export class MasterComponent implements OnInit {
    url: any;
    form_investments: FormGroup;
    readonly separatorKeysCodes = [ENTER, COMMA] as const;
+   tabs: any = [{ id: '1', name: 'English', language: 'EN', emoji: '🇺🇸' }];
+   available_langs: any = [{ id: '1', name: 'English', language: 'EN', emoji: '🇺🇸' }, { id: '2', name: 'Español', language: 'ES', emoji: '🇲🇽' }];
 
    constructor(
       private provider: ProviderService,
@@ -110,6 +112,11 @@ export class MasterComponent implements OnInit {
             this.dataToDisplay1 = []
          }
       })
+
+      // this.provider.BD_ActionGet('general', 'get_languages').subscribe((languages: Response) => {
+      //    this.available_langs = languages.msg
+      //    console.log(languages)
+      // })
    }
 
    get _modulo() {

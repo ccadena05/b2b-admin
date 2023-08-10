@@ -75,70 +75,97 @@
             <form #cc [formGroup]="form_investments" (ngSubmit)="save()" id="company-form"
                class="bg-white rounded-2xl shadow-lg p-6">
 
-               <div class="flex flex-col gap-y-6 overflow-x-hidden">
+               <div [matMenuTriggerFor]="addLang" class="btn-2">
+                  <mat-icon>translate</mat-icon>
+               </div>
 
-                  <div class="grid gap-x-6 w-full"
-                     [ngClass]="cc.offsetWidth <= 640 ? 'grid-cols-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'grid-cols-2' : 'grid-cols-3'">
+               <mat-menu #addLang="matMenu">
+                  <button class="text-slate-900 disabled:text-slate-500" mat-menu-item
+                     *ngFor="let lang of available_langs; let i = index" [disabled]="lang.id == tabs[i]?.id"
+                     (click)="lang.id == tabs[i]?.id ? '' : master.add_lang_tab(tabs, lang, form_investments)">
+                     <span class="ml-2"
+                        [ngClass]="lang.id == tabs[i]?.id ? 'opacity-15' : 'opacity-100'">{{lang?.emoji}}</span>
+                     <span class="ml-2"
+                        [ngClass]="lang.id == tabs[i]?.id ? 'opacity-15' : 'opacity-100'">{{lang?.name}}</span>
+                  </button>
+               </mat-menu>
 
-                     <div class="title w-full"
-                        [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
-                        Información de la categoría
-                     </div>
+               <mat-tab-group>
+                  <mat-tab *ngFor="let tab of tabs; let i = index">
+                     <ng-template mat-tab-label class="w-full flex gap-x-2">
+                        <span>{{tab?.emoji}}</span>
+                        <span class="ml-2">{{tab?.name}}</span>
+                        <mat-icon class="ml-4" (click)="master.del_lang_tab(tabs, tab.id, form_investments, i)"
+                           *ngIf="this.tabs.length > 1 && i !== 0 && tab.id !== 1">close</mat-icon>
+                     </ng-template>
 
-                     <location [form]="form_investments"
-                        [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
-                     </location>
+                     <div class="flex flex-col gap-y-6 overflow-x-hidden">
 
-                     <mat-form-field appearance="outline" class="w-full duration-300">
-                        <mat-label>Monto De Inversión (USD Millions)</mat-label>
-                        <input formControlName="total_amount" type="text" matInput>
-                        <mat-error>Ingresa un valor válido</mat-error>
-                     </mat-form-field>
+                        <div class="grid gap-x-6 w-full"
+                           [ngClass]="cc.offsetWidth <= 640 ? 'grid-cols-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'grid-cols-2' : 'grid-cols-3'">
 
-                     <mat-form-field appearance="outline" class="w-full duration-300">
-                        <mat-label>Empleos Generados</mat-label>
-                        <input formControlName="total_amount" type="text" matInput>
-                        <mat-error>Ingresa un valor válido</mat-error>
-                     </mat-form-field>
+                           <div class="title w-full"
+                              [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                              Información de la categoría
+                           </div>
 
-                     <mat-form-field appearance="outline" class="w-full duration-300">
-                        <mat-label>Superficie En Construccion</mat-label>
-                        <input formControlName="total_amount" type="text" matInput>
-                        <mat-error>Ingresa un valor válido</mat-error>
-                     </mat-form-field>
+                           <location [form]="form_investments"
+                              [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                           </location>
 
-                     <!-- <div
-                        [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"
-                        formArrayName="description">
-                        <div [formGroupName]="i"
-                           *ngFor="let item of master.getterA(form.controls['description']).controls; let i = index">
-                           <mat-form-field class="w-full" appearance="outline"
-                              *ngIf="item.value.languages_id == tab.id">
-                              <mat-label>Descripción</mat-label>
-                              <textarea formControlName="text" type="text" matInput></textarea>
+                           <mat-form-field appearance="outline" class="w-full duration-300">
+                              <mat-label>Monto De Inversión (USD Millions)</mat-label>
+                              <input formControlName="total_amount" type="text" matInput>
                               <mat-error>Ingresa un valor válido</mat-error>
                            </mat-form-field>
+
+                           <mat-form-field appearance="outline" class="w-full duration-300">
+                              <mat-label>Empleos Generados</mat-label>
+                              <input formControlName="total_jobs" type="text" matInput>
+                              <mat-error>Ingresa un valor válido</mat-error>
+                           </mat-form-field>
+
+                           <mat-form-field appearance="outline" class="w-full duration-300">
+                              <mat-label>Superficie En Construccion</mat-label>
+                              <input formControlName="suface_construction" type="text" matInput>
+                              <mat-error>Ingresa un valor válido</mat-error>
+                           </mat-form-field>
+
+                           <div
+                              [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"
+                              formArrayName="description">
+                              <div [formGroupName]="i"
+                                 *ngFor="let item of master.getterA(form_investments.controls['description']).controls; let i = index">
+                                 <mat-form-field class="w-full" appearance="outline"
+                                    *ngIf="item.value.languages_id == tab.id">
+                                    <mat-label>Descripción</mat-label>
+                                    <textarea formControlName="text" type="text" matInput></textarea>
+                                    <mat-error>Ingresa un valor válido</mat-error>
+                                 </mat-form-field>
+                              </div>
+                           </div>
+
+                           <mat-form-field class="w-full" appearance="outline"
+                              [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                              <mat-label>Etiquetas</mat-label>
+                              <mat-chip-list #chipList formControlName="categories">
+                                 <mat-chip *ngFor="let category of form_investments.value.categories?.split(',')"
+                                    (removed)="removeCategory(category)">
+                                    {{ category }}
+                                    <button matChipRemove>
+                                       <mat-icon>cancel</mat-icon>
+                                    </button>
+                                 </mat-chip>
+                                 <input [matChipInputFor]="chipList"
+                                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="true"
+                                    (matChipInputTokenEnd)="addCategory($event)">
+                              </mat-chip-list>
+                           </mat-form-field>
+
                         </div>
-                     </div> -->
-
-                     <mat-form-field class="w-full" appearance="outline"
-                        [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
-                        <mat-label>Etiquetas</mat-label>
-                        <mat-chip-list #chipList formControlName="categories">
-                           <mat-chip *ngFor="let category of form_investments.value.categories?.split(',')"
-                              (removed)="removeCategory(category)">
-                              {{ category }}
-                              <button matChipRemove>
-                                 <mat-icon>cancel</mat-icon>
-                              </button>
-                           </mat-chip>
-                           <input [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                              [matChipInputAddOnBlur]="true" (matChipInputTokenEnd)="addCategory($event)">
-                        </mat-chip-list>
-                     </mat-form-field>
-
-                  </div>
-               </div>
+                     </div>
+                  </mat-tab>
+               </mat-tab-group>
             </form>
          </div>
 

@@ -60,8 +60,8 @@ export class BlogFormComponent implements OnInit {
          id: [null],
          user_create: [this.jwt.getUser()],
          user_update: [this.jwt.getUser()],
-         title: this.formBuilder.array([this.master.createTranslation('1',  null)]),
-         description: this.formBuilder.array([this.master.createTranslation('1',  null)]),
+         title: this.formBuilder.array([this.master.createTranslation('1', null)]),
+         description: this.formBuilder.array([this.master.createTranslation('1', null)]),
          image_url: [null, Validators.required],
          image_gallery: this.formBuilder.array([]),
          video_url: [null],
@@ -176,7 +176,7 @@ export class BlogFormComponent implements OnInit {
       const categoryId = category.id;
       this.form.controls['category'].patchValue(this.selected_all[0])
       this.form.controls['sub_category'].patchValue(this.selected_all[this.selected_all.length - 1])
-      
+
       this.provider.BD_ActionGet('general', 'get_category_blogs', { tree_size: 0, id_category: categoryId })
          .subscribe((category_blogs: Response) => {
             category.children = category_blogs.msg;
