@@ -7,7 +7,6 @@ import { ComponentsModule } from 'src/app/components/components.module';
 import { MaterialModule } from 'src/app/components/material/material.module';
 import { MatTableModule } from 'src/app/components/mat-table/mat-table.module';
 
-
 @NgModule({
   declarations: [
     MasterComponent,
@@ -20,7 +19,7 @@ import { MatTableModule } from 'src/app/components/mat-table/mat-table.module';
     MatTableModule
   ],
   providers: [
-   KeyValuePipe
+    KeyValuePipe
   ]
 })
 export class MasterModule { }

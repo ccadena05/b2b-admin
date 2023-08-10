@@ -1,0 +1,41 @@
+<form #cc [formGroup]="form" (ngSubmit)="save()" id="company-form" class="bg-white rounded-2xl shadow-lg p-6">
+
+    <div class="flex flex-col gap-y-6 overflow-x-hidden">
+
+        <div class="grid gap-x-6 w-full"
+            [ngClass]="cc.offsetWidth <= 640 ? 'grid-cols-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'grid-cols-2' : 'grid-cols-3'">
+
+            <div class="title w-full"
+                [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                Información de la categoría
+            </div>
+
+            <mat-form-field appearance="outline" class="w-full duration-300">
+                <mat-label>Monto De Inversión (USD Millions)</mat-label>
+                <input formControlName="total_amount" type="text" matInput>
+                <mat-error>Ingresa un valor válido</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="w-full duration-300">
+                <mat-label>Título Español</mat-label>
+                <input formControlName="title_es" type="text" matInput>
+                <mat-error>Ingresa un valor válido</mat-error>
+            </mat-form-field>
+
+            <!-- <mat-form-field class="w-full" appearance="outline"
+                [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                <mat-label>Etiquetas</mat-label>
+                <mat-chip-list #chipList formControlName="tags">
+                    <mat-chip *ngFor="let tag of form.value.tags?.split(',')" (removed)="removeTag(tag)">
+                        {{tag}}
+                        <button matChipRemove>
+                            <mat-icon>cancel</mat-icon>
+                        </button>
+                    </mat-chip>
+                    <input [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                        [matChipInputAddOnBlur]="true" (matChipInputTokenEnd)="addTag($event)">
+                </mat-chip-list>
+            </mat-form-field> -->
+        </div>
+    </div>
+</form>

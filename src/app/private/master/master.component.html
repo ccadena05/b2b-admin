@@ -5,7 +5,7 @@
             {{masterSection}}
          </div>
          <div class="h-12 w-12 flex shadow-xl rounded-xl overflow-hidden">
-            <button (click)="add()"
+            <button (click)="add()" *ngIf="_modulo !== 'investments'"
                class="bg-b2b-2 text-white h-12 w-12 shrink-0 grow-0 flex justify-center items-center">
                <mat-icon class="m-auto">add</mat-icon>
             </button>
@@ -68,6 +68,78 @@
                Empresas Pendientes
             </h1>
             <app-mat-table [dataToDisplay]="dataToDisplay1" [action]="edit"></app-mat-table>
+         </div>
+
+         <div *ngIf="_modulo === 'investments'">
+
+            <form #cc [formGroup]="form_investments" (ngSubmit)="save()" id="company-form"
+               class="bg-white rounded-2xl shadow-lg p-6">
+
+               <div class="flex flex-col gap-y-6 overflow-x-hidden">
+
+                  <div class="grid gap-x-6 w-full"
+                     [ngClass]="cc.offsetWidth <= 640 ? 'grid-cols-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'grid-cols-2' : 'grid-cols-3'">
+
+                     <div class="title w-full"
+                        [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                        Información de la categoría
+                     </div>
+
+                     <location [form]="form_investments"
+                        [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                     </location>
+
+                     <mat-form-field appearance="outline" class="w-full duration-300">
+                        <mat-label>Monto De Inversión (USD Millions)</mat-label>
+                        <input formControlName="total_amount" type="text" matInput>
+                        <mat-error>Ingresa un valor válido</mat-error>
+                     </mat-form-field>
+
+                     <mat-form-field appearance="outline" class="w-full duration-300">
+                        <mat-label>Empleos Generados</mat-label>
+                        <input formControlName="total_amount" type="text" matInput>
+                        <mat-error>Ingresa un valor válido</mat-error>
+                     </mat-form-field>
+
+                     <mat-form-field appearance="outline" class="w-full duration-300">
+                        <mat-label>Superficie En Construccion</mat-label>
+                        <input formControlName="total_amount" type="text" matInput>
+                        <mat-error>Ingresa un valor válido</mat-error>
+                     </mat-form-field>
+
+                     <!-- <div
+                        [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"
+                        formArrayName="description">
+                        <div [formGroupName]="i"
+                           *ngFor="let item of master.getterA(form.controls['description']).controls; let i = index">
+                           <mat-form-field class="w-full" appearance="outline"
+                              *ngIf="item.value.languages_id == tab.id">
+                              <mat-label>Descripción</mat-label>
+                              <textarea formControlName="text" type="text" matInput></textarea>
+                              <mat-error>Ingresa un valor válido</mat-error>
+                           </mat-form-field>
+                        </div>
+                     </div> -->
+
+                     <mat-form-field class="w-full" appearance="outline"
+                        [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                        <mat-label>Etiquetas</mat-label>
+                        <mat-chip-list #chipList formControlName="categories">
+                           <mat-chip *ngFor="let category of form_investments.value.categories?.split(',')"
+                              (removed)="removeCategory(category)">
+                              {{ category }}
+                              <button matChipRemove>
+                                 <mat-icon>cancel</mat-icon>
+                              </button>
+                           </mat-chip>
+                           <input [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                              [matChipInputAddOnBlur]="true" (matChipInputTokenEnd)="addCategory($event)">
+                        </mat-chip-list>
+                     </mat-form-field>
+
+                  </div>
+               </div>
+            </form>
          </div>
 
       </div>

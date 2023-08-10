@@ -11,6 +11,10 @@ import { CloudinaryWidgetManager } from 'ngx-cloudinary-upload-widget';
 import { config } from 'src/config';
 import { Response } from 'src/app/models/response.model';
 import { MatTableComponent } from 'src/app/components/mat-table/mat-table.component';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MasterService } from 'src/app/services/master.service';
+import { MatChipInputEvent } from '@angular/material/chips';
+import { COMMA, ENTER, X } from '@angular/cdk/keycodes';
 
 @Component({
    selector: 'app-master',
@@ -24,6 +28,8 @@ export class MasterComponent implements OnInit {
    masterSection: any;
    b2b_menu = b2b_menu;
    url: any;
+   form_investments: FormGroup;
+   readonly separatorKeysCodes = [ENTER, COMMA] as const;
 
    constructor(
       private provider: ProviderService,
@@ -33,7 +39,8 @@ export class MasterComponent implements OnInit {
       private ls: LocalStoreService,
       private dialog: MatDialog,
       private manager: CloudinaryWidgetManager,
-
+      private form_builder: FormBuilder,
+      public master: MasterService
    ) {
       router.events.pipe(
          filter((e: Event): e is RouterEvent => e instanceof RouterEvent)
@@ -45,6 +52,16 @@ export class MasterComponent implements OnInit {
          }
       });
 
+      this.form_investments = this.form_builder.group({
+         total_amount: ['', Validators.required],
+         country: [null, Validators.required],
+         state: [null, Validators.required],
+         city: [null, Validators.required],
+         total_jobs: ['', Validators.required],
+         suface_construction: ['', Validators.required],
+         description: this.form_builder.array([this.master.createTranslation(1)]),
+         categories: [null, Validators.required]
+      })
    }
 
    ngOnInit(): void {
@@ -53,28 +70,36 @@ export class MasterComponent implements OnInit {
    }
 
    getData() {
-      this.output.ready.next(false);
+      this.output.ready.next(false)
       this.output.table_ready.next(false)
 
       this.provider.BD_ActionAdminGet(this._modulo, 'get').subscribe((data) => {
          if (!data.error) {
             switch (this._modulo) {
                case 'events':
-                  this.dataToDisplay = data.msg;
+                  this.dataToDisplay = data.msg
+                  this.output.ready.next(true)
+                  this.output.table_ready.next(true)
                   break;
 
                case 'blogs':
-                  this.dataToDisplay = data.msg;
+                  this.dataToDisplay = data.msg
+                  this.output.ready.next(true)
+                  this.output.table_ready.next(true)
                   break;
 
                case 'rfq':
-                  this.dataToDisplay = data.msg.no_rfq;
-                  this.dataToDisplay1 = data.msg.is_rfq;
+                  this.dataToDisplay = data.msg.no_rfq
+                  this.dataToDisplay1 = data.msg.is_rfq
+                  this.output.ready.next(true)
+                  this.output.table_ready.next(true)
                   break;
 
                case 'companies':
-                  this.dataToDisplay = data.msg.approved;
-                  this.dataToDisplay1 = data.msg.no_approved;
+                  this.dataToDisplay = data.msg.approved
+                  this.dataToDisplay1 = data.msg.no_approved
+                  this.output.ready.next(true)
+                  this.output.table_ready.next(true)
                   break;
 
                default:
@@ -85,87 +110,8 @@ export class MasterComponent implements OnInit {
             this.dataToDisplay1 = []
          }
       })
-
-      // this.provider.BD_ActionAdminGet(this._modulo, 'get').subscribe((data) => {
-      //    this.dataToDisplay = data.msg.approved.is_rfq;
-      //    console.log(data.msg.approved.is_rfq);
-      // });
-
-      // this.provider.BD_ActionAdminGet(this._modulo, 'get').subscribe(
-
-      //    (data: Response) => {
-      //       console.log(data);
-
-      //       if (typeof data.msg == 'object') {
-      //          if (this.router.url != '/m/rfq') {
-      //             this.dataToDisplay = data.msg
-      //          } else {
-      //             const element2: any = []
-      //             for (const key in data?.msg) {
-      //                if (Object.prototype.hasOwnProperty.call(data?.msg, key)) {
-      //                   const element = data?.msg[key];
-      //                   for (const sub_key in data?.msg[key]) {
-      //                      if (Object.prototype.hasOwnProperty.call(data?.msg[key], sub_key)) {
-      //                         element2[sub_key + '_' + key] = data?.msg[key][sub_key];
-
-      //                      }
-      //                   }
-
-
-      //                }
-      //             }
-      //             console.log(element2);
-      //             this.dataArray = element2
-      //             console.log(this.dataArray);
-      //          }
-
-      //          this.output.ready.next(true)
-      //       } /* else {
-      //          this.dataToDisplay = [{name: 'No hay registros disponibles'}]
-      //       } */
-      //    }
-
-      // )
-
    }
-   /*      
-        this.output.ready.next(false)
-        this.provider.BD_ActionAdminGet(this._modulo, 'get').subscribe(
-  
-           (data: Response) => {
-              console.log(data);
-              
-              if (typeof data.msg == 'object' ) {
-                 if(this.router.url != '/m/rfq'){
-                    this.dataToDisplay = data.msg
-                 } else {
-                    let element2: any = []
-                    for (const key in data?.msg) {
-                       if (Object.prototype.hasOwnProperty.call(data?.msg, key)) {
-                          const element = data?.msg[key];
-                          for (const sub_key in data?.msg[key]) {
-                             if (Object.prototype.hasOwnProperty.call(data?.msg[key], sub_key)) {
-                                element2[sub_key + '_' + key] = data?.msg[key][sub_key];
-                                // console.log(element2, sub_key + '_' + key);
-                                // this.dataArray[sub_key + '_' + key] = element2;
-                                this.dataArray = element2;
-                             }
-                          }
-                          
-                          
-                       }
-                    }
-                 }
-                 console.log(this.dataArray);
-                 
-                 this.output.ready.next(true)
-              } 
-           }
-  
-        )
-  
-     }
-   */
+
    get _modulo() {
       let m = ''
       this.activatedRoute.params.subscribe(params => {
@@ -214,5 +160,26 @@ export class MasterComponent implements OnInit {
 
    add(): void {
       this.router.navigate([this.router.url, 'add'])
+   }
+
+   save() {
+      console.log(this.form_investments.value)
+   }
+
+   addCategory(event: MatChipInputEvent): void {
+      const value = (event.value || '').trim();
+
+      if (value) {
+         if (this.form_investments.value.categories != null)
+            this.form_investments.controls['categories'].patchValue(this.form_investments.value.categories + ', ' + value);
+         else
+            this.form_investments.controls['categories'].patchValue(value);
+      }
+      event.chipInput!.clear();
+   }
+
+   removeCategory(category: any): void {
+      const tagToRemove = category + ', ';
+      this.form_investments.value.categories = this.form_investments.value.categories.replace(tagToRemove, '');
    }
 }

@@ -52,5 +52,11 @@ export const b2b_menu = [
       link: '/m/memberships',
       icon: 'membership',
       bg: 'bg-b2b-2'
+   },
+   {
+      label: 'Inversiones',
+      link: '/m/investments',
+      icon: 'money',
+      bg: 'bg-b2b-2'
    }
 ]
