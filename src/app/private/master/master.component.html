@@ -4,8 +4,8 @@
          <div class="text-slate-500 dark:!text-slate-100 text-xl font-semibold">
             {{masterSection}}
          </div>
-         <div class="h-12 w-12 flex shadow-xl rounded-xl overflow-hidden">
-            <button (click)="add()" *ngIf="_modulo !== 'investments'"
+         <div *ngIf="_modulo !== 'investments'" class="h-12 w-12 flex shadow-xl rounded-xl overflow-hidden">
+            <button (click)="add()"
                class="bg-b2b-2 text-white h-12 w-12 shrink-0 grow-0 flex justify-center items-center">
                <mat-icon class="m-auto">add</mat-icon>
             </button>
@@ -75,7 +75,7 @@
             <form #cc [formGroup]="form_investments" (ngSubmit)="save()" id="company-form"
                class="bg-white rounded-2xl shadow-lg p-6">
 
-               <div [matMenuTriggerFor]="addLang" class="btn-2">
+               <div [matMenuTriggerFor]="addLang" class="btn-1 bg-b2b-2 float-right">
                   <mat-icon>translate</mat-icon>
                </div>
 
@@ -106,26 +106,26 @@
 
                            <div class="title w-full"
                               [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
-                              Información de la categoría
+                              Informacion De La Inversión
                            </div>
 
-                           <location [form]="form_investments"
+                           <location [form]="form_investments" *ngIf="i == 0"
                               [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
                            </location>
 
-                           <mat-form-field appearance="outline" class="w-full duration-300">
+                           <mat-form-field appearance="outline" class="w-full duration-300" *ngIf="i == 0">
                               <mat-label>Monto De Inversión (USD Millions)</mat-label>
                               <input formControlName="total_amount" type="text" matInput>
                               <mat-error>Ingresa un valor válido</mat-error>
                            </mat-form-field>
 
-                           <mat-form-field appearance="outline" class="w-full duration-300">
+                           <mat-form-field appearance="outline" class="w-full duration-300" *ngIf="i == 0">
                               <mat-label>Empleos Generados</mat-label>
                               <input formControlName="total_jobs" type="text" matInput>
                               <mat-error>Ingresa un valor válido</mat-error>
                            </mat-form-field>
 
-                           <mat-form-field appearance="outline" class="w-full duration-300">
+                           <mat-form-field appearance="outline" class="w-full duration-300" *ngIf="i == 0">
                               <mat-label>Superficie En Construccion</mat-label>
                               <input formControlName="suface_construction" type="text" matInput>
                               <mat-error>Ingresa un valor válido</mat-error>
@@ -146,7 +146,8 @@
                            </div>
 
                            <mat-form-field class="w-full" appearance="outline"
-                              [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                              [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"
+                              *ngIf="i == 0">
                               <mat-label>Etiquetas</mat-label>
                               <mat-chip-list #chipList formControlName="categories">
                                  <mat-chip *ngFor="let category of form_investments.value.categories?.split(',')"

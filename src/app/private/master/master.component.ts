@@ -31,7 +31,8 @@ export class MasterComponent implements OnInit {
    form_investments: FormGroup;
    readonly separatorKeysCodes = [ENTER, COMMA] as const;
    tabs: any = [{ id: '1', name: 'English', language: 'EN', emoji: '🇺🇸' }];
-   available_langs: any = [{ id: '1', name: 'English', language: 'EN', emoji: '🇺🇸' }, { id: '2', name: 'Español', language: 'ES', emoji: '🇲🇽' }];
+   // available_langs: any = [{ id: '1', name: 'English', language: 'EN', emoji: '🇺🇸' }, { id: '2', name: 'Español', language: 'ES', emoji: '🇲🇽' }];
+   available_langs: any = []
 
    constructor(
       private provider: ProviderService,
@@ -113,10 +114,9 @@ export class MasterComponent implements OnInit {
          }
       })
 
-      // this.provider.BD_ActionGet('general', 'get_languages').subscribe((languages: Response) => {
-      //    this.available_langs = languages.msg
-      //    console.log(languages)
-      // })
+      this.provider.BD_ActionAdminGet('general', 'get_languages').subscribe((langs: Response) => {
+         this.available_langs = langs
+      })
    }
 
    get _modulo() {
