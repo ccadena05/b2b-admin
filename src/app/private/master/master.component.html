@@ -79,6 +79,10 @@
                   <mat-icon>translate</mat-icon>
                </div>
 
+               <div (click)="save()" class="btn-1 bg-b2b-2 float-right mr-2">
+                  <mat-icon>save</mat-icon>
+               </div>
+
                <mat-menu #addLang="matMenu">
                   <button class="text-slate-900 disabled:text-slate-500" mat-menu-item
                      *ngFor="let lang of available_langs; let i = index" [disabled]="lang.id == tabs[i]?.id"
