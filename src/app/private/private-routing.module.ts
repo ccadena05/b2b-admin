@@ -8,6 +8,8 @@ import { RfqFormComponent } from './rfq-form/rfq-form.component';
 import { RfqEditComponent } from './rfq-edit/rfq-edit.component';
 import { UsersFormComponent } from './users-form/users-form.component';
 import { CategoriesFormComponent } from './categories-form/categories-form.component';
+import { MembershipsFormComponent } from './memberships-form/memberships-form.component';
+import { ClustersFormComponent } from './clusters-form/clusters-form.component';
 const routes: Routes = [
   {
     path: '',
@@ -54,6 +56,14 @@ const routes: Routes = [
         path: 'm/categories/add',
         component: CategoriesFormComponent
       },
+      {
+        path: 'm/memberships/add',
+        component: MembershipsFormComponent
+      },
+      {
+        path: 'm/clusters/add',
+        component: ClustersFormComponent
+      },
 
       {
         path: 'm/events/detail/:id',
@@ -74,6 +84,14 @@ const routes: Routes = [
       {
         path: 'm/categories/detail/:id',
         component: CategoriesFormComponent
+      },
+      {
+        path: 'm/memberships/detail/:id',
+        component: MembershipsFormComponent
+      },
+      {
+        path: 'm/clusters/detail/:id',
+        component: ClustersFormComponent
       },
       {
         path: 'm/:modulo',

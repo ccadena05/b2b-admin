@@ -1,0 +1,133 @@
+<form #cc [formGroup]="form" (ngSubmit)="save()" id="company-form" class="bg-white rounded-2xl shadow-lg p-6">
+   <div
+      class="sticky top-0 right-0 left-full w-[7.5rem] z-50 justify-end text-slate-100 rounded-2xl flex gap-x-2 group">
+      <div *ngIf="router.url.includes('detail')" type="button" class="btn-del" (click)="delete()">
+         <mat-icon>delete</mat-icon>
+      </div>
+      <button type="submit" class="btn-1" [disabled]="form.invalid">
+         <mat-icon>{{router.url.includes('detail') ? 'edit' : 'save'}}</mat-icon>
+      </button>
+      <div [matMenuTriggerFor]="addLang" class="btn-2">
+         <mat-icon>translate</mat-icon>
+      </div>
+
+      <mat-menu #addLang="matMenu">
+         <button class="text-slate-900 disabled:text-slate-500" mat-menu-item
+            *ngFor="let lang of available_langs; let i = index" [disabled]="lang.id == tabs[i]?.id"
+            (click)="lang.id == tabs[i]?.id ? '' : master.add_lang_tab(tabs, lang, form)">
+            <span class="ml-2" [ngClass]="lang.id == tabs[i]?.id ? 'opacity-15' : 'opacity-100'">{{lang?.emoji}}</span>
+            <span class="ml-2" [ngClass]="lang.id == tabs[i]?.id ? 'opacity-15' : 'opacity-100'">{{lang?.name}}</span>
+         </button>
+      </mat-menu>
+   </div>
+
+   <mat-tab-group>
+      <mat-tab *ngFor="let tab of tabs; let i = index">
+         <ng-template mat-tab-label class="w-full flex gap-x-2">
+            <span>{{tab?.emoji}}</span>
+            <span class="ml-2">{{tab?.name}}</span>
+            <mat-icon class="ml-4" (click)="master.del_lang_tab(tabs, tab.id, form, i)"
+               *ngIf="this.tabs.length > 1 && i !== 0 && tab.id !== 1">close</mat-icon>
+         </ng-template>
+
+         <div class="flex flex-col gap-y-6 overflow-x-hidden">
+
+            <div
+               [ngClass]="cc.offsetWidth <= 640 ? 'grid-cols-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'grid-cols-2' : 'grid-cols-3'"
+               class="grid gap-x-6 w-full">
+
+               <div class="title w-full"
+                  [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                  Información del cluster
+               </div>
+
+               <mat-form-field class="w-full" appearance="outline" *ngIf="i == 0">
+                  <mat-label>Título</mat-label>
+                  <input formControlName="title" type="text" matInput>
+                  <mat-error>Ingresa un valor válido</mat-error>
+               </mat-form-field>
+
+               <mat-form-field appearance="outline" class="w-full" *ngIf="i == 0">
+                  <mat-label>Orden</mat-label>
+                  <mat-icon class="text-slate-900" matPrefix
+                     (click)="order.valueAsNumber = order.valueAsNumber - 1">remove</mat-icon>
+
+                  <input #order formControlName="order" type="number" matInput [value]="0">
+                  <mat-icon class="text-slate-900" matSuffix
+                     (click)="order.valueAsNumber = order.valueAsNumber + 1">add</mat-icon>
+                  <mat-error>Ingresa un valor válido</mat-error>
+               </mat-form-field>
+
+               <mat-form-field class="w-full" appearance="outline" *ngIf="i == 0">
+                  <mat-label>Facebook</mat-label>
+                  <mat-icon matPrefix class="scale-75">
+                     <icon>facebook</icon>
+                  </mat-icon>
+                  <input formControlName="facebook" type="text" matInput>
+                  <mat-error>Ingresa un valor válido</mat-error>
+               </mat-form-field>
+
+               <mat-form-field class="w-full" appearance="outline" *ngIf="i == 0">
+                  <mat-label>Twitter</mat-label>
+                  <mat-icon matPrefix class="scale-75">
+                     <icon>twitter</icon>
+                  </mat-icon>
+                  <input formControlName="twitter" type="text" matInput>
+                  <mat-error>Ingresa un valor válido</mat-error>
+               </mat-form-field>
+
+               <mat-form-field class="w-full" appearance="outline" *ngIf="i == 0">
+                  <mat-label>Instagram</mat-label>
+                  <mat-icon matPrefix class="scale-75">
+                     <icon>instagram</icon>
+                  </mat-icon>
+                  <input formControlName="instagram" type="text" matInput>
+                  <mat-error>Ingresa un valor válido</mat-error>
+               </mat-form-field>
+
+               <mat-form-field appearance="outline" class="w-full" *ngIf="i == 0">
+                  <mat-label>Página web</mat-label>
+                  <input formControlName="web_page" type="text" matInput>
+                  <mat-error>Ingresa un valor válido</mat-error>
+               </mat-form-field>
+
+               <mat-form-field appearance="outline" class="w-full" *ngIf="i == 0">
+                  <mat-label>Email de contacto</mat-label>
+                  <input formControlName="email" type="text" matInput>
+                  <mat-error>Ingresa un valor válido</mat-error>
+               </mat-form-field>
+
+               <div #phone class="w-full flex gap-x-3" *ngIf="i == 0">
+                  <div #pc class="w-full max-w-[6rem]">
+                      <search-select [label]="'Código'" [select]="sel['countries']"
+                          [control]="form.controls['phone_code']" class="w-full"></search-select>
+                  </div>
+
+                  <mat-form-field appearance="outline" class="w-full"
+                      [ngStyle]="{'max-width.px' : phone.offsetWidth - pc.offsetWidth - 12}">
+                      <mat-label>Teléfono</mat-label>
+                      <input formControlName="phone" type="text" matInput>
+                      <mat-error>Ingresar un valor válido *</mat-error>
+                  </mat-form-field>
+              </div>
+
+               
+
+               <div class="label"
+                  [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                  Descripción</div>
+               <div class="mb-6"
+                  [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                  <div formArrayName="description"
+                     *ngFor="let item of master.getterA(form.controls['description']).controls; let i = index;">
+                     <div [formGroupName]="i">
+                        <quill-editor *ngIf="item.value.languages_id == tab.id" [required]="true"
+                           formControlName="text"></quill-editor>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </mat-tab>
+   </mat-tab-group>
+</form>

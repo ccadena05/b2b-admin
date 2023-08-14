@@ -26,6 +26,8 @@ import { RfqFormComponent } from './rfq-form/rfq-form.component';
 import { RfqEditComponent } from './rfq-edit/rfq-edit.component';
 import { UsersFormComponent } from './users-form/users-form.component';
 import { CategoriesFormComponent } from './categories-form/categories-form.component';
+import { MembershipsFormComponent } from './memberships-form/memberships-form.component';
+import { ClustersFormComponent } from './clusters-form/clusters-form.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +39,8 @@ import { CategoriesFormComponent } from './categories-form/categories-form.compo
     RfqEditComponent,
     UsersFormComponent,
     CategoriesFormComponent,
+    MembershipsFormComponent,
+    ClustersFormComponent,
   ],
   imports: [
     ComponentsModule,

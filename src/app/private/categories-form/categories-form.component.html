@@ -5,7 +5,7 @@
          <mat-icon>delete</mat-icon>
       </div>
       <button type="submit" class="btn-1" [disabled]="form.invalid">
-         <icon [i]="router.url.includes('detail') ? 'edit' : 'add'"></icon>
+         <icon>{{router.url.includes('detail') ? 'edit' : 'add'}}</icon>
       </button>
 
    </div>
