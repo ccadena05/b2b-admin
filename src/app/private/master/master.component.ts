@@ -81,8 +81,8 @@ export class MasterComponent implements OnInit {
             switch (this._modulo) {
                case 'events':
                   this.dataToDisplay = data.msg
-                  this.output.ready.next(true)
-                  this.output.table_ready.next(true)
+                  // this.output.ready.next(true)
+                  // this.output.table_ready.next(true)
                   break;
 
                case 'blogs':
