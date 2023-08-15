@@ -28,7 +28,6 @@ export class MasterComponent implements OnInit {
    masterSection: any;
    b2b_menu = b2b_menu;
    url: any;
-   form_investments: FormGroup;
    readonly separatorKeysCodes = [ENTER, COMMA] as const;
    tabs: any = [{ id: '1', name: 'English', language: 'EN', emoji: '🇺🇸' }];
    // available_langs: any = [{ id: '1', name: 'English', language: 'EN', emoji: '🇺🇸' }, { id: '2', name: 'Español', language: 'ES', emoji: '🇲🇽' }];
@@ -54,17 +53,6 @@ export class MasterComponent implements OnInit {
             this.getData();
          }
       });
-
-      this.form_investments = this.form_builder.group({
-         total_amount: ['', Validators.required],
-         country: [null, Validators.required],
-         state: [null, Validators.required],
-         city: [null, Validators.required],
-         total_jobs: ['', Validators.required],
-         suface_construction: ['', Validators.required],
-         description: this.form_builder.array([this.master.createTranslation(1)]),
-         categories: [null, Validators.required]
-      })
    }
 
    ngOnInit(): void {
@@ -83,39 +71,42 @@ export class MasterComponent implements OnInit {
                   this.dataToDisplay = data.msg
                   // this.output.ready.next(true)
                   // this.output.table_ready.next(true)
-                  break;
+                  break
 
                case 'blogs':
                   this.dataToDisplay = data.msg
                   this.output.ready.next(true)
                   this.output.table_ready.next(true)
-                  break;
+                  break
 
                case 'rfq':
                   this.dataToDisplay = data.msg.no_rfq
                   this.dataToDisplay1 = data.msg.is_rfq
                   this.output.ready.next(true)
                   this.output.table_ready.next(true)
-                  break;
+                  break
 
                case 'companies':
                   this.dataToDisplay = data.msg.approved
                   this.dataToDisplay1 = data.msg.no_approved
                   this.output.ready.next(true)
                   this.output.table_ready.next(true)
-                  break;
+                  break
+
+               case 'investments':
+                  this.dataToDisplay = [
+                     {
+                     }
+                  ]
+                  break
 
                default:
-                  break;
+                  break
             }
          } else {
             this.dataToDisplay = []
             this.dataToDisplay1 = []
          }
-      })
-
-      this.provider.BD_ActionAdminGet('general', 'get_languages').subscribe((langs: Response) => {
-         this.available_langs = langs
       })
    }
 
@@ -167,26 +158,5 @@ export class MasterComponent implements OnInit {
 
    add(): void {
       this.router.navigate([this.router.url, 'add'])
-   }
-
-   save() {
-      console.log(this.form_investments.value)
-   }
-
-   addCategory(event: MatChipInputEvent): void {
-      const value = (event.value || '').trim();
-
-      if (value) {
-         if (this.form_investments.value.categories != null)
-            this.form_investments.controls['categories'].patchValue(this.form_investments.value.categories + ', ' + value);
-         else
-            this.form_investments.controls['categories'].patchValue(value);
-      }
-      event.chipInput!.clear();
-   }
-
-   removeCategory(category: any): void {
-      const tagToRemove = category + ', ';
-      this.form_investments.value.categories = this.form_investments.value.categories.replace(tagToRemove, '');
    }
 }
