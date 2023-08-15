@@ -8,6 +8,7 @@ import { RfqFormComponent } from './rfq-form/rfq-form.component';
 import { RfqEditComponent } from './rfq-edit/rfq-edit.component';
 import { UsersFormComponent } from './users-form/users-form.component';
 import { CategoriesFormComponent } from './categories-form/categories-form.component';
+import { InvestmentsFormComponent } from './investments-form/investments-form.component';
 const routes: Routes = [
   {
     path: '',
@@ -29,7 +30,7 @@ const routes: Routes = [
         loadChildren: () =>
           import('./dashboard/dashboard.module').then((m) => m.DashboardModule),
       },
-      
+
       {
         path: 'm/events/add',
         component: EventsFormComponent
@@ -74,6 +75,10 @@ const routes: Routes = [
       {
         path: 'm/categories/detail/:id',
         component: CategoriesFormComponent
+      },
+      {
+        path: 'm/investments/add',
+        component: InvestmentsFormComponent
       },
       {
         path: 'm/:modulo',

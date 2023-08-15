@@ -4,7 +4,7 @@
          <div class="text-slate-500 dark:!text-slate-100 text-xl font-semibold">
             {{masterSection}}
          </div>
-         <div *ngIf="_modulo !== 'investments'" class="h-12 w-12 flex shadow-xl rounded-xl overflow-hidden">
+         <div class="h-12 w-12 flex shadow-xl rounded-xl overflow-hidden">
             <button (click)="add()"
                class="bg-b2b-2 text-white h-12 w-12 shrink-0 grow-0 flex justify-center items-center">
                <mat-icon class="m-auto">add</mat-icon>
@@ -70,7 +70,7 @@
             <app-mat-table [dataToDisplay]="dataToDisplay1" [action]="edit"></app-mat-table>
          </div>
          <div *ngIf="_modulo === 'investments'">
-            <p>Hello Investments</p>
+            <app-mat-table [dataToDisplay]="dataToDisplay" [action]="edit"></app-mat-table>
          </div>
 
       </div>

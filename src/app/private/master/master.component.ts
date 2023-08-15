@@ -13,8 +13,6 @@ import { Response } from 'src/app/models/response.model';
 import { MatTableComponent } from 'src/app/components/mat-table/mat-table.component';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MasterService } from 'src/app/services/master.service';
-import { MatChipInputEvent } from '@angular/material/chips';
-import { COMMA, ENTER, X } from '@angular/cdk/keycodes';
 
 @Component({
    selector: 'app-master',
@@ -28,7 +26,6 @@ export class MasterComponent implements OnInit {
    masterSection: any;
    b2b_menu = b2b_menu;
    url: any;
-   readonly separatorKeysCodes = [ENTER, COMMA] as const;
    tabs: any = [{ id: '1', name: 'English', language: 'EN', emoji: '🇺🇸' }];
    // available_langs: any = [{ id: '1', name: 'English', language: 'EN', emoji: '🇺🇸' }, { id: '2', name: 'Español', language: 'ES', emoji: '🇲🇽' }];
    available_langs: any = []
@@ -64,7 +61,7 @@ export class MasterComponent implements OnInit {
       this.output.ready.next(false)
       this.output.table_ready.next(false)
 
-      this.provider.BD_ActionAdminGet(this._modulo, 'get').subscribe((data) => {
+      this.provider.BD_ActionAdminGet(this._modulo, 'get').subscribe((data: Response) => {
          if (!data.error) {
             switch (this._modulo) {
                case 'events':
@@ -96,7 +93,29 @@ export class MasterComponent implements OnInit {
                case 'investments':
                   this.dataToDisplay = [
                      {
-                     }
+                        '01_MONTO DE INVERSION': 1500,
+                        '02_EMPLEOS GENERADOS': 24,
+                        '03_SUPERFICIE EN CONSTRUCCION': 'Ladrillo',
+                        '04_DESCRIPCION': 'Inversion de 1500 pesos'
+                     },
+                     {
+                        '01_MONTO DE INVERSION': 1500,
+                        '02_EMPLEOS GENERADOS': 24,
+                        '03_SUPERFICIE EN CONSTRUCCION': 'Ladrillo',
+                        '04_DESCRIPCION': 'Inversion de 1500 pesos'
+                     },
+                     {
+                        '01_MONTO DE INVERSION': 1500,
+                        '02_EMPLEOS GENERADOS': 24,
+                        '03_SUPERFICIE EN CONSTRUCCION': 'Ladrillo',
+                        '04_DESCRIPCION': 'Inversion de 1500 pesos'
+                     },
+                     {
+                        '01_MONTO DE INVERSION': 1500,
+                        '02_EMPLEOS GENERADOS': 24,
+                        '03_SUPERFICIE EN CONSTRUCCION': 'Ladrillo',
+                        '04_DESCRIPCION': 'Inversion de 1500 pesos'
+                     },
                   ]
                   break
 
