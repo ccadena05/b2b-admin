@@ -26,8 +26,12 @@ import { RfqFormComponent } from './rfq-form/rfq-form.component';
 import { RfqEditComponent } from './rfq-edit/rfq-edit.component';
 import { UsersFormComponent } from './users-form/users-form.component';
 import { CategoriesFormComponent } from './categories-form/categories-form.component';
+<<<<<<< HEAD
 import { MembershipsFormComponent } from './memberships-form/memberships-form.component';
 import { ClustersFormComponent } from './clusters-form/clusters-form.component';
+=======
+import { InvestmentsFormComponent } from './investments-form/investments-form.component';
+>>>>>>> origin/eduardo
 
 @NgModule({
   declarations: [
@@ -39,8 +43,12 @@ import { ClustersFormComponent } from './clusters-form/clusters-form.component';
     RfqEditComponent,
     UsersFormComponent,
     CategoriesFormComponent,
+<<<<<<< HEAD
     MembershipsFormComponent,
     ClustersFormComponent,
+=======
+    InvestmentsFormComponent,
+>>>>>>> origin/eduardo
   ],
   imports: [
     ComponentsModule,

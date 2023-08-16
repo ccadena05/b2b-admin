@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Response } from 'src/app/models/response.model';
 import { MasterService } from 'src/app/services/master.service';
+import { OutputService } from 'src/app/services/output.service';
 import { ProviderService } from 'src/app/services/provider/provider.service';
 
 @Component({
@@ -19,7 +20,8 @@ export class UsersFormComponent implements OnInit {
       public master: MasterService,
       private formBuilder: FormBuilder,
       private provider: ProviderService,
-      private activatedRoute: ActivatedRoute
+      private activatedRoute: ActivatedRoute,
+      private output: OutputService
    ) {
       this.form = this.formBuilder.group({
          user_id: [this.__id, Validators.required],
@@ -49,6 +51,8 @@ export class UsersFormComponent implements OnInit {
    }
 
    get() {
+      this.output.ready.next(false)
+      this.output.table_ready.next(false)
       this.provider.BD_ActionGet('general', 'get_languages').subscribe(
          (languages: Response) => {
             console.log(languages.msg);
@@ -63,6 +67,8 @@ export class UsersFormComponent implements OnInit {
 
                            if (!companies.error) {
                               this.sel['companies'] = this.master?.changeKey({ 'ID': 'id', '01_TITLE': 'name' }, companies.msg.approved)
+                              this.output.ready.next(true)
+                              this.output.table_ready.next(true)
                            }
                         }
                      )

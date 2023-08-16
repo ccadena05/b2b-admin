@@ -10,6 +10,7 @@ import { UsersFormComponent } from './users-form/users-form.component';
 import { CategoriesFormComponent } from './categories-form/categories-form.component';
 import { MembershipsFormComponent } from './memberships-form/memberships-form.component';
 import { ClustersFormComponent } from './clusters-form/clusters-form.component';
+import { InvestmentsFormComponent } from './investments-form/investments-form.component';
 const routes: Routes = [
   {
     path: '',
@@ -31,7 +32,7 @@ const routes: Routes = [
         loadChildren: () =>
           import('./dashboard/dashboard.module').then((m) => m.DashboardModule),
       },
-      
+
       {
         path: 'm/events/add',
         component: EventsFormComponent
@@ -64,6 +65,10 @@ const routes: Routes = [
         path: 'm/clusters/add',
         component: ClustersFormComponent
       },
+      {
+        path: 'm/investments/add',
+        component: InvestmentsFormComponent
+      },
 
       {
         path: 'm/events/detail/:id',
@@ -92,6 +97,10 @@ const routes: Routes = [
       {
         path: 'm/clusters/detail/:id',
         component: ClustersFormComponent
+      },
+      {
+        path: 'm/investments/detail/:id',
+        component: InvestmentsFormComponent
       },
       {
         path: 'm/:modulo',

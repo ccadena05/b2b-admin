@@ -11,6 +11,7 @@ import { Response } from 'src/app/models/response.model';
 import { JwtAuthService } from 'src/app/services/auth/jwt-auth.service';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { COMMA, ENTER, X } from '@angular/cdk/keycodes';
+import { OutputService } from 'src/app/services/output.service';
 
 declare var Quill: any;
 
@@ -54,7 +55,8 @@ export class BlogFormComponent implements OnInit {
       private ls: LocalStoreService,
       private provider: ProviderService,
       private activatedRoute: ActivatedRoute,
-      private jwt: JwtAuthService
+      private jwt: JwtAuthService,
+      private output: OutputService
    ) {
       this.form = this.formBuilder.group({
          id: [null],
@@ -109,6 +111,9 @@ export class BlogFormComponent implements OnInit {
    }
 
    get() {
+      this.output.ready.next(false)
+      this.output.table_ready.next(false)
+
       this.provider.BD_ActionGet('general', 'get_languages').subscribe(
          (languages: Response) => {
             // console.log(languages.msg);
@@ -141,6 +146,8 @@ export class BlogFormComponent implements OnInit {
                                              }
                                           ])
                                           this.master.patch(blog.msg, this.form, this.tabs)
+                                          this.output.ready.next(true)
+                                          this.output.table_ready.next(true)
                                        }
                                     }
                                  )

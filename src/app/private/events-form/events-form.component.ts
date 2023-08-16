@@ -21,6 +21,7 @@ import { MatChipInputEvent } from '@angular/material/chips';
 import { JwtAuthService } from 'src/app/services/auth/jwt-auth.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogoConfirmacionComponent } from 'src/app/components/dialogo-confirmacion/dialogo-confirmacion.component';
+import { OutputService } from 'src/app/services/output.service';
 
 @Component({
    selector: 'app-events-form',
@@ -76,8 +77,7 @@ export class EventsFormComponent implements OnInit {
       private provider: ProviderService,
       private manager: CloudinaryWidgetManager,
       private activatedRoute: ActivatedRoute,
-
-
+      private output: OutputService
    ) {
       this.form = this.formBuilder.group({
          id: [null],
@@ -137,6 +137,8 @@ export class EventsFormComponent implements OnInit {
 
 
    get() {
+      this.output.ready.next(false)
+      this.output.table_ready.next(false)
       let section = null
       this.provider.BD_ActionGet('general', 'get_languages').subscribe(
          (languages: Response) => {
@@ -179,6 +181,8 @@ export class EventsFormComponent implements OnInit {
                                                 }
                                              ])
                                              this.master.patch(event.msg, this.form, this.tabs)
+                                             this.output.ready.next(true)
+                                             this.output.table_ready.next(true)
                                           }
                                        }
                                     )

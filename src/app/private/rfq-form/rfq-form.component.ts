@@ -5,6 +5,7 @@ import { CloudinaryWidgetManager } from 'ngx-cloudinary-upload-widget';
 import { Response } from 'src/app/models/response.model';
 import { LocalStoreService } from 'src/app/services/local-store.service';
 import { MasterService } from 'src/app/services/master.service';
+import { OutputService } from 'src/app/services/output.service';
 import { ProviderService } from 'src/app/services/provider/provider.service';
 import { config } from 'src/config';
 
@@ -28,7 +29,8 @@ export class RfqFormComponent implements OnInit {
       private manager: CloudinaryWidgetManager,
       private provider: ProviderService,
       private ls: LocalStoreService,
-      private router: Router
+      private router: Router,
+      private output: OutputService
    ) {
       this.form = this.formBuilder.group({
          req: this.formBuilder.array([this.requirements_form(null, null, null, null)])
@@ -75,6 +77,8 @@ export class RfqFormComponent implements OnInit {
    }
 
    get() {
+      this.output.ready.next(false)
+      this.output.table_ready.next(false)
       this.provider.BD_ActionGet('general', 'get_languages').subscribe(
          (languages: Response) => {
             console.log(languages.msg);
@@ -88,11 +92,10 @@ export class RfqFormComponent implements OnInit {
                         (companies: Response) => {
                            if (!companies.error) {
                               console.log(companies.msg);
-
                               console.log(this.master?.changeKey({ 'ID': 'id', '01_TITLE': 'name' }, companies.msg.approved));
-
                               this.sel['companies'] = this.master?.changeKey({ 'ID': 'id', '01_TITLE': 'name' }, companies.msg.approved)
-
+                              this.output.ready.next(true)
+                              this.output.table_ready.next(true)
                            }
                         }
                      )

@@ -13,8 +13,6 @@ import { Response } from 'src/app/models/response.model';
 import { MatTableComponent } from 'src/app/components/mat-table/mat-table.component';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MasterService } from 'src/app/services/master.service';
-import { MatChipInputEvent } from '@angular/material/chips';
-import { COMMA, ENTER, X } from '@angular/cdk/keycodes';
 
 @Component({
    selector: 'app-master',
@@ -28,8 +26,6 @@ export class MasterComponent implements OnInit {
    masterSection: any;
    b2b_menu = b2b_menu;
    url: any;
-   form_investments: FormGroup;
-   readonly separatorKeysCodes = [ENTER, COMMA] as const;
    tabs: any = [{ id: '1', name: 'English', language: 'EN', emoji: '🇺🇸' }];
    // available_langs: any = [{ id: '1', name: 'English', language: 'EN', emoji: '🇺🇸' }, { id: '2', name: 'Español', language: 'ES', emoji: '🇲🇽' }];
    available_langs: any = []
@@ -42,7 +38,6 @@ export class MasterComponent implements OnInit {
       private ls: LocalStoreService,
       private dialog: MatDialog,
       private manager: CloudinaryWidgetManager,
-      private form_builder: FormBuilder,
       public master: MasterService
    ) {
       router.events.pipe(
@@ -54,17 +49,6 @@ export class MasterComponent implements OnInit {
             this.getData();
          }
       });
-
-      this.form_investments = this.form_builder.group({
-         total_amount: ['', Validators.required],
-         country: [null, Validators.required],
-         state: [null, Validators.required],
-         city: [null, Validators.required],
-         total_jobs: ['', Validators.required],
-         suface_construction: ['', Validators.required],
-         description: this.form_builder.array([this.master.createTranslation(1)]),
-         categories: [null, Validators.required]
-      })
    }
 
    ngOnInit(): void {
@@ -76,46 +60,71 @@ export class MasterComponent implements OnInit {
       this.output.ready.next(false)
       this.output.table_ready.next(false)
 
-      this.provider.BD_ActionAdminGet(this._modulo, 'get').subscribe((data) => {
+      this.provider.BD_ActionAdminGet(this._modulo, 'get').subscribe((data: Response) => {
          if (!data.error) {
             switch (this._modulo) {
                case 'events':
                   this.dataToDisplay = data.msg
-                  // this.output.ready.next(true)
-                  // this.output.table_ready.next(true)
-                  break;
+                  this.output.ready.next(true)
+                  this.output.table_ready.next(true)
+                  break
 
                case 'blogs':
                   this.dataToDisplay = data.msg
                   this.output.ready.next(true)
                   this.output.table_ready.next(true)
-                  break;
+                  break
 
                case 'rfq':
                   this.dataToDisplay = data.msg.no_rfq
                   this.dataToDisplay1 = data.msg.is_rfq
                   this.output.ready.next(true)
                   this.output.table_ready.next(true)
-                  break;
+                  break
 
                case 'companies':
                   this.dataToDisplay = data.msg.approved
                   this.dataToDisplay1 = data.msg.no_approved
                   this.output.ready.next(true)
                   this.output.table_ready.next(true)
-                  break;
+                  break
+
+               case 'investments':
+                  this.dataToDisplay = [
+                     {
+                        '01_MONTO DE INVERSION': 1500,
+                        '02_EMPLEOS GENERADOS': 24,
+                        '03_SUPERFICIE EN CONSTRUCCION': 'Ladrillo',
+                        '04_DESCRIPCION': 'Inversion de 1500 pesos'
+                     },
+                     {
+                        '01_MONTO DE INVERSION': 1500,
+                        '02_EMPLEOS GENERADOS': 24,
+                        '03_SUPERFICIE EN CONSTRUCCION': 'Ladrillo',
+                        '04_DESCRIPCION': 'Inversion de 1500 pesos'
+                     },
+                     {
+                        '01_MONTO DE INVERSION': 1500,
+                        '02_EMPLEOS GENERADOS': 24,
+                        '03_SUPERFICIE EN CONSTRUCCION': 'Ladrillo',
+                        '04_DESCRIPCION': 'Inversion de 1500 pesos'
+                     },
+                     {
+                        '01_MONTO DE INVERSION': 1500,
+                        '02_EMPLEOS GENERADOS': 24,
+                        '03_SUPERFICIE EN CONSTRUCCION': 'Ladrillo',
+                        '04_DESCRIPCION': 'Inversion de 1500 pesos'
+                     },
+                  ]
+                  break
 
                default:
-                  break;
+                  break
             }
          } else {
             this.dataToDisplay = []
             this.dataToDisplay1 = []
          }
-      })
-
-      this.provider.BD_ActionAdminGet('general', 'get_languages').subscribe((langs: Response) => {
-         this.available_langs = langs
       })
    }
 
@@ -167,26 +176,5 @@ export class MasterComponent implements OnInit {
 
    add(): void {
       this.router.navigate([this.router.url, 'add'])
-   }
-
-   save() {
-      console.log(this.form_investments.value)
-   }
-
-   addCategory(event: MatChipInputEvent): void {
-      const value = (event.value || '').trim();
-
-      if (value) {
-         if (this.form_investments.value.categories != null)
-            this.form_investments.controls['categories'].patchValue(this.form_investments.value.categories + ', ' + value);
-         else
-            this.form_investments.controls['categories'].patchValue(value);
-      }
-      event.chipInput!.clear();
-   }
-
-   removeCategory(category: any): void {
-      const tagToRemove = category + ', ';
-      this.form_investments.value.categories = this.form_investments.value.categories.replace(tagToRemove, '');
    }
 }
