@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MasterService } from 'src/app/services/master.service';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { COMMA, ENTER, X } from '@angular/cdk/keycodes';
+import { OutputService } from 'src/app/services/output.service';
 
 @Component({
   selector: 'app-investments-form',
@@ -20,7 +21,8 @@ export class InvestmentsFormComponent implements OnInit {
   constructor(
     private provider: ProviderService,
     private form_builder: FormBuilder,
-    public master: MasterService
+    public master: MasterService,
+    private output: OutputService
   ) {
     this.form_investments = this.form_builder.group({
       total_amount: ['', Validators.required],
@@ -40,8 +42,12 @@ export class InvestmentsFormComponent implements OnInit {
   }
 
   get() {
+    this.output.ready.next(false)
+    this.output.table_ready.next(false)
     this.provider.BD_ActionAdminGet('general', 'get_languages').subscribe((langs: Response) => {
       this.available_langs = langs.msg
+      this.output.ready.next(true)
+      this.output.table_ready.next(true)
     })
   }
 

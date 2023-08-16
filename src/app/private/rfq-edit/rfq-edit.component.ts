@@ -6,6 +6,7 @@ import { CloudinaryWidgetManager } from 'ngx-cloudinary-upload-widget';
 import { Response } from 'src/app/models/response.model';
 import { LocalStoreService } from 'src/app/services/local-store.service';
 import { MasterService } from 'src/app/services/master.service';
+import { OutputService } from 'src/app/services/output.service';
 import { ProviderService } from 'src/app/services/provider/provider.service';
 import { config } from 'src/config';
 
@@ -29,6 +30,7 @@ export class RfqEditComponent implements OnInit {
       private ls: LocalStoreService,
       private router: Router,
       private activatedRoute: ActivatedRoute,
+      private output: OutputService
    ) {
       this.form = this.formBuilder.group({
          id: [null],
@@ -68,6 +70,8 @@ export class RfqEditComponent implements OnInit {
 
 
    get() {
+      this.output.ready.next(false)
+      this.output.table_ready.next(false)
       this.provider.BD_ActionGet('general', 'get_languages').subscribe(
          (languages: Response) => {
             if (!languages.error) {
@@ -111,6 +115,8 @@ export class RfqEditComponent implements OnInit {
                                                          link: null
                                                       }
                                                    ])
+                                                   this.output.ready.next(true)
+                                                   this.output.table_ready.next(true)
                                                 }
                                              }
                                           )

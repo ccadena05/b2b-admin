@@ -303,6 +303,7 @@ export class CompaniesDetailComponent implements OnInit {
 
    get() {
       this.output.ready.next(false)
+      this.output.table_ready.next(false)
       this.countries();
       this.provider.BD_ActionGet('general', 'get_languages').subscribe(
          (languages: Response) => {
@@ -370,8 +371,7 @@ export class CompaniesDetailComponent implements OnInit {
                                  // this.form.controls['pisi']?.patchValue(this.master.turn_check_array([this.master.getterA(this.form.controls['main_processes']), this.master.getterA(this.form.controls['production_capacity'])]) || this.ls.getItem('COMPANY_FORM')?.pisi)
 
                                  this.output.ready.next(true)
-
-
+                                 this.output.table_ready.next(true)
                               }
                            }
                         )
