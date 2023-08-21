@@ -86,7 +86,12 @@ export class MasterService {
 						formArray.removeAt(i);
 					}
 				}
-			}
+			} /* else if (control instanceof FormArray && !data[key]){
+
+					(control as FormArray).push(new FormGroup({}));
+					// console.log(formArray);
+					
+			} */
 		});
 	}
 

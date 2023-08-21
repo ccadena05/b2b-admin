@@ -6,6 +6,7 @@ import { MasterService } from 'src/app/services/master.service';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { COMMA, ENTER, X } from '@angular/cdk/keycodes';
 import { OutputService } from 'src/app/services/output.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-investments-form',
@@ -19,6 +20,7 @@ export class InvestmentsFormComponent implements OnInit {
   readonly separatorKeysCodes = [ENTER, COMMA] as const
 
   constructor(
+    public router: Router,
     private provider: ProviderService,
     private form_builder: FormBuilder,
     public master: MasterService,
@@ -53,6 +55,10 @@ export class InvestmentsFormComponent implements OnInit {
 
   save() {
     console.log(this.form_investments.value)
+  }
+
+  delete() {
+    
   }
 
   addCategory(event: MatChipInputEvent): void {

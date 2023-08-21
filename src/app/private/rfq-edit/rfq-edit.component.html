@@ -1,6 +1,6 @@
 <form (ngSubmit)="save()" [formGroup]="form"
-class=" w-full overflow-scroll rfq relative p-6 rounded-2xl bg-white">
-<div class="title">Editar requerimiento</div>
+class="bg-white rounded-2xl shadow-lg p-6">
+
    <div class="sticky top-0 right-10 left-full w-[7.5rem] z-50 justify-end text-slate-100 rounded-2xl flex gap-x-2">
       <div type="button" class="btn-del" (click)="delete()">
          <mat-icon>delete</mat-icon>
@@ -41,6 +41,11 @@ class=" w-full overflow-scroll rfq relative p-6 rounded-2xl bg-white">
                <div
                   [ngClass]="cc.offsetWidth <= 640 ? 'grid-cols-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'grid-cols-2' : 'grid-cols-3'"
                   class="grid gap-x-6 w-full">
+
+                  <div class="title w-full"
+                  [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                  Información del requerimiento
+               </div>
 
                   <div
                      [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"

@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
-import { AbstractControl } from '@angular/forms';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { AbstractControl, FormGroup } from '@angular/forms';
 import { MasterService } from 'src/app/services/master.service';
 
 @Component({
@@ -7,7 +7,7 @@ import { MasterService } from 'src/app/services/master.service';
    templateUrl: './recursive-select.component.html',
    styleUrls: ['./recursive-select.component.scss']
 })
-export class RecursiveSelectComponent implements OnInit {
+export class RecursiveSelectComponent implements OnInit, OnChanges {
    @Output() categorySelected = new EventEmitter<any>();
    @Input() control!: AbstractControl;
    @Input() generation: number = 0;

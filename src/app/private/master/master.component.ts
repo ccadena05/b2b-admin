@@ -169,8 +169,6 @@ export class MasterComponent implements OnInit {
 
 
    edit(row?: any): void {
-      console.log([this.router.url, 'detail', btoa(row.ID), row.ID]);
-
       this.router.navigate([this.router.url, 'detail', btoa(row.ID)])
    }
 

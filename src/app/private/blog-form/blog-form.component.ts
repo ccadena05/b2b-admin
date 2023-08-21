@@ -12,6 +12,7 @@ import { JwtAuthService } from 'src/app/services/auth/jwt-auth.service';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { COMMA, ENTER, X } from '@angular/cdk/keycodes';
 import { OutputService } from 'src/app/services/output.service';
+import { LanguageService } from 'src/app/services/language.service';
 
 declare var Quill: any;
 
@@ -29,6 +30,8 @@ export class BlogFormComponent implements OnInit {
    sel: any = [];
    readonly separatorKeysCodes = [ENTER, COMMA] as const;
    selected_all: any = [];
+   changes: boolean = false;
+
    comments: Object[] = [
       {
          '01_USUARIO': 'Angel Antonio Zapatero Díaz',
@@ -56,32 +59,31 @@ export class BlogFormComponent implements OnInit {
       private provider: ProviderService,
       private activatedRoute: ActivatedRoute,
       private jwt: JwtAuthService,
-      private output: OutputService
+      private output: OutputService,
+      private lang: LanguageService
    ) {
       this.form = this.formBuilder.group({
          id: [null],
          user_create: [this.jwt.getUser()],
          user_update: [this.jwt.getUser()],
          title: this.formBuilder.array([this.master.createTranslation('1', null)]),
+         summary: this.formBuilder.array([this.master.createTranslation('1', null)]),
          description: this.formBuilder.array([this.master.createTranslation('1', null)]),
          image_url: [null, Validators.required],
          image_gallery: this.formBuilder.array([]),
          video_url: [null],
          file_url: [null],
          tags: [null, Validators.required],
+         // parent_id: [null, Validators.required],
          category: [null, Validators.required],
          sub_category: [null, Validators.required],
          profile_company_id: [null],
          released: [null]
-      })
-      console.log(this.form);
-
+      });
    }
 
    ngOnInit(): void {
       this.get();
-      console.log(this.form);
-
    }
 
    ngAfterViewInit() {
@@ -116,21 +118,15 @@ export class BlogFormComponent implements OnInit {
 
       this.provider.BD_ActionGet('general', 'get_languages').subscribe(
          (languages: Response) => {
-            // console.log(languages.msg);
             if (!languages.error) {
                this.available_langs = languages.msg;
                this.provider.BD_ActionGet('general', 'get_category_blogs', { tree_size: 0 }).subscribe(
                   (category_blogs: Response) => {
-                     console.log(category_blogs.msg);
-
                      this.sel['category_blogs'] = category_blogs.msg;
                      this.provider.BD_ActionAdminGet('companies', 'get').subscribe(
                         (companies: Response) => {
-                           // console.log(companies.msg);
-
                            if (!companies.error) {
                               this.sel['companies'] = this.master?.changeKey({ 'ID': 'id', '01_TITLE': 'name' }, companies.msg.approved)
-
                               if (this.router.url.includes('detail')) {
                                  this.provider.BD_ActionAdminGet('blogs', 'get_blog_by_id', { blog_id: atob(this.__id) }).subscribe(
                                     (blog: Response) => {
@@ -146,8 +142,9 @@ export class BlogFormComponent implements OnInit {
                                              }
                                           ])
                                           this.master.patch(blog.msg, this.form, this.tabs)
+                                          this.empty_translations(['title', 'summary', 'description'])
                                           this.output.ready.next(true)
-                                          this.output.table_ready.next(true)
+                                          this.output.table_ready.next(true)                              
                                        }
                                     }
                                  )
@@ -168,26 +165,33 @@ export class BlogFormComponent implements OnInit {
                      )
                   }
                )
-
-
             }
          }
       )
    }
 
    onCategorySelected(category: any): void {
-      this.selected_all[category.generation] = category.id;
-      while (this.selected_all[category.generation + 1])
-         this.selected_all.pop()
+      if (this.form.value['category']?.[category.generation] != category.id) {
+         this.selected_all[category.generation] = category.id;
+         while (this.selected_all[category.generation + 1])
+            this.selected_all.pop()
 
-      const categoryId = category.id;
+         this.form.controls['category'].patchValue(this.selected_all)
+      }
+      console.log(this.selected_all);
+      
+      // this.form.controls['parent_id'].patchValue(this.selected_all[this.selected_all.length - 1])
       this.form.controls['category'].patchValue(this.selected_all[0])
       this.form.controls['sub_category'].patchValue(this.selected_all[this.selected_all.length - 1])
 
-      this.provider.BD_ActionGet('general', 'get_category_blogs', { tree_size: 0, id_category: categoryId })
+      const categoryId = category.id;
+
+      this.provider.BD_ActionGet('general', 'get_category_searcher', { tree_size: 0, id_category: categoryId })
          .subscribe((category_blogs: Response) => {
+
             category.children = category_blogs.msg;
          });
+      // console.log(this.form.value);
    }
 
 
@@ -242,5 +246,16 @@ export class BlogFormComponent implements OnInit {
    removeTag(tag: any): void {
       const tagToRemove = tag + ', ';
       this.form.value.tags = this.form.value.tags.replace(tagToRemove, '');
+   }
+
+   stringify(control: any) {
+      return JSON.stringify(this.form.value?.[control]!)
+   }
+
+   empty_translations(controls: string[]){
+      controls.forEach((control: string) => {
+         if(JSON.stringify(this.form.value?.[control]) == '[]')
+            this.master.getterA(this.form.controls[control]).push(this.master.createTranslation('1'))
+      });
    }
 }

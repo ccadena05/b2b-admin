@@ -13,7 +13,7 @@ export class LocalStoreService {
    }
 
    public setItem(key: any, value: any) {
-      this.bread$.next(value);
+      // this.bread$.next(value);
       value = JSON.stringify(value);
       this.ls.setItem(key, value);
       return true;

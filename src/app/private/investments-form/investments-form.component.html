@@ -1,26 +1,29 @@
 <div class="flex flex-col">
     <form #cc [formGroup]="form_investments" (ngSubmit)="save()" id="company-form"
-        class="bg-white rounded-2xl shadow-lg p-6">
-        <div class="flex flex-row gap-2 justify-end">
-            <div [matMenuTriggerFor]="addLang" class="btn-1 bg-b2b-2 float-right">
+        class="bg-white rounded-2xl shadow-lg p-6 relative">
+        <div
+            class="sticky top-0 right-0 left-full w-[7.5rem] z-50 justify-end text-slate-100 rounded-2xl flex gap-x-2 group">
+            <div *ngIf="router.url.includes('detail')" type="button" class="btn-del" (click)="delete()">
+                <mat-icon>delete</mat-icon>
+            </div>
+            <button type="submit" class="btn-1" [disabled]="form_investments.invalid">
+                <mat-icon>{{router.url.includes('detail') ? 'edit' : 'add'}}</mat-icon>
+            </button>
+            <div [matMenuTriggerFor]="addLang" class="btn-2">
                 <mat-icon>translate</mat-icon>
             </div>
 
-            <div (click)="save()" class="btn-1 bg-b2b-2 float-right">
-                <mat-icon>save</mat-icon>
-            </div>
+            <mat-menu #addLang="matMenu">
+                <button class="text-slate-900 disabled:text-slate-500" mat-menu-item
+                    *ngFor="let lang of available_langs; let i = index" [disabled]="lang.id == tabs[i]?.id"
+                    (click)="lang.id == tabs[i]?.id ? '' : master.add_lang_tab(tabs, lang, form_investments)">
+                    <span class="ml-2"
+                        [ngClass]="lang.id == tabs[i]?.id ? 'opacity-15' : 'opacity-100'">{{lang?.emoji}}</span>
+                    <span class="ml-2"
+                        [ngClass]="lang.id == tabs[i]?.id ? 'opacity-15' : 'opacity-100'">{{lang?.name}}</span>
+                </button>
+            </mat-menu>
         </div>
-
-        <mat-menu #addLang="matMenu">
-            <button class="text-slate-900 disabled:text-slate-500" mat-menu-item
-                *ngFor="let lang of available_langs; let i = index" [disabled]="lang.id == tabs[i]?.id"
-                (click)="lang.id == tabs[i]?.id ? '' : master.add_lang_tab(tabs, lang, form_investments)">
-                <span class="ml-2"
-                    [ngClass]="lang.id == tabs[i]?.id ? 'opacity-15' : 'opacity-100'">{{lang?.emoji}}</span>
-                <span class="ml-2"
-                    [ngClass]="lang.id == tabs[i]?.id ? 'opacity-15' : 'opacity-100'">{{lang?.name}}</span>
-            </button>
-        </mat-menu>
 
         <mat-tab-group>
             <mat-tab *ngFor="let tab of tabs; let i = index">
