@@ -1,6 +1,5 @@
 <div class="flex flex-col">
-    <form #cc [formGroup]="form_investments" (ngSubmit)="save()" id="company-form"
-        class="bg-white rounded-2xl shadow-lg p-6">
+    <form #cc [formGroup]="form" (ngSubmit)="save()" id="company-form" class="bg-white rounded-2xl shadow-lg p-6">
         <div class="flex flex-row gap-2 justify-end">
             <div [matMenuTriggerFor]="addLang" class="btn-1 bg-b2b-2 float-right">
                 <mat-icon>translate</mat-icon>
@@ -14,7 +13,7 @@
         <mat-menu #addLang="matMenu">
             <button class="text-slate-900 disabled:text-slate-500" mat-menu-item
                 *ngFor="let lang of available_langs; let i = index" [disabled]="lang.id == tabs[i]?.id"
-                (click)="lang.id == tabs[i]?.id ? '' : master.add_lang_tab(tabs, lang, form_investments)">
+                (click)="lang.id == tabs[i]?.id ? '' : master.add_lang_tab(tabs, lang, form)">
                 <span class="ml-2"
                     [ngClass]="lang.id == tabs[i]?.id ? 'opacity-15' : 'opacity-100'">{{lang?.emoji}}</span>
                 <span class="ml-2"
@@ -27,7 +26,7 @@
                 <ng-template mat-tab-label class="w-full flex gap-x-2">
                     <span>{{tab?.emoji}}</span>
                     <span class="ml-2">{{tab?.name}}</span>
-                    <mat-icon class="ml-4" (click)="master.del_lang_tab(tabs, tab.id, form_investments, i)"
+                    <mat-icon class="ml-4" (click)="master.del_lang_tab(tabs, tab.id, form, i)"
                         *ngIf="this.tabs.length > 1 && i !== 0 && tab.id !== 1">close</mat-icon>
                 </ng-template>
 
@@ -41,7 +40,7 @@
                             Informacion De La Inversión
                         </div>
 
-                        <location [form]="form_investments" *ngIf="i == 0"
+                        <location [form]="form" *ngIf="i == 0"
                             [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
                         </location>
 
@@ -63,16 +62,14 @@
                             <mat-error>Ingresa un valor válido</mat-error>
                         </mat-form-field>
 
-                        <div [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"
-                            formArrayName="description">
-                            <div [formGroupName]="i"
-                                *ngFor="let item of master.getterA(form_investments.controls['description']).controls; let i = index">
-                                <mat-form-field class="w-full" appearance="outline"
-                                    *ngIf="item.value.languages_id == tab.id">
-                                    <mat-label>Descripción</mat-label>
-                                    <textarea formControlName="text" type="text" matInput></textarea>
-                                    <mat-error>Ingresa un valor válido</mat-error>
-                                </mat-form-field>
+                        <div class="mb-6"
+                            [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                            <div formArrayName="description"
+                                *ngFor="let item of master.getterA(form.controls['description']).controls; let i = index;">
+                                <div [formGroupName]="i">
+                                    <quill-editor *ngIf="item.value.languages_id == tab.id" [required]="true"
+                                        formControlName="text"></quill-editor>
+                                </div>
                             </div>
                         </div>
 
@@ -81,7 +78,7 @@
                             *ngIf="i == 0">
                             <mat-label>Etiquetas</mat-label>
                             <mat-chip-list #chipList formControlName="categories">
-                                <mat-chip *ngFor="let category of form_investments.value.categories?.split(',')"
+                                <mat-chip *ngFor="let category of form.value.categories?.split(',')"
                                     (removed)="removeCategory(category)">
                                     {{ category }}
                                     <button matChipRemove>
