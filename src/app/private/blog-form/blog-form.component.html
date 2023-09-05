@@ -107,7 +107,7 @@
                                 [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
                                 <recursive-select [select]="sel['category_blogs']" label="Categoría"
                                     class="w-full flex basis-1/3 gap-x-6" [control]="form.controls['category']"
-                                    [rq]="true" [generation]="0"
+                                    [rq]="true" [generation]="0" [value]="form.value.categories"
                                     (categorySelected)="onCategorySelected($event)"></recursive-select>
                             </div>
 
@@ -140,9 +140,9 @@
                                     </div>
 
                                     <div cdkDropList class="flex gap-x-3 mt-3" (cdkDropListDropped)="drop($event)">
-                                        <div class="cursor-move" *ngFor="let item of form.value.image_gallery" cdkDrag>
+                                        <div class="cursor-move" *ngFor="let item of form?.value?.image_gallery" cdkDrag>
                                             <div class="example-custom-placeholder" *cdkDragPlaceholder></div>
-                                            <img class="h-10 aspect-square object-cover rounded-lg" [src]="item.url"
+                                            <img class="h-10 aspect-square object-cover rounded-lg" [src]="item?.url"
                                                 alt="">
                                         </div>
                                     </div>

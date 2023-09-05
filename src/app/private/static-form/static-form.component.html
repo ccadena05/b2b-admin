@@ -1,0 +1,231 @@
+<form #cc [formGroup]="article" (ngSubmit)="save()" id="company-form"
+   class="bg-white rounded-2xl shadow-lg p-6 relative">
+   <div
+      class="sticky top-0 right-0 left-full w-[7.5rem] z-50 justify-end text-slate-100 rounded-2xl flex gap-x-2 group">
+      <div *ngIf="router.url.includes('detail')" type="button" class="btn-del" (click)="delete()">
+         <mat-icon>delete</mat-icon>
+      </div>
+      <button type="submit" class="btn-1" [disabled]="router.url.includes('detail') ? false : article.invalid">
+         <mat-icon>{{router.url.includes('detail') ? 'edit' : 'add'}}</mat-icon>
+      </button>
+      <div [matMenuTriggerFor]="addLang" class="btn-2">
+         <mat-icon>translate</mat-icon>
+      </div>
+
+      <mat-menu #addLang="matMenu">
+         <div *ngFor="let t of tabs; let j = index">
+            <button class="text-slate-900 disabled:text-slate-500" mat-menu-item
+               *ngFor="let lang of available_langs; let lang_i = index" [disabled]="lang.id == tabs[lang_i]?.id"
+               (click)="lang.id == tabs[lang_i]?.id ? '' : master.add_lang_tab(tabs, lang, article)">
+               <span class="ml-2" [ngClass]="lang.id == t?.id ? 'opacity-15' : 'opacity-100'">{{lang?.emoji}}</span>
+               <span class="ml-2" [ngClass]="lang.id == t?.id ? 'opacity-15' : 'opacity-100'">{{lang?.name}}</span>
+            </button>
+         </div>
+      </mat-menu>
+   </div>
+
+   <mat-tab-group>
+      <mat-tab *ngFor="let tab of tabs; let tabs_i = index">
+         <ng-template mat-tab-label class="w-full flex gap-x-2">
+            <span>{{tab?.emoji}}</span>
+            <span class="ml-2">{{tab?.name}}</span>
+            <mat-icon class="ml-4" (click)="master.del_lang_tab(tabs, tab.id, article, tabs_i)"
+               *ngIf="this.tabs.length > 1 && tabs_i !== 0 && tab.id !== 1">close</mat-icon>
+         </ng-template>
+
+         <div [ngClass]="field_width" class="grow" formArrayName="title">
+            <div *ngFor="let item of master.array(article, 'title'); let tit_i = index" [formGroupName]="tit_i">
+               <mat-form-field class="w-full" appearance="outline"
+                  *ngIf="item.value.languages_id == tab.id">
+                  <mat-label>Título</mat-label>
+                  <input formControlName="text" type="text" matInput>
+                  <mat-hint class="text-[#bbbdc3]">{{(item?.value?.text?.length ?? 0 )+ '/' + 250}}</mat-hint>
+                  <mat-error>Ingresa un valor válido</mat-error>
+               </mat-form-field>
+            </div>
+         </div>
+
+         <div class="w-full" formArrayName="description">
+            <div *ngFor="let item of master.array(article, 'title'); let desc_i = index" [formGroupName]="desc_i">
+               <quill-editor #quill *ngIf="item.value.languages_id == tab.id" [required]="true"
+                  formControlName="text"></quill-editor>
+            </div>
+         </div>
+
+         <div formArrayName="children" class="flex flex-col gap-6">
+            <div *ngFor="let child of master.array(article, 'children'); let child_i = index; let _uno = first" [formGroupName]="child_i"
+               class="flex flex-wrap gap-6">
+
+               <!-- SECCIÓN -->
+
+               <div *ngIf="child.value.type == 'section'" class="p-6 bg-[#ef7600]/10 rounded-3xl" [ngClass]="_uno ? 'mt-6' : ''">
+                  <div class="title">Sección</div>
+                  <div formArrayName="title" class="basis-64 grow shrink-0">
+                     <div *ngFor="let title of master.array(master.group(child), 'title'); let title_i = index"
+                        [formGroupName]="title_i">
+                        <mat-form-field class="w-full" appearance="outline"
+                           *ngIf="title.value.languages_id == tab.id">
+                           <mat-label>Subtítulo</mat-label>
+                           <input formControlName="text" type="text" matInput>
+                           <mat-hint class="text-[#bbbdc3]">{{(title?.value?.text?.length ?? 0 )+ '/' + 250}}</mat-hint>
+                           <mat-error>Ingresa un valor válido</mat-error>
+                        </mat-form-field>
+                     </div>
+                  </div>
+                  <div (click)="upload(child.get('image_url'))" class="file-field"
+                     [ngClass]="child.get('image_url')?.invalid && child.get('image_url')?.touched ? 'border-red-500 text-red-500' : ''">
+                     <mat-icon *ngIf="!child.value.image_url" class="text-[rgba(0,0,0,.54)]">upload_file</mat-icon>
+                     <img *ngIf="child.value.image_url" [src]="child.value.image_url" alt=""
+                        class="h-8 rounded-lg aspect-square grow-0">
+                     <div class="absolute left-11" [ngClass]="child.value.image_url ? 'top-0 text-xs' : ''">
+                        Imagen
+                     </div>
+                     <div class="max-w-[12rem] overflow-hidden whitespace-nowrap">
+                        {{child.value.image_url ?? ''}}
+                     </div>
+                  </div>
+                  <div formArrayName="description" class="mb-6 basis-full">
+                     <div
+                        *ngFor="let description of master.array(master.group(child), 'description'); let desc_i = index"
+                        [formGroupName]="desc_i">
+                        <quill-editor *ngIf="description.value.languages_id == tab.id" [required]="true"
+                           formControlName="text"></quill-editor>
+                     </div>
+                  </div>
+               </div>
+
+               <!-- CAROUSEL -->
+
+               <div *ngIf="child.value.type == 'carousel'" class="p-3 bg-[#76ef00]/10 rounded-3xl" [ngClass]="_uno ? 'mt-6' : ''">
+                  <div class="title">Carousel</div>
+                  <div formArrayName="title" class="basis-64 grow shrink-0">
+                     <div *ngFor="let title of master.array(master.group(child), 'title'); let title_i = index"
+                        [formGroupName]="title_i">
+                        <mat-form-field class="w-full" appearance="outline"
+                           *ngIf="title.value.languages_id == tab.id">
+                           <mat-label>Subtítulo</mat-label>
+                           <input formControlName="text" type="text" matInput>
+                           <mat-hint class="text-[#bbbdc3]">{{(title?.value?.text?.length ?? 0 )+ '/' + 250}}</mat-hint>
+                           <mat-error>Ingresa un valor válido</mat-error>
+                        </mat-form-field>
+                     </div>
+                  </div>
+
+                  <div formArrayName="carousel" class="basis-64 grow shrink-0 mb-6 flex flex-col gap-y-6">
+                     <div *ngFor="let carousel of master.array(master.group(child), 'carousel'); let carousel_i = index"
+                        [formGroupName]="carousel_i" class=" p-3 bg-[#76ef00]/10 rounded-3xl">
+                        <div formArrayName="description" class="mb-6 basis-full">
+                           <div
+                              *ngFor="let description of master.array(master.group(carousel), 'description'); let desc_i = index"
+                              [formGroupName]="desc_i">
+                              <quill-editor *ngIf="description.value.languages_id == tab.id" [required]="true" formControlName="text"></quill-editor>
+                           </div>
+                        </div>
+                        <div (click)="upload(carousel.get('image_url'))" class="file-field"
+                           [ngClass]="carousel.get('image_url')?.invalid && carousel.get('image_url')?.touched ? 'border-red-500 text-red-500' : ''">
+                           <mat-icon *ngIf="!carousel.value.image_url"
+                              class="text-[rgba(0,0,0,.54)]">upload_file</mat-icon>
+                           <img *ngIf="carousel.value.image_url" [src]="carousel.value.image_url" alt=""
+                              class="h-8 rounded-lg aspect-square grow-0">
+                           <div class="absolute left-11" [ngClass]="carousel.value.image_url ? 'top-0 text-xs' : ''">
+                              Imagen
+                           </div>
+                           <div class="max-w-[12rem] overflow-hidden whitespace-nowrap">
+                              {{carousel.value.image_url ?? ''}}
+                           </div>
+                        </div>
+                        <button *ngIf="master.array(master.group(child), 'carousel').length == (carousel_i + 1)"
+                           type="button" class="btn-2 !w-auto px-3"
+                           (click)="add_carousel_item(master.arr(master.group(child), 'carousel'))">Agregar Imagen al
+                           Carousel</button>
+                     </div>
+                  </div>
+               </div>
+
+               <!-- CARDS -->
+
+               <div *ngIf="child.value.type == 'card'" class="p-3 bg-[#7600ef]/10 rounded-3xl" [ngClass]="_uno ? 'mt-6' : ''">
+                  <div class="title">Cards</div>
+                  <div formArrayName="title" class="basis-64 grow shrink-0">
+                     <div *ngFor="let title of master.array(master.group(child), 'title'); let title_i = index"
+                        [formGroupName]="title_i">
+                        <mat-form-field class="w-full" appearance="outline"
+                           *ngIf="title.value.languages_id == tab.id">
+                           <mat-label>Subtítulo</mat-label>
+                           <input formControlName="text" type="text" matInput>
+                           <mat-hint class="text-[#bbbdc3]">{{(title?.value?.text?.length ?? 0 )+ '/' + 250}}</mat-hint>
+                           <mat-error>Ingresa un valor válido</mat-error>
+                        </mat-form-field>
+                     </div>
+                  </div>
+
+                  <div formArrayName="cards" class="basis-64 grow shrink-0 mb-6 flex flex-col gap-y-6">
+                     <div *ngFor="let cards of master.array(master.group(child), 'cards'); let cards_i = index"
+                        [formGroupName]="cards_i" class="p-3 bg-[#7600ef]/10 rounded-3xl flex flex-wrap gap-x-6">
+                        <div formArrayName="title" class="basis-64 grow shrink-0">
+                           <div *ngFor="let title of master.array(master.group(child), 'title'); let title_i = index"
+                              [formGroupName]="title_i">
+                              <mat-form-field class="w-full" appearance="outline"
+                                 *ngIf="title.value.languages_id == tab.id">
+                                 <mat-label>Subtítulo</mat-label>
+                                 <input formControlName="text" type="text" matInput>
+                                 <mat-hint class="text-[#bbbdc3]">{{(title?.value?.text?.length ?? 0 )+ '/' +
+                                    250}}</mat-hint>
+                                 <mat-error>Ingresa un valor válido</mat-error>
+                              </mat-form-field>
+                           </div>
+                        </div>
+
+                        <mat-form-field appearance="outline" class="basis-64 grow shrink-0">
+                           <mat-label>Ícono</mat-label>
+                           <mat-select #select formControlName="icon" class="!rounded-3xl !overflow-hidden">
+                              <input type="text" #val (keydown)="filter_icons(val.value)" class="sticky top-0 left-0 right-0 z-20 h-12 w-full bg-white !rounded-3xl !overflow-hidden border-b-2 [border-image:linear-gradient(310deg,#0076ef,#000259)1] p-3">
+                              <div class="flex flex-wrap">
+                                 <mat-option *ngFor="let icon of filtered_icons" [value]="icon?.filename" [ngClass]="select.panelOpen ? 'basis-1/5' : 'basis-full'">
+                                    <div *ngIf="select.panelOpen" class="flex justify-center">
+                                       <icon [i]="icon.filename" c="#000000"></icon>
+                                    </div>
+                                    <div *ngIf="!select.panelOpen" class="flex justify-center">
+                                       {{icon.filename}}
+                                    </div>
+                                 </mat-option>
+                              </div>
+                           </mat-select>
+                        </mat-form-field>
+
+                        <div formArrayName="description" class="mb-6 basis-full">
+                           <div
+                              *ngFor="let description of master.array(master.group(cards), 'description'); let desc_i = index"
+                              [formGroupName]="desc_i">
+                              <quill-editor *ngIf="description.value.languages_id == tab.id" [required]="true" formControlName="text"></quill-editor>
+                           </div>
+                        </div>
+                        <button *ngIf="master.array(master.group(child), 'cards').length == (cards_i + 1)" type="button"
+                           class="btn-2 !w-auto px-3"
+                           (click)="add_cards_item(master.arr(master.group(child), 'cards'))">Agregar Card</button>
+                     </div>
+                  </div>
+
+
+               </div>
+
+            </div>
+         </div>
+
+         <div class="flex gap-6 mt-6">
+            <button type="button" (click)="add_section()" class="btn-1 !w-auto px-3 flex gap-x-3">
+               <icon i="section" class="!max-w-[1.5rem] !max-h-[1.5rem]"></icon>
+               Agregar sección
+            </button>
+            <button type="button" (click)="add_carousel()" class="btn-1 !w-auto px-3 flex gap-x-3">
+               <icon i="carousel-horizontal" class="!max-w-[1.5rem] !max-h-[1.5rem]"></icon>
+               Agregar sección de carousel
+            </button>
+            <button type="button" (click)="add_card()" class="btn-1 !w-auto px-3 flex gap-x-3">
+               <icon i="carousel-horizontal" class="!max-w-[1.5rem] !max-h-[1.5rem]"></icon>
+               Agregar sección de cards
+            </button>
+         </div>
+      </mat-tab>
+   </mat-tab-group>
+</form>

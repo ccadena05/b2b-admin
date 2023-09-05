@@ -73,6 +73,24 @@
                                     <mat-error>Ingresar un valor válido *</mat-error>
                                 </mat-form-field>
 
+                                <div class="flex gap-x-3">
+                                    <!-- <img *ngIf="form.value.image_url" [src]="form.value.image_url" alt="" class="h-10 mt-1 rounded-lg aspect-square grow-0"> -->
+                                    <div (click)="uploadPDF(form.get('image_url'))" class="file-field" *ngIf="i == 0"
+                                        [ngClass]="form.controls['image_url'].invalid && form.controls['image_url'].touched ? 'border-red-500 text-red-500' : ''">
+                                        <mat-icon *ngIf="!form.value.image_url"
+                                            class="text-[rgba(0,0,0,.54)]">upload_file</mat-icon>
+                                        <img *ngIf="form.value.image_url" [src]="form.value.image_url" alt=""
+                                            class="h-8 rounded-lg aspect-square grow-0">
+                                        <div class="absolute left-11"
+                                            [ngClass]="form.value.image_url ? 'top-0 text-xs' : ''">
+                                            Logo
+                                        </div>
+                                        <div class="max-w-[12rem] overflow-hidden whitespace-nowrap">
+                                            {{form.value.image_url ?? ''}}
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <mat-form-field appearance="outline" class="w-full" *ngIf="i == 0">
                                     <mat-label>RFC</mat-label>
                                     <input formControlName="rfc" type="text" matInput>
@@ -273,7 +291,7 @@
                                     <mat-error>Ingresa un valor válido</mat-error>
                                 </mat-form-field>
 
-                                <div (click)="uploadPDF(form.get('brochure_name'), form.get('brochure_url'))"
+                                <div (click)="uploadPDF(form.get('brochure_url'))"
                                     class="file-field" *ngIf="i == 0">
                                     <mat-icon>upload_file</mat-icon>
                                     <div class="absolute left-11"

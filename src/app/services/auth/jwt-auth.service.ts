@@ -156,6 +156,10 @@ export class JwtAuthService {
       // this.user$.next(user);
       this.ls.setItem(config.APP_TOKEN, u.token);
       this.ls.setItem(config.APP_USER, u.user_id);
+      if (typeof u.languages == 'number')
+         this.ls.setItem(config.APP_LANG, this.ls.getItem('languages')?.find((lang: any) => lang.id == u.languages))
+      else
+         this.ls.setItem(config.APP_LANG, u.languages)
       this.ls.setItem(config.APP_PROFILE, u.profile_user_id);
       this.ls.setItem(config.APP_COMPANY, u.profile_company_id);
    }

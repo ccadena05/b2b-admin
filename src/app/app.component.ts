@@ -2,6 +2,10 @@ import { Component, HostBinding, AfterContentInit } from '@angular/core';
 import { JwtAuthService } from './services/auth/jwt-auth.service';
 declare var FinisherHeader: any;
 import '../assets/finisher-header.es5.min.js'
+import { ProviderService } from './services/provider/provider.service';
+import { Response } from './models/response.model';
+import { LocalStoreService } from './services/local-store.service';
+
 // @Component({
 //   selector: 'body',
 //   template: `<child></child>`
@@ -24,8 +28,9 @@ export class AppComponent implements AfterContentInit {
 
   // mode:string;
   constructor(
+    private ls: LocalStoreService,
     private jwtAuth: JwtAuthService,
-
+    private provider: ProviderService
   ) {
    // if(this.jwtAuth.getUser()?.mode){
       // this.mode= this.jwtAuth.getColor();
@@ -34,15 +39,21 @@ export class AppComponent implements AfterContentInit {
    // }
 
   // @HostBinding('class') public cssClass = 'class1';
+  this.get();
   }
 
   ngAfterContentInit(){
-    this.finisher()
+    // this.finisher()
 
   /*  if(this.jwtAuth.getColor() !== undefined)
       document.body.classList.add(this.jwtAuth.getColor() ?? ""); */
 
   }
+  get() {
+    this.provider.BD_ActionGet('general', 'get_languages').subscribe(
+       (languages: Response) => this.ls.setItem('languages', languages.msg)
+    )
+ }
 
 
   finisher() {

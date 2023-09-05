@@ -64,8 +64,8 @@ export class BlogFormComponent implements OnInit {
    ) {
       this.form = this.formBuilder.group({
          id: [null],
-         user_create: [this.jwt.getUser()],
          user_update: [this.jwt.getUser()],
+         user_create: [this.jwt.getUser()],
          title: this.formBuilder.array([this.master.createTranslation('1', null)]),
          summary: this.formBuilder.array([this.master.createTranslation('1', null)]),
          description: this.formBuilder.array([this.master.createTranslation('1', null)]),
@@ -77,6 +77,7 @@ export class BlogFormComponent implements OnInit {
          // parent_id: [null, Validators.required],
          category: [null, Validators.required],
          sub_category: [null, Validators.required],
+         categories: [null, Validators.required],
          profile_company_id: [null],
          released: [null]
       });
@@ -120,8 +121,10 @@ export class BlogFormComponent implements OnInit {
          (languages: Response) => {
             if (!languages.error) {
                this.available_langs = languages.msg;
-               this.provider.BD_ActionGet('general', 'get_category_blogs', { tree_size: 0 }).subscribe(
+               this.provider.BD_ActionGet('blogs', 'get_category_blogs', { tree_size: 0 }).subscribe(
                   (category_blogs: Response) => {
+                     console.log(category_blogs.msg);
+                     
                      this.sel['category_blogs'] = category_blogs.msg;
                      this.provider.BD_ActionAdminGet('companies', 'get').subscribe(
                         (companies: Response) => {
@@ -130,7 +133,10 @@ export class BlogFormComponent implements OnInit {
                               if (this.router.url.includes('detail')) {
                                  this.provider.BD_ActionAdminGet('blogs', 'get_blog_by_id', { blog_id: atob(this.__id) }).subscribe(
                                     (blog: Response) => {
+                                       console.log(blog.msg);
+                                       
                                        if (!blog.error) {
+                                          blog.msg.categories = blog.msg.categories.reverse()
                                           this.ls.update('bc', [
                                              {
                                                 item: 'Blog',
@@ -143,8 +149,11 @@ export class BlogFormComponent implements OnInit {
                                           ])
                                           this.master.patch(blog.msg, this.form, this.tabs)
                                           this.empty_translations(['title', 'summary', 'description'])
+                                          this.selected_all = blog.msg.categories
                                           this.output.ready.next(true)
-                                          this.output.table_ready.next(true)                              
+                                          this.output.table_ready.next(true)   
+                                          console.log(this.form.value);
+                                                                     
                                        }
                                     }
                                  )
@@ -171,12 +180,12 @@ export class BlogFormComponent implements OnInit {
    }
 
    onCategorySelected(category: any): void {
-      if (this.form.value['category']?.[category.generation] != category.id) {
+      if (this.form.value['categories']?.[category.generation] != category.id) {
          this.selected_all[category.generation] = category.id;
          while (this.selected_all[category.generation + 1])
             this.selected_all.pop()
 
-         this.form.controls['category'].patchValue(this.selected_all)
+         this.form.controls['categories'].patchValue(this.selected_all)
       }
       console.log(this.selected_all);
       
@@ -186,7 +195,7 @@ export class BlogFormComponent implements OnInit {
 
       const categoryId = category.id;
 
-      this.provider.BD_ActionGet('general', 'get_category_searcher', { tree_size: 0, id_category: categoryId })
+      this.provider.BD_ActionGet('blogs', 'get_category_blogs', { tree_size: 0, id_category: categoryId })
          .subscribe((category_blogs: Response) => {
 
             category.children = category_blogs.msg;
@@ -196,6 +205,10 @@ export class BlogFormComponent implements OnInit {
 
 
    save() {
+      if(!this.form.value.user_update)
+         this.form.controls['user_update'].patchValue(this.jwt.getUser())
+
+         this.form.controls['category'].patchValue(this.selected_all[0])
       this.master.save('blogs', this.router.url.includes('detail') ? 'update_blog' : 'insert_blog', this.form.value)
    }
 

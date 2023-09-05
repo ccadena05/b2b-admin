@@ -47,7 +47,7 @@ export class RecursiveSelectComponent implements OnInit, OnChanges {
       if(this._value?.length > 0 && this.filtered['children'])
       {
          let event: any = {value: {id: this._value[this._generation]}};
-         this.selectedCategory = this.filtered['children'].find((child: any) => child.id == event.value.id)
+         this.selectedCategory = this.filtered?.['children']?.find((child: any) => child?.id == event?.value?.id)
          this.onSelectionChange(event, this._control)
       } else if(!this._value){
          let event: any = {value: {id: null}};

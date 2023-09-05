@@ -85,14 +85,14 @@ export class EventsFormComponent implements OnInit {
          description: this.formBuilder.array([this.master.createTranslation('1', null)]),
          image_url: [null, Validators.required],
          cost: [null, Validators.required],
-         coin: [null, Validators.required],
+         coin: [null],
          event_type: [null, Validators.required],
          image_gallery: this.formBuilder.array([]),
          video_gallery: this.formBuilder.array([]),
          public_gallery: [null],
          start_date: [null, Validators.required],//yyyy-mm-dd 2023-01-23
          end_date: [null, Validators.required],//yyyy-mm-dd 2023-01-23
-         event_summary: [null],
+         event_summary: this.formBuilder.array([this.master.createTranslation('1', null)]),
          profile_company_id: [null, Validators.required],
          blog_id: [null],
          organizer: [null, Validators.required],
@@ -106,11 +106,13 @@ export class EventsFormComponent implements OnInit {
          active: [null],
          create_date: [null],
          last_update: [null],
-         category: [null],
-         sub_category: [null],
+         category: [null, Validators.required],
+         sub_category: [null, Validators.required],
+         categories: [null],
          user_update: [this.jwt.getUser()],
          user_create: [this.jwt.getUser()],
-         parent_id: [null]
+         parent_id: [null],
+         url: [null]
       })
       this.activatedRoute.params.subscribe(params => {
 
@@ -150,10 +152,10 @@ export class EventsFormComponent implements OnInit {
                this.sel['coin'] = [{ name: 'MXN', id: 0 }, { name: 'USD', id: 1 }]
                this.sel['event_privacy'] = [{ name: 'Público', id: 0 }, { name: 'Registrado', id: 1 }, { name: 'Premium', id: 2 }]
 
-               this.provider.BD_ActionGet('general', 'get_category_events', { tree_size: 0, id_category: 643 }).subscribe(
+               this.provider.BD_ActionGet('events', 'get_category_events', { tree_size: 0, id_category: 643 }).subscribe(
                   (category: Response) => {
                      console.log(category.msg);
-                     this.sel['category'] = category.msg
+                     this.sel['category_events'] = category.msg
 
                      if (!category.error) {
                         this.provider.BD_ActionAdminGet('companies', 'get').subscribe(
@@ -165,11 +167,13 @@ export class EventsFormComponent implements OnInit {
 
                                  if (this.router.url.includes('detail')) {
                                     let id = atob(this.__id)
-
+                                    console.log('obtener');
+                                    
                                     this.provider.BD_ActionAdminGet('events', 'get_event_by_id', { event_id: id }).subscribe(
                                        (event: Response) => {
+                                          console.log('DB', event.msg);
                                           if (!event.error) {
-                                             console.log('DB', event.msg);
+                                          // event.msg.categories = event.msg?.categories?.reverse()
                                              this.ls.update('bc', [
                                                 {
                                                    item: 'Eventos',
@@ -181,11 +185,15 @@ export class EventsFormComponent implements OnInit {
                                                 }
                                              ])
                                              this.master.patch(event.msg, this.form, this.tabs)
+                                            this.empty_translations(['title', 'event_summary', 'description'])
+                                            this.selected_all = event.msg.categories
                                              this.output.ready.next(true)
                                              this.output.table_ready.next(true)
                                           }
                                        }
                                     )
+                                    console.log('obtenido');
+
                                  } else {
                                     this.ls.update('bc', [
                                        {
@@ -212,6 +220,9 @@ export class EventsFormComponent implements OnInit {
    save() {
       this.save_button = true;
       this.form.controls['user_update'].patchValue(this.jwt.getUser())
+      // console.log(this.selected_all,this.selected_all[this.selected_all.length - 1]);
+      
+      // this.form.controls['sub_category'].patchValue(this.selected_all[this.selected_all.length - 1])
       this.master.save('events', this.router.url.includes('detail') ? 'update_event' : 'insert_event', this.form.value)
    }
 
@@ -220,19 +231,31 @@ export class EventsFormComponent implements OnInit {
    }
 
    onCategorySelected(category: any): void {
-      this.selected_all[category.generation] = category.id;
-      while (this.selected_all[category.generation + 1])
-         this.selected_all.pop()
-      console.log(this.selected_all);
+      if (this.form.value['categories']?.[category.generation] != category.id) {
+         this.selected_all[category.generation] = category.id;
+         while (this.selected_all[category.generation + 1])
+            this.selected_all.pop()
 
-      const categoryId = category.id;
+         this.form.controls['categories'].patchValue(this.selected_all)
+      }
+      console.log(this.selected_all);
+      
+      // this.form.controls['parent_id'].patchValue(this.selected_all[this.selected_all.length - 1])
       this.form.controls['category'].patchValue(this.selected_all[0])
       this.form.controls['sub_category'].patchValue(this.selected_all[this.selected_all.length - 1])
 
-      this.provider.BD_ActionGet('general', 'get_category_events', { tree_size: 0, id_category: categoryId })
+      console.log(this.selected_all[0],
+         this.selected_all[this.selected_all.length - 1]);
+      
+      const categoryId = category.id;
+
+      this.provider.BD_ActionGet('events', 'get_category_events', { tree_size: 0, id_category: categoryId })
          .subscribe((category_blogs: Response) => {
+            console.log(category_blogs.msg);
+            
             category.children = category_blogs.msg;
          });
+      // console.log(this.form.value);
    }
 
    uploadGallery(control: any) {
@@ -297,6 +320,17 @@ export class EventsFormComponent implements OnInit {
 
    get_company_name(id: any) {
       return this.sel['companies']?.filter((company: any) => company.id == id)[0]?.['name']
+   }
+
+   stringify(control: any) {
+      return JSON.stringify(this.form.value?.[control]!)
+   }
+
+   empty_translations(controls: string[]){
+      controls.forEach((control: string) => {
+         if(JSON.stringify(this.form.value?.[control]) == '[]')
+            this.master.getterA(this.form.controls[control]).push(this.master.createTranslation('1'))
+      });
    }
 
 }

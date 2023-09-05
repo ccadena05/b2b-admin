@@ -4,7 +4,7 @@
       routerLinkActive="bg-white shadow-lg dark:bg-dark-blue-50 hover:bg-white shadow-lg hover:dark:bg-dark-blue-50">
       <div class="{{item.bg}} rounded-xl aspect-square w-10 h-10 flex justify-center items-center text-white bg-clip-content border-2 border-transparent group-hover:bg-transparent group-hover:border-b2b-2 duration-300">
          <!-- <mat-icon class="m-auto">{{item.icon}}</mat-icon> -->
-         <icon>{{item.icon}}</icon>
+         <icon [i]="item.icon"></icon>
 
       </div>
       <div class="ease-soft font-semibold text-size-sm  duration-300">{{item.label}}</div>

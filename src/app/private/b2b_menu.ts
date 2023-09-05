@@ -8,19 +8,19 @@ export const b2b_menu = [
    {
       label: 'Eventos',
       link: '/m/events',
-      icon: 'event',
+      icon: 'calendar-event',
       bg: 'bg-b2b-2'
    },
    {
       label: 'Blog',
       link: '/m/blogs',
-      icon: 'blog',
+      icon: 'article',
       bg: 'bg-b2b-2'
    },
    {
       label: 'Requerimientos - RFQ',
       link: '/m/rfq',
-      icon: 'requirements',
+      icon: 'checklist',
       bg: 'bg-b2b-2'
    },
    {
@@ -44,19 +44,25 @@ export const b2b_menu = [
    {
       label: 'Clusters',
       link: '/m/clusters',
-      icon: 'group',
+      icon: 'affiliate',
       bg: 'bg-b2b-2'
    },
    {
       label: 'Membresías',
       link: '/m/memberships',
-      icon: 'membership',
+      icon: 'brand-my-oppo',
       bg: 'bg-b2b-2'
    },
    {
       label: 'Inversiones',
       link: '/m/investments',
-      icon: 'money',
+      icon: 'coin',
+      bg: 'bg-b2b-2'
+   },
+   {
+      label: 'Textos',
+      link: '/m/static',
+      icon: 'text-plus',
       bg: 'bg-b2b-2'
    }
 ]

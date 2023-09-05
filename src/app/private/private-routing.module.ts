@@ -11,6 +11,7 @@ import { CategoriesFormComponent } from './categories-form/categories-form.compo
 import { MembershipsFormComponent } from './memberships-form/memberships-form.component';
 import { ClustersFormComponent } from './clusters-form/clusters-form.component';
 import { InvestmentsFormComponent } from './investments-form/investments-form.component';
+import { StaticFormComponent } from './static-form/static-form.component';
 const routes: Routes = [
   {
     path: '',
@@ -69,6 +70,10 @@ const routes: Routes = [
         path: 'm/investments/add',
         component: InvestmentsFormComponent
       },
+      {
+        path: 'm/static/add',
+        component: StaticFormComponent
+      },
 
       {
         path: 'm/events/detail/:id',
@@ -101,6 +106,10 @@ const routes: Routes = [
       {
         path: 'm/investments/detail/:id',
         component: InvestmentsFormComponent
+      },
+      {
+        path: 'm/static/detail/:id',
+        component: StaticFormComponent
       },
       {
         path: 'm/:modulo',

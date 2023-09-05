@@ -11,12 +11,12 @@
       <div class="sticky top-0 left-0 right-0 bg-white z-10"></div>
       <div *ngIf="filtered?.length == 0" disabled class="text-slate-100 h-12 p-3" >Sin resultados</div>
       <mat-option *ngFor="let item of filtered" value="{{item?.id.toString()}}" class="capitalize !text-sm">
-         <div *ngIf="select.focused" class="flex gap-x-3">
+         <div *ngIf="select.panelOpen" class="flex gap-x-3">
             <span>{{item?.e}}</span>|
             <span>{{item?.n}}</span>
             <span class="text-slate-300">{{'(' + item?.pc + ')'}}</span>
          </div>
-         <div *ngIf="!select.focused" class="flex gap-x-3">
+         <div *ngIf="!select.panelOpen" class="flex gap-x-3">
             <span class="text-slate-300">{{'(' + item?.pc + ')'}}</span>
          </div>
       </mat-option>

@@ -15,6 +15,7 @@ $bgray2: #2c3344;
 $bgray2L: #556182;
 $slate-100: #f1f5f9;
 $slate-100-15: rgba(#f1f5f9, 0.15);
+$slate-200: #e2e8f0;
 $slate-300: #cbd5e1;
 $slate-400: #94a3b8;
 $slate-900: #0f172a;
@@ -134,15 +135,15 @@ body {
 
 @layer components {
    .btn-1 {
-      @apply flex justify-center items-center bg-b2b-2 hover:bg-[#2491ff] disabled:bg-[#57abff] disabled:cursor-not-allowed text-white disabled:text-slate-300 h-12 w-12 rounded-xl shrink-0 grow-0 duration-300 cursor-pointer shadow-lg; 
+      @apply flex justify-center items-center bg-b2b-2 hover:bg-[#2491ff] disabled:bg-[#57abff] disabled:cursor-not-allowed text-white disabled:text-slate-300 h-12 w-12 rounded-xl shrink-0 grow-0 duration-300 cursor-pointer; 
    }
 
    .btn-2 {
-      @apply flex justify-center items-center bg-slate-200 hover:bg-slate-100 disabled:bg-slate-50 text-b2b-2 disabled:text-[#57abff] disabled:cursor-not-allowed h-12 w-12 rounded-xl shrink-0 grow-0 duration-300 cursor-pointer shadow-lg; 
+      @apply flex justify-center items-center bg-slate-200 hover:bg-slate-100 disabled:bg-slate-50 text-b2b-2 disabled:text-[#57abff] disabled:cursor-not-allowed h-12 w-12 rounded-xl shrink-0 grow-0 duration-300 cursor-pointer; 
    }
 
    .btn-del {
-      @apply flex justify-center items-center bg-[#ef0076] hover:bg-[#ff2491] disabled:bg-[#ff57ab] disabled:cursor-not-allowed text-white disabled:text-slate-300 h-12 w-12 rounded-xl shrink-0 grow-0 duration-300 cursor-pointer shadow-lg; 
+      @apply flex justify-center items-center bg-[#ef0076] hover:bg-[#ff2491] disabled:bg-[#ff57ab] disabled:cursor-not-allowed text-white disabled:text-slate-300 h-12 w-12 rounded-xl shrink-0 grow-0 duration-300 cursor-pointer; 
    }
 
    .btn-p {
@@ -178,7 +179,7 @@ body {
    }
 
    .file-field {
-      @apply relative text-slate-900 cursor-default border border-[rgba(0,0,0,0.12)] hover:border-2 hover:border-slate-900 bg-slate-900/5 h-[58px] mt-1 p-3 basis-64 grow justify-start items-center rounded-xl flex gap-x-2 duration-100 mb-6;
+      @apply relative text-slate-900 cursor-default border border-[rgba(0,0,0,0.12)] hover:border-2 hover:border-slate-900 bg-slate-100 h-[58px] mt-1 p-3 basis-64 grow justify-start items-center rounded-xl flex gap-x-2 duration-100 mb-6;
    }
 
    .field-error {
@@ -245,7 +246,7 @@ mat-form-field {
    .mat-form-field-outline-start,
    .mat-form-field-outline-gap,
    .mat-form-field-outline-end {
-      background-color: rgba($slate-900, 0.05) !important;
+      background-color: rgba($slate-100, 1) !important;
       transition-duration: 300ms;
    }
 
@@ -270,7 +271,7 @@ mat-form-field {
 .mat-form-field-flex:hover .mat-form-field-outline-start,
 .mat-form-field-flex:hover .mat-form-field-outline-gap,
 .mat-form-field-flex:hover .mat-form-field-outline-end {
-   background-color: rgba($slate-900, 0.07) !important;
+   background-color: rgba($slate-200, 1) !important;
 }
 
 .mat-select-panel, .mat-autocomplete-panel {
@@ -690,10 +691,23 @@ NOTE: for old browsers, will need to restart watcher after changing a variable
    border-width: 2px;
    border-color: rgb(15 23 42);
 }
+
+.ql-toolbar.ql-snow, .ql-container.ql-snow {
+   background-color: $slate-100;
+}
  input:-webkit-autofill,
  input:-webkit-autofill:hover,
  input:-webkit-autofill:focus,
  input:-webkit-autofill:active {
      transition: background-color 5000s ease-in-out 0s;
      -webkit-text-fill-color: #fff !important;
+ }
+
+
+ icon {
+   display: inline-block;
+   width: 24px; /* Ajusta el ancho según tus necesidades */
+   height: 24px; /* Ajusta la altura según tus necesidades */
+   max-width: 1.5rem !important;
+   overflow: hidden;
  }

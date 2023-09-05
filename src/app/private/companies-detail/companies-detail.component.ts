@@ -161,7 +161,8 @@ export class CompaniesDetailComponent implements OnInit {
       public router: Router
    ) {
       this.form = this.formBuilder.group({
-         profile_company_id: [this.__id],
+         // profile_company_id: [this.__id],
+         id: [this.__id],
          legal_name: this.formBuilder.array([this.master.createTranslation('1')]),
          friendly_name: [null],
          rfc: [null, Validators.required], //QUITAR TRADUCCION
@@ -353,9 +354,9 @@ export class CompaniesDetailComponent implements OnInit {
                                     this.master.getterA(this.form.controls['categories_company']).push(this.master.createSimpleTranslation())
                                  });
 
-                                 if (this.ls.getItem('COMPANY_FORM'))
+                                /*  if (this.ls.getItem('COMPANY_FORM'))
                                     this.master.patch(this.master.compare_object(comp, this.ls.getItem('COMPANY_FORM')), this.form, this.tabs)
-                                 else
+                                 else */
                                     this.master.patch(comp, this.form, this.tabs)
 
                                  console.log(this.form.value);
@@ -442,7 +443,7 @@ export class CompaniesDetailComponent implements OnInit {
       this.form.value.schedule_week = JSON.stringify(this.form.value.schedule_week)
 
       if (this.form.valid) {
-         this.provider.BD_ActionPut('profile_company', 'update_profile', this.form.value).subscribe(
+         this.provider.BD_ActionAdminPut('companies', 'update_company', this.form.value).subscribe(
             (data: Response) => {
                console.log(data);
 
@@ -560,12 +561,11 @@ export class CompaniesDetailComponent implements OnInit {
       this.form.value.tags = this.form.value.tags.replace(tagToRemove, '');
    }
 
-   uploadPDF(control: any, name_control?: any) {
+   uploadPDF(control: any) {
       this.manager.open(config.upload_config).subscribe(
          data => {
             if (data.event == 'success') {
                control?.patchValue(data.info.secure_url)
-               name_control?.patchValue(data.info.original_filename)
             }
          }
       )

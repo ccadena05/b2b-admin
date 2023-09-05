@@ -29,6 +29,8 @@ import { CategoriesFormComponent } from './categories-form/categories-form.compo
 import { MembershipsFormComponent } from './memberships-form/memberships-form.component';
 import { ClustersFormComponent } from './clusters-form/clusters-form.component';
 import { InvestmentsFormComponent } from './investments-form/investments-form.component';
+import { StaticFormComponent } from './static-form/static-form.component';
+import { PreviewComponent } from './static-form/preview/preview.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +45,8 @@ import { InvestmentsFormComponent } from './investments-form/investments-form.co
     MembershipsFormComponent,
     ClustersFormComponent,
     InvestmentsFormComponent,
+    StaticFormComponent,
+    PreviewComponent,
   ],
   imports: [
     ComponentsModule,

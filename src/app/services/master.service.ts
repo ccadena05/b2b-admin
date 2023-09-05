@@ -12,6 +12,7 @@ import { Response } from '../models/response.model';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogoConfirmacionComponent } from '../components/dialogo-confirmacion/dialogo-confirmacion.component';
 import { Location } from '@angular/common';
+import { LanguageService } from './language.service';
 // import { CloudinaryWidgetManager } from 'ngx-cloudinary-upload-widget';
 
 @Injectable({
@@ -20,15 +21,17 @@ import { Location } from '@angular/common';
 export class MasterService {
 	_languages: any = [];
 	translate_keys = "id,text,active,identifier,languages_id";
+	no_translate_keys = ["children","cards","carousel"];
 
 	constructor(
 		private dialog: MatDialog,
 		private location: Location,
 		private jwt: JwtAuthService,
+		private lang: LanguageService,
 		private snackbar: MatSnackBar,
 		private sanitizer: DomSanitizer,
 		private formBuilder: FormBuilder,
-		private provider: ProviderService
+		private provider: ProviderService,
 		// private manager: CloudinaryWidgetManager
 	) {
 		this.languages();
@@ -39,20 +42,20 @@ export class MasterService {
 		Object.keys(data).forEach((key) => {
 			const control = formGroup.get(key);
 
-			if (control instanceof FormArray) 
+			if (control instanceof FormArray)
 				this.getterA(control).clear()
 
 			if (control instanceof FormControl) {
 				control.patchValue(data[key]);
-			} 
+			}
 
 			else if (control instanceof FormGroup) {
 				while (typeof data?.[key] == 'string')
 					data[key] = JSON.parse(data?.[key])
 
 				this.patch(data[key], control);
-			} 
-			
+			}
+
 			else if (control instanceof FormArray && Array.isArray(data[key])) {
 				const formArray = control as FormArray;
 				const dataArray = data[key];
@@ -131,6 +134,23 @@ export class MasterService {
 		this.snack(0, 'Revisa tu información e inténtalo de nuevo.')
 	}
 
+	arr(form: FormGroup, control: string, type?: any) {
+		// if (type)
+		// return form.controls[control] as FormArray
+		return (form.controls[control] as FormArray)
+	}
+
+	array(form: FormGroup, control: string, type?: any) {
+		// if(control == 'title')
+		// console.log((form.controls[control] as FormArray).controls);
+
+		return (form.controls[control] as FormArray)?.controls
+	}
+
+	group(control: any) {
+		return control as FormGroup
+	}
+
 	getterA(control: AbstractControl) {
 		return control as FormArray
 	}
@@ -144,15 +164,15 @@ export class MasterService {
 	}
 
 	createCertificate(name_id: any, name?: any): FormGroup {
-      return this.formBuilder.group({
-         id: [null],
-         name: [name, Validators.required],
-         name_id: [name_id, Validators.required],
-         // file_name: [''],
-         url: [null, Validators.required],
-         active: ['1', Validators.required]
-      });
-   }
+		return this.formBuilder.group({
+			id: [null],
+			name: [name, Validators.required],
+			name_id: [name_id, Validators.required],
+			// file_name: [''],
+			url: [null, Validators.required],
+			active: ['1', Validators.required]
+		});
+	}
 
 	createTranslation(languages_id: any, identifier?: any): FormGroup {
 		return this.formBuilder.group({
@@ -178,6 +198,58 @@ export class MasterService {
 			url: [url, Validators.required],
 			active: ['1']
 		})
+	}
+
+	createCarousel(languages_id: any, tabs: any): FormGroup {
+		
+
+		return this.formBuilder.group({
+			description: this.formBuilder.array(this.create_array(tabs)),
+			image_url: [null, Validators.required]
+		})
+	}
+
+	createCard(languages_id: any, tabs: any): FormGroup {
+		return this.formBuilder.group({
+			title: this.formBuilder.array(this.create_array(tabs)),
+			description: this.formBuilder.array(this.create_array(tabs)),
+			icon: [null, Validators.required]
+		})
+	}
+
+	createSection(languages_id: any, tabs: any): FormGroup {
+		return this.formBuilder.group({
+			title: this.formBuilder.array(this.create_array(tabs)),
+			description: this.formBuilder.array(this.create_array(tabs)),
+			image_url: [null, Validators.required],
+			type: ['section'],
+		})
+	}
+
+	fullCarousel(languages_id: any, tabs: any): FormGroup {
+		return this.formBuilder.group({
+			title: this.formBuilder.array(this.create_array(tabs)),
+			carousel: this.formBuilder.array([this.createCarousel(languages_id,tabs)]),
+			type: ['carousel'],
+		})
+	}
+
+	fullCard(languages_id: any, tabs: any): FormGroup {
+		return this.formBuilder.group({
+			title: this.formBuilder.array(this.create_array(tabs)),
+			cards: this.formBuilder.array([this.createCard(languages_id,tabs)]),
+			type: ['card'],
+		})
+	}
+
+	create_array(tabs: any) {
+		console.log(tabs);
+		
+		let array: any = []
+		tabs.forEach((tab: any) => {
+			array.push(this.createTranslation(tab.id, null))
+		});
+		return array;
 	}
 
 	changeKey(mapeo: { [oldKey: string]: string }, json: any) {
@@ -216,15 +288,15 @@ export class MasterService {
 
 	turn_check(form: FormGroup, controls: string[]): boolean {
 		console.log(controls.some(control => form.get(control)?.value !== null && form.get(control)?.value !== undefined && form.get(control)?.value !== '' && form.get(control)?.value !== ""));
-		
+
 		return controls.some(control => form.get(control)?.value !== null && form.get(control)?.value !== undefined && form.get(control)?.value !== '' && form.get(control)?.value !== "");
 	}
 
-	turn_check_array(form:FormGroup, controlNames: string[]): boolean {
+	turn_check_array(form: FormGroup, controlNames: string[]): boolean {
 		return controlNames.some(controlName => {
 			const control = form.get(controlName) as FormControl;
 			return control.value !== null && control.value !== undefined;
-		 });
+		});
 	}
 
 	addslashes(string: any) {
@@ -285,14 +357,24 @@ export class MasterService {
 	} */
 
 	add_lang_tab(tabs: any, language: any, form: FormGroup) {
-		if (!tabs.some((item: any) => item.id == language.id) && (language.id != '1' || language.id != 1)) {
+		console.log(tabs, language, form, this.lang.user_lang.id);
+		
+		if (!tabs.some((item: any) => item.id == language.id) && (language.id != this.lang.user_lang.id || language.id != this.lang.user_lang.id.toString())) {
 			tabs.push(language);
 
-			Object.keys(form.controls).forEach(element => {
-				if (form.controls[element] instanceof FormArray)
-					this.getterA(form.controls[element]).push(this.createTranslation(language.id,  form.value?.[element]?.[0]?.['identifier'] ?? null))
-			})
+			this.push_lang(language, form)
 		}
+	}
+
+	push_lang(language: any, form: FormGroup) {
+		Object.keys(form.controls).forEach(element => {
+			if (form.controls[element] instanceof FormArray && !this.no_translate_keys.includes(element))
+				this.getterA(form.controls[element]).push(this.createTranslation(language.id, form.value?.[element]?.[0]?.['identifier'] ?? null))
+			else if (form.controls[element] instanceof FormArray && this.no_translate_keys.includes(element))
+				Object.keys(this.group(form.controls[element]).controls).forEach(number => {
+					this.push_lang(language, this.group(this.group(form.controls[element]).controls[number]))
+				});
+		})
 	}
 
 	del_lang_tab(tabs: any, languages_id: any, form: FormGroup, tab_index: any) {
@@ -325,7 +407,7 @@ export class MasterService {
 
 
 			if (form_array instanceof FormArray)
-				this.getterA(form_array).push(this.createTranslation(language.id,this.getterA(this.getterA(form.controls[array]).at(item_index)).value[element]?.[0]?.['identifier'] ?? null))
+				this.getterA(form_array).push(this.createTranslation(language.id, this.getterA(this.getterA(form.controls[array]).at(item_index)).value[element]?.[0]?.['identifier'] ?? null))
 		})
 	}
 
@@ -370,46 +452,50 @@ export class MasterService {
 	}
 
 	save(model: string, action: string, data: any) {
-      this.dialog.open(DialogoConfirmacionComponent).afterClosed().subscribe(
-         confirm => {
-            if (confirm)
-               this.provider[action.includes('update') ? 'BD_ActionAdminPut' : 'BD_ActionAdminPost'](model, action, data).subscribe(
-                  (data: Response) => {
+		this.dialog.open(DialogoConfirmacionComponent).afterClosed().subscribe(
+			confirm => {
+				if (confirm)
+					this.provider[action.includes('update') ? 'BD_ActionAdminPut' : 'BD_ActionAdminPost'](model, action, data).subscribe(
+						(data: Response) => {
 							console.log(data);
-							
-                     if(!data.error) { // Se completó
+
+							if (!data.error) { // Se completó
 								this.location.back()
-                        this.snack(2)
+								this.snack(2)
 							}
-                     else // Error
-                        this.snack(0)	
-                  }
-               )
-            else
-               this.snack(1, 'El elemento sigue visible')
-         }
-      )
-   }
+							else // Error
+								this.snack(0)
+						}
+					)
+				else
+					this.snack(1, 'El elemento sigue visible')
+			}
+		)
+	}
 
 
 
 	delete(model: string, action: string, data: any) {
-      this.dialog.open(DialogoConfirmacionComponent).afterClosed().subscribe(
-         confirm => {
-            if (confirm)
-               this.provider.BD_ActionAdminDel(model, action, data).subscribe(
-                  (data: Response) => {
-                     if(!data.error) {// Se completó
+		this.dialog.open(DialogoConfirmacionComponent).afterClosed().subscribe(
+			confirm => {
+				if (confirm)
+					this.provider.BD_ActionAdminDel(model, action, data).subscribe(
+						(data: Response) => {
+							if (!data.error) {// Se completó
 								this.location.back()
-                        this.snack(2)
+								this.snack(2)
 							}
-                     else // Error
-                        this.snack(0)	
-                  }
-               )
-            else
-               this.snack(1, 'El elemento sigue visible')
-         }
-      )
-   }
+							else // Error
+								this.snack(0)
+						}
+					)
+				else
+					this.snack(1, 'El elemento sigue visible')
+			}
+		)
+	}
+
+	inner(code: string) {
+		return this.sanitizer.bypassSecurityTrustHtml(code);
+	}
 }

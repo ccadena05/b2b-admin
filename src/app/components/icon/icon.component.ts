@@ -1,4 +1,6 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, ElementRef, Input, OnInit, Renderer2, SimpleChange, SimpleChanges } from '@angular/core';
+import { MasterService } from 'src/app/services/master.service';
 
 
 @Component({
@@ -7,23 +9,33 @@ import { Component, ElementRef, Input, OnInit, Renderer2, SimpleChange, SimpleCh
    styleUrls: ['./icon.component.scss']
 })
 export class IconComponent implements OnInit {
-   constructor(private el: ElementRef, private renderer: Renderer2) {
+   @Input() c: string = '';
+   @Input() i: string = '';
+   _i: string = '';
+   _c: string = '';
+   path: string = ''
+   icon: any = ''
+
+   constructor(
+      public master: MasterService,
+      private http: HttpClient,
+   ) {
    }
 
    ngOnInit(): void {
    }
 
    ngOnChanges(changes: SimpleChanges) {
-   }
+      this._i = changes['i']?.currentValue ?? this.i;
+      this._c = changes['c']?.currentValue ?? this._c;
+      this.path = `assets/icons2/${this._i}.svg`;
 
-   ngAfterViewInit() {
-      const iconName = this.el.nativeElement.textContent.trim();
-      this.renderer.setStyle(this.el.nativeElement, 'background-image', `url('assets/icons/${iconName}.svg')`);
-      this.renderer.setStyle(this.el.nativeElement, 'background-size', 'contain');
-      this.renderer.setStyle(this.el.nativeElement, 'background-repeat', 'no-repeat');
-      this.renderer.setStyle(this.el.nativeElement, 'background-cover', 'contain');
-      this.renderer.setStyle(this.el.nativeElement, 'color', 'transparent');
-      this.renderer.setStyle(this.el.nativeElement, 'max-width', '1.5rem');
+      this.http.get(this.path, { responseType: 'text' }).subscribe(
+         (data: any) => {
+            this.icon = this._c ? data.replace(/<svg(.*?)stroke="([^"]*)"([^>]*)>/g, `<svg$1stroke="${this._c}"$3>`) : data;
+            this.icon = this.master.inner(this.icon)
+         }
+      );
    }
 
 }
