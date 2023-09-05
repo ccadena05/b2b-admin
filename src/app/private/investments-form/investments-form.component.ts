@@ -16,7 +16,7 @@ import { Router } from '@angular/router';
 export class InvestmentsFormComponent implements OnInit {
   available_langs: any = []
   tabs: any = [{ id: '1', name: 'English', language: 'EN', emoji: '🇺🇸' }]
-  form_investments: FormGroup
+  form: FormGroup
   readonly separatorKeysCodes = [ENTER, COMMA] as const
 
   constructor(
@@ -26,7 +26,7 @@ export class InvestmentsFormComponent implements OnInit {
     public master: MasterService,
     private output: OutputService
   ) {
-    this.form_investments = this.form_builder.group({
+    this.form = this.form_builder.group({
       total_amount: ['', Validators.required],
       country: [null, Validators.required],
       state: [null, Validators.required],
@@ -54,7 +54,7 @@ export class InvestmentsFormComponent implements OnInit {
   }
 
   save() {
-    console.log(this.form_investments.value)
+    console.log(this.form.value)
   }
 
   delete() {
@@ -65,16 +65,16 @@ export class InvestmentsFormComponent implements OnInit {
     const value = (event.value || '').trim()
 
     if (value) {
-      if (this.form_investments.value.categories != null)
-        this.form_investments.controls['categories'].patchValue(this.form_investments.value.categories + ', ' + value)
+      if (this.form.value.categories != null)
+        this.form.controls['categories'].patchValue(this.form.value.categories + ', ' + value)
       else
-        this.form_investments.controls['categories'].patchValue(value)
+        this.form.controls['categories'].patchValue(value)
     }
     event.chipInput!.clear();
   }
 
   removeCategory(category: any): void {
     const tagToRemove = category + ', ';
-    this.form_investments.value.categories = this.form_investments.value.categories.replace(tagToRemove, '')
+    this.form.value.categories = this.form.value.categories.replace(tagToRemove, '')
   }
 }
