@@ -154,6 +154,10 @@ body {
       @apply bg-bgray2 rounded-xl text-slate-100 py-2 px-4 cursor-pointer disabled:cursor-not-allowed disabled:bg-bgray/80 disabled:text-slate-300 hover:bg-bgray2L duration-300;
    }
 
+   .big-title {
+      @apply bg-gradient-to-r from-[#0076ef] to-[#000259] bg-clip-text text-transparent text-4xl font-bold mb-3 [text-wrap:balance];
+   }
+
    .title {
       @apply text-[#0076ef] text-xl basis-full text-center mb-4;
    }
@@ -684,6 +688,13 @@ NOTE: for old browsers, will need to restart watcher after changing a variable
          height: 18px !important;
       }
    }
+}
+
+.mat-bottom-sheet-container-medium, .mat-bottom-sheet-container-large {
+   min-width: calc(100vw - 128px) !important;
+   max-width: calc(100vw - 128px) !important;
+   border-top-left-radius: 1.5rem !important; /* 24px */
+   border-top-right-radius: 1.5rem !important;
 }
 
 

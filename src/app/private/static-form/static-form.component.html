@@ -2,6 +2,10 @@
    class="bg-white rounded-2xl shadow-lg p-6 relative">
    <div
       class="sticky top-0 right-0 left-full w-[7.5rem] z-50 justify-end text-slate-100 rounded-2xl flex gap-x-2 group">
+      <div type="button" class="btn-del !bg-[#00ef76]" (click)="preview()">
+         <icon i="eye"></icon>
+      </div>
+
       <div *ngIf="router.url.includes('detail')" type="button" class="btn-del" (click)="delete()">
          <mat-icon>delete</mat-icon>
       </div>
@@ -59,7 +63,10 @@
                <!-- SECCIÓN -->
 
                <div *ngIf="child.value.type == 'section'" class="p-6 bg-[#ef7600]/10 rounded-3xl" [ngClass]="_uno ? 'mt-6' : ''">
-                  <div class="title">Sección</div>
+                  <div class="flex justify-end gap-x-6">
+                     <div class="title">Sección</div>
+                     <icon i="x" c="#ef0076" matTooltip="Eliminar sección" (click)="delete_section(child_i)"></icon>
+                  </div>
                   <div formArrayName="title" class="basis-64 grow shrink-0">
                      <div *ngFor="let title of master.array(master.group(child), 'title'); let title_i = index"
                         [formGroupName]="title_i">
@@ -97,7 +104,10 @@
                <!-- CAROUSEL -->
 
                <div *ngIf="child.value.type == 'carousel'" class="p-3 bg-[#76ef00]/10 rounded-3xl" [ngClass]="_uno ? 'mt-6' : ''">
-                  <div class="title">Carousel</div>
+                  <div class="flex justify-end gap-x-6">
+                     <div class="title">Carousel</div>
+                     <icon i="x" c="#ef0076" matTooltip="Eliminar sección de carousel" (click)="delete_section(child_i)"></icon>
+                  </div>
                   <div formArrayName="title" class="basis-64 grow shrink-0">
                      <div *ngFor="let title of master.array(master.group(child), 'title'); let title_i = index"
                         [formGroupName]="title_i">
@@ -112,16 +122,21 @@
                   </div>
 
                   <div formArrayName="carousel" class="basis-64 grow shrink-0 mb-6 flex flex-col gap-y-6">
-                     <div *ngFor="let carousel of master.array(master.group(child), 'carousel'); let carousel_i = index"
-                        [formGroupName]="carousel_i" class=" p-3 bg-[#76ef00]/10 rounded-3xl">
-                        <div formArrayName="description" class="mb-6 basis-full">
+                     <div *ngFor="let carousel of master.array(master.group(child), 'carousel'); let carousel_i = index; let ult = last"
+                        [formGroupName]="carousel_i" class=" p-3 bg-[#76ef00]/10 rounded-3xl flex flex-wrap">
+                        <div formArrayName="description" class="mb-6 basis-10/12 grow">
                            <div
                               *ngFor="let description of master.array(master.group(carousel), 'description'); let desc_i = index"
                               [formGroupName]="desc_i">
                               <quill-editor *ngIf="description.value.languages_id == tab.id" [required]="true" formControlName="text"></quill-editor>
                            </div>
                         </div>
-                        <div (click)="upload(carousel.get('image_url'))" class="file-field"
+
+                        <div class="h-14 w-8 mt-1 flex justify-center items-center" (click)="delete_item(master.arr(master.group(child), 'cards'), child_i)">
+                           <icon i="x" c="#ef0076" matTooltip="Eliminar item"></icon>
+                        </div>
+
+                        <div (click)="upload(carousel.get('image_url'))" class="file-field basis-full"
                            [ngClass]="carousel.get('image_url')?.invalid && carousel.get('image_url')?.touched ? 'border-red-500 text-red-500' : ''">
                            <mat-icon *ngIf="!carousel.value.image_url"
                               class="text-[rgba(0,0,0,.54)]">upload_file</mat-icon>
@@ -134,7 +149,7 @@
                               {{carousel.value.image_url ?? ''}}
                            </div>
                         </div>
-                        <button *ngIf="master.array(master.group(child), 'carousel').length == (carousel_i + 1)"
+                        <button *ngIf="ult"
                            type="button" class="btn-2 !w-auto px-3"
                            (click)="add_carousel_item(master.arr(master.group(child), 'carousel'))">Agregar Imagen al
                            Carousel</button>
@@ -145,7 +160,10 @@
                <!-- CARDS -->
 
                <div *ngIf="child.value.type == 'card'" class="p-3 bg-[#7600ef]/10 rounded-3xl" [ngClass]="_uno ? 'mt-6' : ''">
-                  <div class="title">Cards</div>
+                  <div class="flex justify-end gap-x-6">
+                     <div class="title">Cards</div>
+                     <icon i="x" c="#ef0076" matTooltip="Eliminar sección de cards" (click)="delete_section(child_i)"></icon>
+                  </div>
                   <div formArrayName="title" class="basis-64 grow shrink-0">
                      <div *ngFor="let title of master.array(master.group(child), 'title'); let title_i = index"
                         [formGroupName]="title_i">
@@ -160,7 +178,7 @@
                   </div>
 
                   <div formArrayName="cards" class="basis-64 grow shrink-0 mb-6 flex flex-col gap-y-6">
-                     <div *ngFor="let cards of master.array(master.group(child), 'cards'); let cards_i = index"
+                     <div *ngFor="let card of master.array(master.group(child), 'cards'); let cards_i = index; let ult = last"
                         [formGroupName]="cards_i" class="p-3 bg-[#7600ef]/10 rounded-3xl flex flex-wrap gap-x-6">
                         <div formArrayName="title" class="basis-64 grow shrink-0">
                            <div *ngFor="let title of master.array(master.group(child), 'title'); let title_i = index"
@@ -193,14 +211,19 @@
                            </mat-select>
                         </mat-form-field>
 
+                        <div class="h-14 w-8 mt-1 flex justify-center items-center" (click)="delete_item(master.arr(master.group(child), 'cards'), child_i)">
+                           <icon i="x" c="#ef0076" matTooltip="Eliminar card"></icon>
+                        </div>
+
+
                         <div formArrayName="description" class="mb-6 basis-full">
                            <div
-                              *ngFor="let description of master.array(master.group(cards), 'description'); let desc_i = index"
+                              *ngFor="let description of master.array(master.group(card), 'description'); let desc_i = index"
                               [formGroupName]="desc_i">
                               <quill-editor *ngIf="description.value.languages_id == tab.id" [required]="true" formControlName="text"></quill-editor>
                            </div>
                         </div>
-                        <button *ngIf="master.array(master.group(child), 'cards').length == (cards_i + 1)" type="button"
+                        <button *ngIf="ult" type="button"
                            class="btn-2 !w-auto px-3"
                            (click)="add_cards_item(master.arr(master.group(child), 'cards'))">Agregar Card</button>
                      </div>
@@ -222,7 +245,7 @@
                Agregar sección de carousel
             </button>
             <button type="button" (click)="add_card()" class="btn-1 !w-auto px-3 flex gap-x-3">
-               <icon i="carousel-horizontal" class="!max-w-[1.5rem] !max-h-[1.5rem]"></icon>
+               <icon i="rectangle-vertical" class="!max-w-[1.5rem] !max-h-[1.5rem]"></icon>
                Agregar sección de cards
             </button>
          </div>

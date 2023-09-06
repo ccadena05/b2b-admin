@@ -1,13 +1,15 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Router } from '@angular/router';
 import { CloudinaryWidgetManager } from 'ngx-cloudinary-upload-widget';
 import { Response } from 'src/app/models/response.model';
 import { LanguageService } from 'src/app/services/language.service';
 import { MasterService } from 'src/app/services/master.service';
 import { ProviderService } from 'src/app/services/provider/provider.service';
-import { icons } from 'src/assets/icons/icons';
+import { _icons } from 'src/assets/icons/_icons';
 import { config } from 'src/config';
+import { PreviewComponent } from './preview/preview.component';
 
 @Component({
    selector: 'app-static-form',
@@ -21,8 +23,8 @@ export class StaticFormComponent implements OnInit {
    available_langs: any = []
    tabs: any = [this.lang.user_lang];
    i_section = 0;
-   filtered_icons = icons.slice(0,25);
-   _icons = icons;
+   filtered_icons = _icons.slice(0,25);
+   _icons = _icons;
 
    @ViewChild('cc') cc!: ElementRef;
 
@@ -33,6 +35,7 @@ export class StaticFormComponent implements OnInit {
       private lang: LanguageService,
       private formBuilder: FormBuilder,
       private provider: ProviderService,
+      private bottomsheet: MatBottomSheet,
       private manager: CloudinaryWidgetManager,
 
    ) {
@@ -95,6 +98,19 @@ export class StaticFormComponent implements OnInit {
 
    add_cards_item(cards: FormArray) {
       cards.push(this.master.createCard(this.lang.user_lang.id,this.tabs))
+   }
+
+   delete_section(index: any) {
+      console.log(index);
+      this.master.arr(this.article, 'children').removeAt(index)
+   }
+
+   delete_item(child: FormArray, index: any) {
+      child.removeAt(index)
+   }
+
+   preview() {
+      this.bottomsheet.open(PreviewComponent, {data: this.article.value})
    }
 
    stringify(form: any, control: any) {

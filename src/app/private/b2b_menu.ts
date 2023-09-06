@@ -2,7 +2,7 @@ export const b2b_menu = [
    {
       label: 'Dashboard',
       link: 'dashboard',
-      icon: 'dashboard',
+      icon: 'layout-2',
       bg: 'bg-gradient-to-tr from-b2b-1 to-b2b-2'
    },
    {

@@ -1,1 +1,57 @@
-<p>preview works!</p>
+<main class="!w-full">
+   <article class="w-full text-slate-900 text-lg p-6">
+      <section class="bg-white py-6 px-[4.3%] rounded-3xl">
+         <article class="py-6">
+            <div class="mb-12">
+               <h1 *ngIf="data?.title" class="big-title">{{lang.get_text(data?.title)}}</h1>
+               <p *ngIf="data?.description" [innerHTML]="lang.get_text(data?.description)"></p>
+            </div>
+
+            <section *ngIf="data?.children" class="flex flex-col gap-y-12">
+               <div *ngFor="let child of data?.children; let i = index; let par = even"
+                  class="md:even:text-right md:odd:text-left">
+                  <h2 class="title text-center" *ngIf="child?.title" [ngClass]="par ? 'md:text-left' : 'md:text-right'">
+                     {{lang.get_text(child?.title)}}
+                  </h2>
+
+                  <div *ngIf="child?.type == 'section'"
+                     class="flex flex-col md:flex-row md:items-center gap-6 md:gap-40">
+                     <p *ngIf="child?.description" [innerHTML]="lang.get_text(child?.description)" [ngClass]="par ? 'md:order-1' : 'md:order-2'"> </p>
+                     <img *ngIf="child?.image_url" [src]="child?.image_url" class="w-full md:w-[30%] object-contain" [ngClass]="par ? 'md:order-2' : 'md:order-1'">
+                  </div>
+
+                  <div *ngIf="child?.type == 'carousel'" class="flex flex-col md:flex-row md:items-center gap-6 md:gap-40">
+                     <div class="relative w-full flex gap-6 mb-6 snap-x snap-mandatory overflow-x-auto overflow-y-hidden scroll-smooth" #car>
+                        <div class="sticky left-0 inset-y-0 flex items-center" (click)="prev()">
+                           <icon i="chevron_left" c="#ffffff" class="scale-[1.75] bg-b2b-2/15 rounded-full">
+                           </icon>
+                        </div>
+                        <span #el *ngFor="let chi of child?.carousel" class="bg-b2b-2/90 text-slate-100 rounded-3xl p-12 snap-center shrink-0 text-center flex flex-col md:flex-row gap-6 items-center w-full">
+                           <img [src]="chi?.image_url" alt="image"
+                              class="rounded-3xl object-contain aspect-[10/5] w-full max-w-[15rem] mb-6">
+                           <p [innerHTML]="lang.get_text(chi?.description)"
+                              class="px-[10%] py-[5%] text-center text-xl w-full"></p>
+                        </span>
+                        <div class="sticky right-0 inset-y-0 flex items-center" (click)="next()">
+                           <icon i="chevron_right" c="#ffffff" class="scale-[1.75] bg-b2b-2/15 rounded-full">
+                           </icon>
+                        </div>
+                     </div>
+                  </div>
+
+                  <div *ngIf="child?.type == 'card'" class="flex flex-wrap gap-6 justify-center p-6">
+                     <div *ngFor="let card of child?.cards" class="bg-slate-100 rounded-3xl p-6 text-slate-900 flex flex-col gap-3 items-center basis-72">
+                        <div class="bg-[#d6ebff] p-3 rounded-xl flex justify-center items-center w-full aspect-[5/2]">
+                           <icon [i]="card.icon || ''" c="#0076ef" class="max-w-[1.5rem] overflow-hidden scale-[3]"></icon>
+                        </div>
+                        <div class="title !basis-4">{{lang.get_text(card.title)}}</div>
+                        <p class="text-slate-900 !text-center" [innerHTML]="lang.get_text(card.description)"></p>
+                     </div>
+                  </div>
+
+               </div>
+            </section>
+         </article>
+      </section>
+   </article>
+</main>
