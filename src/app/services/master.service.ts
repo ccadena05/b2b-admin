@@ -21,7 +21,7 @@ import { LanguageService } from './language.service';
 export class MasterService {
 	_languages: any = [];
 	translate_keys = "id,text,active,identifier,languages_id";
-	no_translate_keys = ["children","cards","carousel"];
+	no_translate_keys = ["children", "cards", "carousel"];
 
 	constructor(
 		private dialog: MatDialog,
@@ -144,7 +144,7 @@ export class MasterService {
 		// if(control == 'title')
 		// console.log((form.controls[control] as FormArray).controls);
 
-		return (form.controls[control] as FormArray)?.controls
+		return (form.controls?.[control] as FormArray)?.controls
 	}
 
 	group(control: any) {
@@ -200,24 +200,7 @@ export class MasterService {
 		})
 	}
 
-	createCarousel(languages_id: any, tabs: any): FormGroup {
-		
-
-		return this.formBuilder.group({
-			description: this.formBuilder.array(this.create_array(tabs)),
-			image_url: [null, Validators.required]
-		})
-	}
-
-	createCard(languages_id: any, tabs: any): FormGroup {
-		return this.formBuilder.group({
-			title: this.formBuilder.array(this.create_array(tabs)),
-			description: this.formBuilder.array(this.create_array(tabs)),
-			icon: [null, Validators.required]
-		})
-	}
-
-	createSection(languages_id: any, tabs: any): FormGroup {
+	text_section(tabs: any): FormGroup {
 		return this.formBuilder.group({
 			title: this.formBuilder.array(this.create_array(tabs)),
 			description: this.formBuilder.array(this.create_array(tabs)),
@@ -226,25 +209,88 @@ export class MasterService {
 		})
 	}
 
-	fullCarousel(languages_id: any, tabs: any): FormGroup {
+	carousel_section(tabs: any): FormGroup {
 		return this.formBuilder.group({
 			title: this.formBuilder.array(this.create_array(tabs)),
-			carousel: this.formBuilder.array([this.createCarousel(languages_id,tabs)]),
+			carousel: this.formBuilder.array([this.carousel_item(tabs)]),
 			type: ['carousel'],
 		})
 	}
 
-	fullCard(languages_id: any, tabs: any): FormGroup {
+	carousel_item(tabs: any): FormGroup {
+		return this.formBuilder.group({
+			description: this.formBuilder.array(this.create_array(tabs)),
+			image_url: [null, Validators.required]
+		})
+	}
+
+	card_item(tabs: any): FormGroup {
 		return this.formBuilder.group({
 			title: this.formBuilder.array(this.create_array(tabs)),
-			cards: this.formBuilder.array([this.createCard(languages_id,tabs)]),
-			type: ['card'],
+			description: this.formBuilder.array(this.create_array(tabs)),
+			icon: [null, Validators.required]
+		})
+	}
+
+	card_section(tabs: any): FormGroup {
+		return this.formBuilder.group({
+			title: this.formBuilder.array(this.create_array(tabs)),
+			cards: this.formBuilder.array([this.card_item(tabs)]),
+			type: ['cards'],
+		})
+	}
+
+
+	linetime_section(tabs: any): FormGroup {
+		return this.formBuilder.group({
+			title: this.formBuilder.array(this.create_array(tabs)),
+			linetime: this.formBuilder.array([this.linetime_item(tabs)]),
+			type: ['linetime'],
+
+		})
+	}
+
+	linetime_item(tabs: any): FormGroup {
+		return this.formBuilder.group({
+			label: this.formBuilder.array(this.create_array(tabs)),
+			subtitle: this.formBuilder.array(this.create_array(tabs)),
+			title: this.formBuilder.array(this.create_array(tabs)),
+			description: this.formBuilder.array(this.create_array(tabs)),
+			children: this.formBuilder.array([])
+		})
+	}
+	
+	linetime_child(tabs: any): FormGroup {
+		return this.formBuilder.group({
+			label: this.formBuilder.array(this.create_array(tabs)),
+			subtitle: this.formBuilder.array(this.create_array(tabs)),
+			title: this.formBuilder.array(this.create_array(tabs)),
+			description: this.formBuilder.array(this.create_array(tabs)),
+		})
+	}
+
+	numberCard(languages_id: any, tabs: any): FormGroup {
+		let form = this.formBuilder.group({
+			title: this.formBuilder.array(this.create_array(tabs)),
+			cards: this.formBuilder.array([]),
+			type: ['number-cards'],
+		})
+
+		for (let index = 0; index < 4; index++) {
+			this.arr(form, 'cards').push(this.ncard(tabs))
+		}
+
+		return form
+	}
+
+	ncard(tabs: any): FormGroup {
+		return this.formBuilder.group({
+			title: this.formBuilder.array(this.create_array(tabs)),
+			icon: [null, Validators.required]
 		})
 	}
 
 	create_array(tabs: any) {
-		console.log(tabs);
-		
 		let array: any = []
 		tabs.forEach((tab: any) => {
 			array.push(this.createTranslation(tab.id, null))
@@ -358,7 +404,7 @@ export class MasterService {
 
 	add_lang_tab(tabs: any, language: any, form: FormGroup) {
 		console.log(tabs, language, form, this.lang.user_lang.id);
-		
+
 		if (!tabs.some((item: any) => item.id == language.id) && (language.id != this.lang.user_lang.id || language.id != this.lang.user_lang.id.toString())) {
 			tabs.push(language);
 

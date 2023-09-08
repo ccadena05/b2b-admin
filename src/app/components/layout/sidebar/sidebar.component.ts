@@ -18,7 +18,7 @@ export class SidebarComponent implements OnInit {
    sideMenu = menu;
    b2b_menu = b2b_menu
    /* @Output() location = new EventEmitter<string>(); */
-
+   
    constructor(
       private observer: BreakpointObserver,
       private router: Router,) { }

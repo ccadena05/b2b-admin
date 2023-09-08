@@ -1,7 +1,6 @@
-<div style="background-image: url(../../../assets/img/wave.svg);"
+<!-- <div style="background-image: url(../../../assets/img/wave.svg);"
    class="bg-cover bg-no-repeat bg-right w-[90vw] h-[90vh] overflow-hidden bg-slate-100">
    <mat-stepper #stepper class="!bg-transparent">
-      <!-- [linear]="true" -->
       <mat-step>
          <ng-template matStepLabel>Bienvenido a <img src="assets/img/netscool2.png" alt=""
                class="max-w-[5rem] inline pb-1"> </ng-template>
@@ -51,7 +50,6 @@
                   <div formArrayName="carreras">
                      <div *ngFor="let carrera of c.controls; let i = index" [formGroupName]="i" class="flex flex-wrap gap-4 rounded-xl bg-neutral-50 shadow-lg p-4 m-4">
                         <div>
-                           <!-- <div class="font-semibold">Nivel acádemico</div> -->
                            <div class="h-14 pb-5 my-1">
                               <div class="text-gray-500 h-6">Nivel acádemico</div>
                                  <mat-radio-group class="flex flex-wrap items-center h-8" aria-label="Selecciona una opción" formControlName="nivel">
@@ -61,7 +59,6 @@
                            </div>
                         </div>
                         <div>
-                           <!-- <div class="font-semibold">Nombre de la carrera</div> -->
                            <mat-form-field appearance="outline" class="min-w-[15rem]">
                               <mat-label>Nombre de la carrera</mat-label>
                               <input matInput type="text" formControlName="descripcion_carrera">
@@ -71,7 +68,7 @@
                         </div>
 
                         <div>
-                           <!-- <div class="font-semibold">Nombre del programa académico</div> -->
+
                            <mat-form-field appearance="outline" class="min-w-[15rem]">
                               <mat-label>Nombre del programa</mat-label>
                               <input matInput type="text" formControlName="descripcion_programa">
@@ -80,7 +77,7 @@
                            </mat-form-field>
                         </div>
                         <div>
-                           <!-- <div class="font-semibold">Tipo de periodo</div> -->
+
                            <mat-form-field appearance="outline" class="min-w-[15rem]">
                               <mat-label>Tipo de periodo</mat-label>
                               <mat-select formControlName="tipo_periodo">
@@ -92,13 +89,13 @@
                            </mat-form-field>
                         </div>
                         <button matTooltip="Eliminar" (click)="EliminarCarrera(i)" class="bg-gradient-slate bg-clip-text text-transparent border-2 border-slate-400 rounded-xl py-2 px-4 duration-300 my-auto">
-                           <mat-icon>delete</mat-icon>
+                           <icon i="trash"></icon>
                         </button>
                      </div>
                   </div>
                </form>
                <button matTooltip="Agregar" (click)="AgregarCarrera()" class="bg-gradient-orange rounded-xl py-2 px-4 mx-4 text-white duration-300">
-                  <mat-icon>add</mat-icon>
+                  <icon i="plus"></icon>
                </button>
             </div>
 
@@ -113,7 +110,6 @@
             </div>
          </div>
 
-         <!-- </div> -->
 
       </mat-step>
       <mat-step>
@@ -139,11 +135,7 @@
                         <div class="font-semibold">
                            Nivel Académico
                         </div>
-                           <!-- {{
-                              item.nivel == 1 ? 'Básico' :
-                              item.nivel == 2 ? 'Media - Superior' :
-                              item.nivel == 3 ? 'Superior' : ''
-                           }} -->
+
                            <div *ngFor="let nivel of nAcademicos">
                               {{nivel.id == item.nivel ? nivel.descripcion : ''}}
                            </div>
@@ -170,12 +162,6 @@
                         <div *ngFor="let periodo of periodos">
                            {{periodo.id == item.tipo_periodo ? periodo.descripcion : ''}}
                         </div>
-                           <!-- {{ item.tipo_periodo == 1 ? 'Bimestral' :
-                              item.tipo_periodo == 2 ? 'Trimestral' :
-                              item.tipo_periodo == 3 ? 'Cuatrimestral' :
-                              item.tipo_periodo == 4 ? 'Semestral' :
-                              item.tipo_periodo == 5 ? 'Anual' : ''
-                           }}  -->
                      </div>
                   </div>
                </div>
@@ -225,3 +211,4 @@
       </mat-step>
    </mat-stepper>
 </div>
+ -->

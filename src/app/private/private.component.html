@@ -9,7 +9,12 @@
       <mat-drawer-content>
          <div class="h-full overflow-scroll p-6 flex flex-col gap-y-6 justify-between">
             <div class="flex flex-col gap-y-6">
-               <app-breadcrumbs class="h-6"></app-breadcrumbs>
+               <div class="flex gap-x-3">
+                  <div *ngIf="container.offsetWidth > 1024" (click)="!drawer.opened ? drawer.open() : drawer.close()" class="cursor-pointer"> 
+                     <icon [i]="!drawer.opened ? 'chevron-right' : 'chevron-left' " c="#0076ef" h="#0076ef"></icon>
+                  </div>
+                  <app-breadcrumbs class="h-6"></app-breadcrumbs>
+               </div>
                <div>
                   <router-outlet></router-outlet>
                </div>                

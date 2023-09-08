@@ -2,7 +2,7 @@
    <div
       class="sticky top-0 right-0 left-full w-[7.5rem] z-50 justify-end text-slate-100 rounded-2xl flex gap-x-2 group">
       <div *ngIf="router.url.includes('detail')" type="button" class="btn-del" (click)="delete()">
-         <mat-icon>delete</mat-icon>
+         <icon i="trash"></icon>
       </div>
       <button type="submit" class="btn-1" [disabled]="form.invalid">
          <icon>{{router.url.includes('detail') ? 'edit' : 'add'}}</icon>
@@ -35,7 +35,7 @@
 
          <div (click)="uploadPDF(form.get('image_url'))" class="file-field"
             [ngClass]="form.controls['image_url'].invalid && save_button ? 'field-error' : ''">
-            <mat-icon *ngIf="!form.value.image_url" class="text-[rgba(0,0,0,.54)]">upload_file</mat-icon>
+            <icon *ngIf="!form.value.image_url" i="photo-up" c="#334155"></icon>
             <img *ngIf="form.value.image_url" [src]="form.value.image_url" alt=""
                class="h-8 rounded-lg aspect-square grow-0 object-contain">
             <div class="absolute left-11" [ngClass]="form.value.image_url ? 'top-0 text-xs' : ''">
@@ -59,7 +59,7 @@
                <mat-chip *ngFor="let tag of form.value.tags?.split(',')" (removed)="removeTag(tag)">
                   {{tag}}
                   <button matChipRemove>
-                     <mat-icon>cancel</mat-icon>
+                     <icon i="circle-x"></icon>
                   </button>
                </mat-chip>
                <input [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"

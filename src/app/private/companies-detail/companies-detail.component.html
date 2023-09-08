@@ -1,14 +1,14 @@
-<div #cc class="bg-slate-100 rounded-2xl shadow-lg p-6">
+<div #cc class="bg-white rounded-2xl shadow-lg p-6">
     <div class="sticky top-0 right-10 left-full w-[7.5rem] z-50 justify-end text-slate-100 rounded-2xl flex gap-x-2">
         <span class="relative flex h-12 w-12">
-            <span #ping class="absolute inline-flex h-full w-full rounded-2xl bg-sky-400 opacity-75"></span>
-            <button (click)="save()" class="relative rounded-2xl p-3 h-12 bg-b2b-2">
-                <mat-icon>save</mat-icon>
+            <span #ping class="absolute inline-flex h-full w-full rounded-2xl bg-b2b-2 opacity-75"></span>
+            <button (click)="save()" class="btn-1 z-50">
+                <icon [i]="router.url.includes('detail') ? 'edit' : 'plus'"></icon>
             </button>
             <!-- <span class="relative inline-flex rounded-full h-3 w-3 bg-sky-500"></span> -->
         </span>
-        <button [matMenuTriggerFor]="addLang" class="rounded-2xl p-3 h-12 bg-b2b-2">
-            <mat-icon>translate</mat-icon>
+        <button [matMenuTriggerFor]="addLang" class="btn-2">
+            <icon i="language" c="#0076ef"></icon>
         </button>
 
         <mat-menu #addLang="matMenu">
@@ -293,7 +293,7 @@
 
                                 <div (click)="uploadPDF(form.get('brochure_url'))"
                                     class="file-field" *ngIf="i == 0">
-                                    <mat-icon>upload_file</mat-icon>
+                                    <icon i="file-upload" c="#334155"></icon>
                                     <div class="absolute left-11"
                                         [ngClass]="form.value.brochure_url ? 'top-0 text-xs' : ''">
                                         Brochure
@@ -310,7 +310,7 @@
                                             (removed)="removeTag(tag)">
                                             {{tag}}
                                             <button matChipRemove>
-                                                <mat-icon>cancel</mat-icon>
+                                                <icon i="circle-x"></icon>
                                             </button>
                                         </mat-chip> -->
                                         <input [matChipInputFor]="chipList"
@@ -625,7 +625,7 @@
                                         </div>
                                         <div class="file-field" #filefield
                                             (click)="uploadPDF(master.getterA(form.controls['isos']).at(i).get('url'))">
-                                            <mat-icon>upload_file</mat-icon>
+                                            <icon i="file-upload" c="#334155"></icon>
                                             <div class="absolute left-11"
                                                 [ngClass]="item.value.url ? 'top-0 text-xs' : ''">
                                                 Comprobante
@@ -636,7 +636,7 @@
                                             </div>
                                         </div>
                                         <a href="{{item.value.url}}"
-                                            target="_blank"><mat-icon>open_in_new</mat-icon></a>
+                                            target="_blank"><icon i="external-link"></icon></a>
                                     </div>
                                 </div>
                             </div>

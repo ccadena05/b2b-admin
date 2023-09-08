@@ -2,7 +2,7 @@
     <form #cc [formGroup]="form" (ngSubmit)="save()" id="company-form" class="bg-white rounded-2xl shadow-lg p-6">
         <div class="flex flex-row gap-2 justify-end">
             <div [matMenuTriggerFor]="addLang" class="btn-1 bg-b2b-2 float-right">
-                <mat-icon>translate</mat-icon>
+                <icon i="language" c="#0076ef"></icon>
             </div>
 
             <mat-menu #addLang="matMenu">
@@ -89,7 +89,7 @@
                                     (removed)="removeCategory(category)">
                                     {{ category }}
                                     <button matChipRemove>
-                                        <mat-icon>cancel</mat-icon>
+                                        <icon i="circle-x"></icon>
                                     </button>
                                 </mat-chip>
                                 <input [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"

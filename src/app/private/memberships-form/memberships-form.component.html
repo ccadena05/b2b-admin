@@ -2,13 +2,13 @@
    <div
       class="sticky top-0 right-0 left-full w-[7.5rem] z-50 justify-end text-slate-100 rounded-2xl flex gap-x-2 group">
       <div *ngIf="router.url.includes('detail')" type="button" class="btn-del" (click)="delete()">
-         <mat-icon>delete</mat-icon>
+         <icon i="trash"></icon>
       </div>
       <button type="submit" class="btn-1" [disabled]="form.invalid">
          <mat-icon>{{router.url.includes('detail') ? 'edit' : 'save'}}</mat-icon>
       </button>
       <div [matMenuTriggerFor]="addLang" class="btn-2">
-         <mat-icon>translate</mat-icon>
+         <icon i="language" c="#0076ef"></icon>
       </div>
 
       <mat-menu #addLang="matMenu">

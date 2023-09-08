@@ -3,16 +3,16 @@ class="bg-white rounded-2xl shadow-lg p-6">
 
    <div class="sticky top-0 right-10 left-full w-[7.5rem] z-50 justify-end text-slate-100 rounded-2xl flex gap-x-2">
       <div type="button" class="btn-del" (click)="delete()">
-         <mat-icon>delete</mat-icon>
+         <icon i="trash"></icon>
       </div>  
       <div (click)="approved_rfq()" class="btn-1">
-         <mat-icon>{{form.value.approved == 1 ? 'visibility' : 'visibility_off'}}</mat-icon>
+         <icon [i]="form.value.approved == 1  ? 'edit' : 'plus'"></icon>
       </div>
       <button type="submit" class="btn-1" [disabled]="form.invalid">
-         <mat-icon>edit</mat-icon>
+         <icon i="edit"></icon>
      </button>
       <div [matMenuTriggerFor]="addLang" class="btn-2">
-         <mat-icon>translate</mat-icon>
+         <icon i="language" c="#0076ef"></icon>
      </div>
 
       <mat-menu #addLang="matMenu">
@@ -160,7 +160,7 @@ class="bg-white rounded-2xl shadow-lg p-6">
                      </mat-form-field>
 
                      <div class="file-field" #field (click)="uploadPDF(form.get('url'))" *ngIf="i == 0 && is_rfq.checked">
-                        <mat-icon>file_upload</mat-icon>
+                        <icon i="file-upload" c="#334155"></icon>
                         <div class="absolute left-11" [ngClass]="form.value.url ? 'top-0 text-xs' : ''">
                            Archivo
                         </div>
@@ -188,11 +188,11 @@ class="h-full !max-h-[80vh] w-full overflow-scroll rfq relative bg-white p-6 rou
       <span class="relative flex h-12 w-12">
          <span #ping class="absolute inline-flex h-full w-full rounded-2xl bg-sky-400 opacity-75"></span>
          <button type="submit" class="relative rounded-2xl p-3 h-12 bg-b2b-2">
-            <mat-icon>save</mat-icon>
+            <icon [i]="router.url.includes('detail') ? 'edit' : 'plus'"></icon>
          </button>
       </span>
       <div [matMenuTriggerFor]="addLang" class="rounded-2xl p-3 h-12 bg-b2b-2 cursor-pointer">
-         <mat-icon>translate</mat-icon>
+         <icon i="language" c="#0076ef"></icon>
       </div>
 
       <mat-menu #addLang="matMenu">
@@ -312,7 +312,7 @@ class="h-full !max-h-[80vh] w-full overflow-scroll rfq relative bg-white p-6 rou
                      </mat-form-field>
 
                      <div (click)="uploadPDF(form.get('url'))" class="file-field" *ngIf="i == 0">
-                        <mat-icon>upload_file</mat-icon>
+                        <icon i="file-upload" c="#334155"></icon>
                         <div class="absolute left-11" [ngClass]="form.value.url ? 'top-0 text-xs' : ''">
                            Archivo
                         </div>

@@ -23,9 +23,9 @@ export class StaticFormComponent implements OnInit {
    available_langs: any = []
    tabs: any = [this.lang.user_lang];
    i_section = 0;
-   filtered_icons = _icons.slice(0,25);
+   filtered_icons = _icons.slice(0, 50);
    _icons = _icons;
-
+   id = 'our-valu';
    @ViewChild('cc') cc!: ElementRef;
 
    constructor(
@@ -45,17 +45,19 @@ export class StaticFormComponent implements OnInit {
          children: this.formBuilder.array([])
       })
 
-      
+
 
    }
 
    ngOnInit(): void {
       console.log(this.tabs);
-      
-      
+
+
       console.log(this.article.value/* , this.section.value, this.carousel.value, this.card.value */);
       this.get();
-      
+      if (this.id == 'our-value')
+         this.master.arr(this.article, 'children').push(this.master.numberCard(this.lang.user_lang.id, this.tabs))
+
    }
 
    get() {
@@ -77,27 +79,44 @@ export class StaticFormComponent implements OnInit {
    }
 
    add_section() {
-      this.master.arr(this.article, 'children').push(this.master.createSection(this.lang.user_lang.id,this.tabs))
+      this.master.arr(this.article, 'children').push(this.master.text_section(this.tabs))
       console.log(this.article.value);
-      
+
    }
 
    add_carousel() {
-      this.master.arr(this.article, 'children').push(this.master.fullCarousel(this.lang.user_lang.id,this.tabs))
+      this.master.arr(this.article, 'children').push(this.master.carousel_section(this.tabs))
       console.log(this.article.value);
    }
 
    add_card() {
-      this.master.arr(this.article, 'children').push(this.master.fullCard(this.lang.user_lang.id,this.tabs))
+      this.master.arr(this.article, 'children').push(this.master.card_section(this.tabs))
       console.log(this.article.value);
    }
 
    add_carousel_item(carousel: FormArray) {
-      carousel.push(this.master.createCarousel(this.lang.user_lang.id,this.tabs))
+      carousel.push(this.master.carousel_item(this.tabs))
    }
 
    add_cards_item(cards: FormArray) {
-      cards.push(this.master.createCard(this.lang.user_lang.id,this.tabs))
+      cards.push(this.master.card_item(this.tabs))
+   }
+
+   add_linetime() {
+      this.master.arr(this.article, 'children').push(this.master.linetime_section(this.tabs))
+      console.log(this.article.value.children);
+   }
+
+   add_linetime_item(line: FormArray) {
+      line.push(this.master.linetime_item(this.tabs))
+   }
+
+   add_linetime_child(item: any) {
+      console.log(item.value);
+      let group = this.master.linetime_child(this.tabs)
+      item.push(group)
+      console.log(this.article.value);
+
    }
 
    delete_section(index: any) {
@@ -110,7 +129,7 @@ export class StaticFormComponent implements OnInit {
    }
 
    preview() {
-      this.bottomsheet.open(PreviewComponent, {data: this.article.value})
+      this.bottomsheet.open(PreviewComponent, { data: this.article.value, })
    }
 
    stringify(form: any, control: any) {
@@ -125,7 +144,7 @@ export class StaticFormComponent implements OnInit {
       return 'col-span-3'
    }
 
-   
+
    upload(control: any) {
       this.manager.open(config.upload_config).subscribe(
          data => {
@@ -137,6 +156,24 @@ export class StaticFormComponent implements OnInit {
    }
 
    filter_icons(val: any) {
-      this.filtered_icons = this._icons.filter((icon: any) => icon.tags.includes(val) || icon.filename.includes(val)).slice(0,25)
+      this.filtered_icons = this._icons.filter((icon: any) => icon.tags.includes(val) || icon.filename.includes(val)).slice(0, 50)
    }
+
+   delete_nulls(form: any) {
+      // console.log(form);
+      
+      setTimeout(() => {
+         Object.keys(form).forEach((element: any, index: any) => {
+            if ((!form[element] || form[element].length == 0 || element == 'active') && element != 'text' && element != 'languages_id')
+               delete form[element]
+            if (Array.isArray(form[element]))
+               form[element].forEach((sub_element: any) => {
+                  this.delete_nulls(sub_element)
+               });
+         });
+         
+      }, 1000);
+      console.log(form);
+   }
+
 }

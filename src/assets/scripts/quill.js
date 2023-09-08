@@ -4163,6 +4163,7 @@ var Scroll = function (_Parchment$Scroll) {
     }
     // Some reason fixes composition issues with character languages in Windows/Chrome, Safari
     _this.domNode.addEventListener('DOMNodeInserted', function () {});
+    // const observer = new MutationObserver(function(mutationsList, observer) {});
     _this.optimize();
     _this.enable();
     return _this;

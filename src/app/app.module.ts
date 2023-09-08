@@ -13,6 +13,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ConfigDialogModule } from './public/config-dialog/config-dialog.module';
 import { LowerDashPipe } from './pipes/lower-dash.pipe';
 import { DialogsModule } from './dialogs/dialogs.module';
+import { ComponentsModule } from './components/components.module';
 
 export function getPaginatorIntl() {
    const paginatorIntl = new MatPaginatorIntl();
@@ -38,7 +39,8 @@ export function getPaginatorIntl() {
       FormsModule,
       ReactiveFormsModule,
       ConfigDialogModule,
-      DialogsModule
+      DialogsModule,
+      ComponentsModule
    ],
    providers: [AuthGuard, {
       provide: HTTP_INTERCEPTORS,

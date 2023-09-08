@@ -31,24 +31,19 @@ export class IconComponent implements OnInit {
    ngOnChanges(changes: SimpleChanges) {
       this._i = changes['i']?.currentValue ?? this.i;
       this._c = this._prev_c = changes['c']?.currentValue ?? this._c;
-      this._h = changes['h']?.currentValue ?? this._h;
-      console.log(this._c);
-      
+      this._h = changes['h']?.currentValue ?? this._h ?? this._c;      
       this.path = `assets/icons2/${this._i}.svg`;
-
       this.inner()
    }
 
    over() {
       this.c = this._c = this._h
       this.inner()
-
    }
 
    out() {
       this.c = this._c = this._prev_c
       this.inner()
-
    }
 
    inner() {
