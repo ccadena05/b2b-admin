@@ -4,8 +4,8 @@
       <div *ngIf="router.url.includes('detail')" type="button" class="btn-del" (click)="delete()">
          <icon i="trash"></icon>
       </div>
-      <button type="submit" class="btn-1" [disabled]="form.invalid">
-         <mat-icon>{{router.url.includes('detail') ? 'edit' : 'save'}}</mat-icon>
+      <button type="submit" class="btn-1">
+         <icon [i]="router.url.includes('detail') ? 'device-floppy' : 'plus'"></icon>
       </button>
       <div [matMenuTriggerFor]="addLang" class="btn-2">
          <icon i="language" c="#0076ef"></icon>
@@ -26,85 +26,122 @@
          <ng-template mat-tab-label class="w-full flex gap-x-2">
             <span>{{tab?.emoji}}</span>
             <span class="ml-2">{{tab?.name}}</span>
-            <mat-icon class="ml-4" (click)="master.del_lang_tab(tabs, tab.id, form, i)"
-               *ngIf="this.tabs.length > 1 && i !== 0 && tab.id !== 1">close</mat-icon>
+            <icon c="x" class="ml-4" (click)="master.del_lang_tab(tabs, tab.id, form, i)"
+               *ngIf="this.tabs.length > 1 && i !== 0 && tab.id !== 1">close</icon>
          </ng-template>
 
          <div class="flex flex-col gap-y-6 overflow-x-hidden">
 
-            <div
-               [ngClass]="cc.offsetWidth <= 640 ? 'grid-cols-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'grid-cols-2' : 'grid-cols-3'"
-               class="grid gap-x-6 w-full">
+            <div [ngClass]="layout.grid(cc)">
 
-               <div class="title w-full"
-                  [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+               <div class="title w-full" [ngClass]="layout.full(cc)">
                   Información de la membresía
                </div>
 
-               <mat-form-field class="w-full" appearance="outline" *ngIf="i == 0">
-                  <mat-label>Título Inglés</mat-label>
-                  <input formControlName="title_EN" type="text" matInput>
-                  <mat-error>Ingresa un valor válido</mat-error>
-               </mat-form-field>
+               <div [ngClass]="layout.full(cc)" [class]="layout.half_grid(cc)">
+                  <mat-slide-toggle class="mb-6" formControlName="hidden" *ngIf="i == 0">Visible</mat-slide-toggle>
+               </div>
 
-               <mat-form-field class="w-full" appearance="outline" *ngIf="i == 0">
-                  <mat-label>Título Español</mat-label>
-                  <input formControlName="title_ES" type="text" matInput>
-                  <mat-error>Ingresa un valor válido</mat-error>
-               </mat-form-field>
-
-               <mat-form-field class="w-full" appearance="outline" *ngIf="i == 0">
-                  <mat-label>Título corto Inglés</mat-label>
-                  <input formControlName="short_title_EN" type="text" matInput>
-                  <mat-error>Ingresa un valor válido</mat-error>
-               </mat-form-field>
-
-               <mat-form-field class="w-full" appearance="outline" *ngIf="i == 0">
-                  <mat-label>Título corto Español</mat-label>
-                  <input formControlName="short_title_ES" type="text" matInput>
-                  <mat-error>Ingresa un valor válido</mat-error>
-               </mat-form-field>
+               <div [ngClass]="layout.full(cc)" [class]="layout.half_grid(cc)">
+                  <div class="grow" formArrayName="name">
+                     <div *ngFor="let item of master.getterA(form.controls['name']).controls; let i = index"
+                        [formGroupName]="i">
+                        <mat-form-field class="w-full" appearance="outline"
+                           *ngIf="item.value.languages_id == tab.id">
+                           <mat-label>Título</mat-label>
+                           <input formControlName="text" type="text" matInput>
+                           <mat-error>Ingresa un valor válido</mat-error>
+                        </mat-form-field>
+                     </div>
+                  </div>
+                  <div class="grow" formArrayName="short_name">
+                     <div *ngFor="let item of master.getterA(form.controls['short_name']).controls; let i = index"
+                        [formGroupName]="i">
+                        <mat-form-field class="w-full" appearance="outline"
+                           *ngIf="item.value.languages_id == tab.id">
+                           <mat-label>Título corto</mat-label>
+                           <input formControlName="text" type="text" matInput>
+                           <mat-error>Ingresa un valor válido</mat-error>
+                        </mat-form-field>
+                     </div>
+                  </div>
+               </div>
 
                <mat-form-field appearance="outline" class="w-full" *ngIf="i == 0">
                   <mat-label>Límite de usuarios</mat-label>
-                  <mat-icon class="text-slate-900" matPrefix
-                     (click)="user_limit.valueAsNumber = user_limit.valueAsNumber - 1">remove</mat-icon>
+                  <icon i="minus" c="#334155" matPrefix
+                     (click)="limit_users.valueAsNumber = limit_users.valueAsNumber - 1">remove</icon>
 
-                  <input #user_limit formControlName="user_limit" type="number" matInput [value]="0">
-                  <mat-icon class="text-slate-900" matSuffix
-                     (click)="user_limit.valueAsNumber = user_limit.valueAsNumber + 1">add</mat-icon>
+                  <input #limit_users formControlName="limit_users" type="number" matInput [value]="0">
+                  <icon i="plus" c="#334155" matSuffix
+                     (click)="limit_users.valueAsNumber = limit_users.valueAsNumber + 1">add</icon>
                   <mat-error>Ingresa un valor válido</mat-error>
                </mat-form-field>
 
                <mat-form-field appearance="outline" class="w-full" *ngIf="i == 0">
                   <mat-label>Límite de productos</mat-label>
-                  <mat-icon class="text-slate-900" matPrefix
-                     (click)="product_limit.valueAsNumber = product_limit.valueAsNumber - 1">remove</mat-icon>
+                  <icon i="minus" c="#334155" matPrefix
+                     (click)="limit_products.valueAsNumber = limit_products.valueAsNumber - 1">remove</icon>
 
-                  <input #product_limit formControlName="product_limit" type="number" matInput [value]="0">
-                  <mat-icon class="text-slate-900" matSuffix
-                     (click)="product_limit.valueAsNumber = product_limit.valueAsNumber + 1">add</mat-icon>
+                  <input #limit_products formControlName="limit_products" type="number" matInput [value]="0">
+                  <icon i="plus" c="#334155" matSuffix
+                     (click)="limit_products.valueAsNumber = limit_products.valueAsNumber + 1">add</icon>
                   <mat-error>Ingresa un valor válido</mat-error>
                </mat-form-field>
 
                <mat-form-field appearance="outline" class="w-full" *ngIf="i == 0">
                   <mat-label>Precio</mat-label>
-                  <mat-icon class="text-slate-900" matPrefix
-                     (click)="price.valueAsNumber = price.valueAsNumber - 1">remove</mat-icon>
+                  <icon i="minus" c="#334155" matPrefix (click)="cost.valueAsNumber = cost.valueAsNumber - 1.00">remove
+                  </icon>
 
-                  <input #price formControlName="price" type="number" matInput [value]="0">
-                  <mat-icon class="text-slate-900" matSuffix
-                     (click)="price.valueAsNumber = price.valueAsNumber + 1">add</mat-icon>
+                  <input #cost formControlName="cost" type="number" matInput [value]="0">
+                  <icon i="plus" c="#334155" matSuffix (click)="cost.valueAsNumber = cost.valueAsNumber + 1.00">add
+                  </icon>
                   <mat-error>Ingresa un valor válido</mat-error>
                </mat-form-field>
 
-               <div class="flex items-center">
-                  <mat-slide-toggle class="mb-6" formControlName="enabled">Habilitado</mat-slide-toggle>
-               </div>
+               <mat-form-field appearance="outline" class="w-full" *ngIf="i == 0">
+                  <mat-label>Impuestos</mat-label>
+                  <icon i="minus" c="#334155" matPrefix (click)="tax.valueAsNumber = tax.valueAsNumber - 1.00">remove
+                  </icon>
 
-               <div class="label" [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">Primera sección</div>
-               <div class="mb-6"
-                  [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                  <input #tax formControlName="tax" type="number" matInput [value]="0">
+                  <icon i="plus" c="#334155" matSuffix (click)="tax.valueAsNumber = tax.valueAsNumber + 1.00">add
+                  </icon>
+                  <mat-error>Ingresa un valor válido</mat-error>
+               </mat-form-field>
+
+               <mat-form-field appearance="outline" class="w-full" *ngIf="i == 0">
+                  <mat-label>Duración de la membresía(meses)</mat-label>
+                  <icon i="minus" c="#334155" matPrefix (click)="months.valueAsNumber = months.valueAsNumber - 1">remove
+                  </icon>
+
+                  <input #months formControlName="months" type="number" matInput [value]="0">
+                  <icon i="plus" c="#334155" matSuffix (click)="months.valueAsNumber = months.valueAsNumber + 1">add
+                  </icon>
+                  <mat-error>Ingresa un valor válido</mat-error>
+               </mat-form-field>
+
+               <div class="flex gap-x-3" *ngIf="i == 0">
+                  <!-- <img *ngIf="form.value.image_url" [src]="form.value.image_url" alt="" class="h-10 mt-1 rounded-lg aspect-square grow-0"> -->
+                  <div (click)="uploadPDF(form.get('image_url'))" class="file-field"
+                      [ngClass]="form.controls['image_url'].invalid && form.controls['image_url'].touched ? 'border-red-500 text-red-500' : ''">
+                      <icon i="photo-up" c="#334155" *ngIf="!form.value.image_url"></icon>
+                      <img *ngIf="form.value.image_url" [src]="form.value.image_url" alt=""
+                          class="h-8 rounded-lg aspect-square grow-0">
+                      <div class="absolute left-11"
+                          [ngClass]="form.value.image_url ? 'top-0 text-xs' : ''">
+                          Imagen
+                      </div>
+                      <div class="max-w-[12rem] overflow-hidden whitespace-nowrap">
+                          {{form.value.image_url ?? ''}}
+                      </div>
+                  </div>
+              </div>
+
+               <div class="label" [ngClass]="layout.full(cc)">
+                  Primera sección</div>
+               <div class="mb-6" [ngClass]="layout.full(cc)">
                   <div formArrayName="first_section"
                      *ngFor="let item of master.getterA(form.controls['first_section']).controls; let i = index;">
                      <div [formGroupName]="i">
@@ -114,9 +151,9 @@
                   </div>
                </div>
 
-               <div class="label" [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">Segunda sección</div>
-               <div class="mb-6"
-                  [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+               <div class="label" [ngClass]="layout.full(cc)">
+                  Segunda sección</div>
+               <div class="mb-6" [ngClass]="layout.full(cc)">
                   <div formArrayName="second_section"
                      *ngFor="let item of master.getterA(form.controls['second_section']).controls; let i = index;">
                      <div [formGroupName]="i">
@@ -126,9 +163,9 @@
                   </div>
                </div>
 
-               <div class="label" [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">Tercera sección</div>
-               <div class="mb-6"
-                  [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+               <div class="label" [ngClass]="layout.full(cc)">
+                  Tercera sección</div>
+               <div class="mb-6" [ngClass]="layout.full(cc)">
                   <div formArrayName="third_section"
                      *ngFor="let item of master.getterA(form.controls['third_section']).controls; let i = index;">
                      <div [formGroupName]="i">
@@ -137,9 +174,9 @@
                      </div>
                   </div>
                </div>
-<!-- 
+               <!-- 
                <div
-                  [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"
+                  [ngClass]="layout.full(cc)"
                   class="grow" formArrayName="title">
                   <div *ngFor="let item of master.getterA(form.controls['title']).controls; let i = index"
                      [formGroupName]="i">

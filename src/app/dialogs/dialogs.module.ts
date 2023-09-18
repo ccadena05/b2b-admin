@@ -5,7 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { CambiarContrasenaComponent } from './cambiar-contrasena/cambiar-contrasena.component';
 import { ComponentsModule } from '../components/components.module';
-import { MatTableModule } from '../components/mat-table/mat-table.module';
+// import { MatTableModule } from '../components/mat-table/mat-table.module';
 
 
 
@@ -20,7 +20,7 @@ import { MatTableModule } from '../components/mat-table/mat-table.module';
       FormsModule,
       RouterModule,
       ComponentsModule,
-      MatTableModule
+      // MatTableModule
     ],
 })
 export class DialogsModule { }

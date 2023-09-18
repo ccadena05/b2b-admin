@@ -5,7 +5,7 @@ import { MasterRoutingModule } from './master-routing.module';
 import { MasterComponent } from './master.component';
 import { ComponentsModule } from 'src/app/components/components.module';
 import { MaterialModule } from 'src/app/components/material/material.module';
-import { MatTableModule } from 'src/app/components/mat-table/mat-table.module';
+// import { MatTableModule } from 'src/app/components/mat-table/mat-table.module';
 
 @NgModule({
   declarations: [
@@ -16,7 +16,7 @@ import { MatTableModule } from 'src/app/components/mat-table/mat-table.module';
     MasterRoutingModule,
     ComponentsModule,
     MaterialModule,
-    MatTableModule
+    // MatTableModule
   ],
   providers: [
     KeyValuePipe

@@ -7,6 +7,8 @@ import { MatChipInputEvent } from '@angular/material/chips';
 import { COMMA, ENTER, X } from '@angular/cdk/keycodes';
 import { OutputService } from 'src/app/services/output.service';
 import { Router } from '@angular/router';
+import { LanguageService } from 'src/app/services/language.service';
+import { Language } from 'src/app/models/language.model';
 
 @Component({
   selector: 'app-investments-form',
@@ -15,16 +17,18 @@ import { Router } from '@angular/router';
 })
 export class InvestmentsFormComponent implements OnInit {
   available_langs: any = []
-  tabs: any = [{ id: '1', name: 'English', language: 'EN', emoji: '🇺🇸' }]
+  tabs: Language[] = [this.lang.user_lang];
   form: FormGroup
   readonly separatorKeysCodes = [ENTER, COMMA] as const
 
   constructor(
     public router: Router,
+    public master: MasterService,
+
+    private lang: LanguageService,
+    private output: OutputService,
     private provider: ProviderService,
     private form_builder: FormBuilder,
-    public master: MasterService,
-    private output: OutputService
   ) {
     this.form = this.form_builder.group({
       total_amount: ['', Validators.required],
@@ -33,7 +37,7 @@ export class InvestmentsFormComponent implements OnInit {
       city: [null, Validators.required],
       total_jobs: ['', Validators.required],
       suface_construction: ['', Validators.required],
-      description: this.form_builder.array([this.master.createTranslation(1)]),
+      description: this.form_builder.array([this.master.translation(1)]),
       categories: [null, Validators.required]
     })
 

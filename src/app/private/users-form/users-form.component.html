@@ -1,12 +1,21 @@
 <form #cc [formGroup]="form" (ngSubmit)="save()" id="company-form" class="bg-white rounded-2xl shadow-lg p-6">
    <div
       class="sticky top-0 right-0 left-full w-[7.5rem] z-50 justify-end text-slate-100 rounded-2xl flex gap-x-2 group">
+      <div type="button" class="btn-grn" (click)="permissions()">
+         <icon i="key"></icon>
+      </div>
+
       <div *ngIf="router.url.includes('detail')" type="button" class="btn-del" (click)="delete()">
          <icon i="trash"></icon>
       </div>
-      <button type="submit" class="btn-1" [disabled]="form.invalid">
-         <i class="fa-solid {{router.url.includes('detail') ? 'fa-user-pen' : 'fa-user-plus'}}"></i>
-         <!-- <icon [i]="router.url.includes('detail') ? 'edit' : 'plus'"></icon> -->
+
+      <div *ngIf="router.url.includes('detail')" type="button" class="btn-2" (click)="change_password()">
+         <icon i="password" c="#0076ef"></icon>
+      </div>
+
+      <button type="submit" class="btn-1">
+         <icon [i]="router.url.includes('detail') ? 'device-floppy' : 'plus'"></icon>
+         <!-- <icon [i]="router.url.includes('detail') ? 'device-floppy' : 'plus'"></icon> -->
       </button>
    </div>
 
@@ -22,12 +31,12 @@
          </div>
 
          <mat-slide-toggle class="mb-6 min-w-[8rem]" formControlName="hidden">Oculto</mat-slide-toggle>
-         <mat-slide-toggle class="mb-6 min-w-[8rem]" formControlName="active">Activo</mat-slide-toggle>
-         <mat-slide-toggle class="mb-6 min-w-[8rem]" formControlName="confirmed">Correo validado</mat-slide-toggle>
+         <mat-slide-toggle class="mb-6 min-w-[8rem]" formControlName="valid_email">Correo validado</mat-slide-toggle>
+         <mat-slide-toggle class="mb-6 min-w-[8rem]" formControlName="approved">Aprobado</mat-slide-toggle>
 
          <mat-form-field appearance="outline" class="w-full">
             <mat-label>Nombre de usuario</mat-label>
-            <mat-icon matPrefix class="scale-75">alternate_email</mat-icon>
+            <icon i="at" c="#334155" matPrefix></icon>
             <input formControlName="username" type="text" matInput>
             <mat-error>Ingresa un valor válido</mat-error>
          </mat-form-field>
@@ -67,8 +76,9 @@
             </mat-form-field>
          </div>
 
-         <search-select [label]=" 'Idioma' " [select]="sel['languages']" [control]="form.controls['languages']"
-            class="w-full"></search-select>
+         <!-- <search-select [label]=" 'Idioma' " [select]="sel['languages']" [control]="form.controls['languages']"
+            class="w-full"></search-select> -->
+
          <location [form]="form"
             [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
          </location>
@@ -78,8 +88,19 @@
             Información laboral
          </div>
 
-         <search-select [label]="'Empresa'" [select]="sel['companies']"
-                  [control]="form.controls['profile_company_id']" class="w-full"></search-select>
+         <search-select [label]="'Empresa'" [select]="sel['companies']" [control]="form.controls['profile_company_id']"
+            class="w-full"></search-select>
+
+         <mat-form-field appearance="outline" class="basis-full grow">
+            <mat-label>Compañía</mat-label>
+            <input formControlName="company" type="text" matInput>
+            <mat-error>Ingresa un valor válido</mat-error>
+         </mat-form-field>
+
+         <div class="file-field">
+            <div class="absolute -top-2 text-xsm">RFC de la empresa</div>
+            {{form?.value?.rfc}}
+         </div>
 
          <mat-form-field appearance="outline" class="basis-full grow">
             <mat-label>Puesto</mat-label>
@@ -89,14 +110,14 @@
 
          <mat-form-field appearance="outline" class="">
             <mat-label>Departamento</mat-label>
-            <input formControlName="departament" type="text" matInput>
+            <input formControlName="department" type="text" matInput>
             <mat-error>Ingresa un valor válido</mat-error>
          </mat-form-field>
 
-         <search-select [label]="'Permisos'" [select]="sel['countries']" [control]="form.controls['phone_code']"
-                  class="w-full"></search-select>
+         <!-- <search-select [label]="'Permisos'" [select]="sel['countries']" [control]="form.controls['permission']"
+                  class="w-full"></search-select> -->
 
-         
+
       </div>
    </div>
 </form>

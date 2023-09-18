@@ -29,9 +29,13 @@ export class LocalStoreService {
 
    public getItem(key: any) {
       let local = this.ls.getItem(key);
+      let value: any;
+      // console.log(local == 'undefined');
 
-
-      let value = local != null ? JSON.parse(local) : null;
+      if (local == undefined || local == 'undefined')
+         value = ''
+      else
+         value = local != null ? JSON.parse(local) : null;
       try {
          return value;
       } catch (e) {
@@ -44,7 +48,7 @@ export class LocalStoreService {
       this.ls.clear();
       this.setItem('openDialog', openDialog)
    }
-   public remove(key: any){
+   public remove(key: any) {
       this.ls.removeItem(key);
    }
 

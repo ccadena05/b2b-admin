@@ -3,11 +3,13 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CloudinaryWidgetManager } from 'ngx-cloudinary-upload-widget';
 import { Response } from 'src/app/models/response.model';
+import { LanguageService } from 'src/app/services/language.service';
 import { LocalStoreService } from 'src/app/services/local-store.service';
 import { MasterService } from 'src/app/services/master.service';
 import { OutputService } from 'src/app/services/output.service';
 import { ProviderService } from 'src/app/services/provider/provider.service';
 import { config } from 'src/config';
+import { Language } from 'src/app/models/language.model';
 
 @Component({
    selector: 'app-rfq-form',
@@ -16,7 +18,7 @@ import { config } from 'src/config';
 })
 export class RfqFormComponent implements OnInit {
    form: FormGroup;
-   tabs: any = [{ id: '1', name: 'English', language: 'EN', emoji: '🇺🇸' }];
+   tabs: Language[] = [this.lang.user_lang];
    total_req: any;
    available_langs: any = [];
    sel: any = [];
@@ -25,12 +27,14 @@ export class RfqFormComponent implements OnInit {
 
    constructor(
       public master: MasterService,
-      private formBuilder: FormBuilder,
-      private manager: CloudinaryWidgetManager,
-      private provider: ProviderService,
-      private ls: LocalStoreService,
+
       private router: Router,
-      private output: OutputService
+      private ls: LocalStoreService,
+      private lang: LanguageService,
+      private output: OutputService,
+      private formBuilder: FormBuilder,
+      private provider: ProviderService,
+      private manager: CloudinaryWidgetManager,
    ) {
       this.form = this.formBuilder.group({
          req: this.formBuilder.array([this.requirements_form(null, null, null, null)])
@@ -56,8 +60,8 @@ export class RfqFormComponent implements OnInit {
          profile_company_id: [null],
          approved: [1],
          rfc: [this.ls.getItem("COMPANY_FORM")?.rfc],
-         title: this.formBuilder.array([this.master.createTranslation('1', null)]),
-         description: this.formBuilder.array([this.master.createTranslation('1', null)]),
+         title: this.formBuilder.array([this.master.translation(this.lang.user_lang.id, null)]),
+         description: this.formBuilder.array([this.master.translation(this.lang.user_lang.id, null)]),
          country: [country],
          state: [state],
          city: [city],
@@ -65,7 +69,7 @@ export class RfqFormComponent implements OnInit {
          image_url: [null],
          is_rfq: [0],
          activity: [null],
-         materials: this.formBuilder.array([this.master.createTranslation('1', null)]),
+         materials: this.formBuilder.array([this.master.translation(this.lang.user_lang.id, null)]),
          volumes: [null],
          budget: [null],
          isos: [null],
@@ -114,7 +118,7 @@ export class RfqFormComponent implements OnInit {
    
            Object.keys(this.form.controls).forEach(element => {
               if (this.form.controls[element] instanceof FormArray)
-                 this.master.getterA(this.form.controls[element]).push(this.master.createTranslation(language.id))
+                 this.master.getterA(this.form.controls[element]).push(this.master.translation(language.id))
            })
         }
      } */

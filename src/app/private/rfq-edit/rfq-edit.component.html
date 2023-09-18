@@ -6,7 +6,7 @@ class="bg-white rounded-2xl shadow-lg p-6">
          <icon i="trash"></icon>
       </div>  
       <div (click)="approved_rfq()" class="btn-1">
-         <icon [i]="form.value.approved == 1  ? 'edit' : 'plus'"></icon>
+         <icon [i]="form.value.approved == 1  ? 'device-floppy' : 'plus'"></icon>
       </div>
       <button type="submit" class="btn-1" [disabled]="form.invalid">
          <icon i="edit"></icon>
@@ -31,8 +31,8 @@ class="bg-white rounded-2xl shadow-lg p-6">
          <ng-template mat-tab-label class="w-full flex gap-x-2">
             <span class="ml-2">{{tab?.emoji}}</span>
             <span class="ml-2">{{tab?.name}}</span>
-            <mat-icon class="ml-4" (click)="master.del_lang_tab(tabs, i, form, tab.id)"
-               *ngIf="this.tabs.length > 1 && i !== 0 && tab.id !== 1">close</mat-icon>
+            <icon c="x" class="ml-4" (click)="master.del_lang_tab(tabs, i, form, tab.id)"
+               *ngIf="this.tabs.length > 1 && i !== 0 && tab.id !== 1">close</icon>
          </ng-template>
 
          <div class="flex flex-col gap-y-6 w-full">
@@ -79,12 +79,12 @@ class="bg-white rounded-2xl shadow-lg p-6">
 
                   <mat-form-field appearance="outline" class="w-full" *ngIf="i == 0">
                      <mat-label>Duration del proyecto(meses)</mat-label>
-                     <mat-icon class="text-slate-900" matPrefix
-                        (click)="expiration_date.valueAsNumber = expiration_date.valueAsNumber - 1">remove</mat-icon>
+                     <icon i="minus" c="#334155" matPrefix
+                        (click)="expiration_date.valueAsNumber = expiration_date.valueAsNumber - 1">remove</icon>
 
                      <input #expiration_date formControlName="expiration_date" type="number" matInput [value]="0">
-                     <mat-icon class="text-slate-900" matSuffix
-                        (click)="expiration_date.valueAsNumber = expiration_date.valueAsNumber + 1">add</mat-icon>
+                     <icon i="plus" c="#334155" matSuffix
+                        (click)="expiration_date.valueAsNumber = expiration_date.valueAsNumber + 1">add</icon>
                      <mat-error>Ingresa un valor válido</mat-error>
                   </mat-form-field>
 
@@ -94,7 +94,7 @@ class="bg-white rounded-2xl shadow-lg p-6">
                      
 
                   <div class="file-field" #field (click)="uploadPDF(form.get('image_url'))" *ngIf="i == 0">
-                     <mat-icon *ngIf="!form.value.image_url">image</mat-icon>
+                     <icon i="photo-plus" c="#334155" *ngIf="!form.value.image_url"></icon>
                      <img *ngIf="form.value.image_url" [src]="form.value.image_url" alt=""
                         class="h-8 rounded-lg aspect-square grow-0">
                      <div class="absolute left-11" [ngClass]="form.value.image_url ? 'top-0 text-xs' : ''">
@@ -188,7 +188,7 @@ class="h-full !max-h-[80vh] w-full overflow-scroll rfq relative bg-white p-6 rou
       <span class="relative flex h-12 w-12">
          <span #ping class="absolute inline-flex h-full w-full rounded-2xl bg-sky-400 opacity-75"></span>
          <button type="submit" class="relative rounded-2xl p-3 h-12 bg-b2b-2">
-            <icon [i]="router.url.includes('detail') ? 'edit' : 'plus'"></icon>
+            <icon [i]="router.url.includes('detail') ? 'device-floppy' : 'plus'"></icon>
          </button>
       </span>
       <div [matMenuTriggerFor]="addLang" class="rounded-2xl p-3 h-12 bg-b2b-2 cursor-pointer">
@@ -211,8 +211,8 @@ class="h-full !max-h-[80vh] w-full overflow-scroll rfq relative bg-white p-6 rou
          <ng-template mat-tab-label class="w-full flex gap-x-2">
             <span class="ml-2">{{tab?.emoji}}</span>
             <span class="ml-2">{{tab?.name}}</span>
-            <mat-icon class="ml-4" (click)="master.del_lang_tab(tabs, i, form, tab.id)"
-               *ngIf="this.tabs.length > 1 && i !== 0 && tab.id !== 1">close</mat-icon>
+            <icon class="ml-4" (click)="master.del_lang_tab(tabs, i, form, tab.id)"
+               *ngIf="this.tabs.length > 1 && i !== 0 && tab.id !== 1">close</icon>
          </ng-template>
 
          <div class="flex flex-col gap-y-6 w-full">
@@ -254,12 +254,12 @@ class="h-full !max-h-[80vh] w-full overflow-scroll rfq relative bg-white p-6 rou
 
                   <mat-form-field appearance="outline" class="w-full" *ngIf="i == 0">
                            <mat-label>Duration del proyecto(meses)</mat-label>
-                           <mat-icon class="text-slate-100" matPrefix
-                              (click)="expiration_date.valueAsNumber = expiration_date.valueAsNumber - 1">remove</mat-icon>
+                           <icon c="#334155" matPrefix
+                              (click)="expiration_date.valueAsNumber = expiration_date.valueAsNumber - 1">remove</icon>
 
                            <input #expiration_date formControlName="expiration_date" type="number" matInput [value]="0">
-                           <mat-icon class="text-slate-100" matSuffix
-                              (click)="expiration_date.valueAsNumber = expiration_date.valueAsNumber + 1">add</mat-icon>
+                           <icon matSuffix
+                              (click)="expiration_date.valueAsNumber = expiration_date.valueAsNumber + 1">add</icon>
                            <mat-error>Ingresa un valor válido</mat-error>
                         </mat-form-field>
 

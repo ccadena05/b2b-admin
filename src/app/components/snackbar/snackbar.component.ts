@@ -21,20 +21,20 @@ export class SnackbarComponent implements OnInit {
    getInfo(data: any, msg?: any){
       let info = {
          0: {
-            icon: 'error',
-            color: 'text-red-400',
+            icon: 'exclamation-circle',
+            color: '#ef0076',
             text: 'Ha ocurrido un error.',
             class: 'error'
          },
          1: {
-            icon: 'info',
-            color: 'text-blue-400',
+            icon: 'info-circle',
+            color: '#0076ef',
             text: msg,
             class: 'info'
          },
          2: {
-            icon: 'done',
-            color: 'text-green-400',
+            icon: 'circle-check',
+            color: '#00ef76',
             text: 'Proceso ejecutado con éxito',
             class: 'done'
          }

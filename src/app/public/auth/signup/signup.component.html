@@ -32,9 +32,7 @@
 							[attr.aria-label]="'Hide password'"
 							[attr.aria-pressed]="hide"
 						>
-							<mat-icon>{{
-								hide ? "visibility_off" : "visibility"
-							}}</mat-icon>
+						<icon matSuffix class="cursor-pointer" [i]="hide ? 'eye' : 'eye-off'" c="#334155" (click)="hide = !hide"></icon>
 						</div>
 						<mat-error *ngIf="signinForm.controls['auth_key'].invalid"
 							>Campo requerido</mat-error

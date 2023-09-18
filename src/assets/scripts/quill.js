@@ -6843,7 +6843,7 @@ var BaseTooltip = function (_Tooltip) {
       this.hide();
     }
   }, {
-    key: 'edit',
+    key: 'device-floppy',
     value: function edit() {
       var mode = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'link';
       var preview = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;

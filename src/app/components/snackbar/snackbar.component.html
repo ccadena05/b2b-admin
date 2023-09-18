@@ -1,4 +1,4 @@
 <div class="flex gap-x-4 w-full h-full {{snack.class}}">
-   <mat-icon class="pl-1 {{snack.color}}">{{snack.icon}}</mat-icon>
-   <div class="text-slate-900">{{snack.text}}</div>
+   <icon [i]="snack.icon" [c]="snack.color"></icon>
+   <div class="!text-slate-900">{{snack.text}}</div>
 </div>

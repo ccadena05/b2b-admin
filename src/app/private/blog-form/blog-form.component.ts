@@ -13,6 +13,7 @@ import { MatChipInputEvent } from '@angular/material/chips';
 import { COMMA, ENTER, X } from '@angular/cdk/keycodes';
 import { OutputService } from 'src/app/services/output.service';
 import { LanguageService } from 'src/app/services/language.service';
+import { Language } from 'src/app/models/language.model';
 
 declare var Quill: any;
 
@@ -24,7 +25,7 @@ declare var Quill: any;
 export class BlogFormComponent implements OnInit {
    _id: any;
    form: FormGroup;
-   tabs: any = [{ id: '1', name: 'English', language: 'EN', emoji: '🇺🇸' }];
+   tabs: Language[] = [this.lang.user_lang];
    available_langs: any = []
    _ql: typeof Quill;
    sel: any = [];
@@ -66,9 +67,9 @@ export class BlogFormComponent implements OnInit {
          id: [null],
          user_update: [this.jwt.getUser()],
          user_create: [this.jwt.getUser()],
-         title: this.formBuilder.array([this.master.createTranslation('1', null)]),
-         summary: this.formBuilder.array([this.master.createTranslation('1', null)]),
-         description: this.formBuilder.array([this.master.createTranslation('1', null)]),
+         title: this.formBuilder.array([this.master.translation(this.lang.user_lang.id, null)]),
+         summary: this.formBuilder.array([this.master.translation(this.lang.user_lang.id, null)]),
+         description: this.formBuilder.array([this.master.translation(this.lang.user_lang.id, null)]),
          image_url: [null, Validators.required],
          image_gallery: this.formBuilder.array([]),
          video_url: [null],
@@ -268,7 +269,7 @@ export class BlogFormComponent implements OnInit {
    empty_translations(controls: string[]){
       controls.forEach((control: string) => {
          if(JSON.stringify(this.form.value?.[control]) == '[]')
-            this.master.getterA(this.form.controls[control]).push(this.master.createTranslation('1'))
+            this.master.getterA(this.form.controls[control]).push(this.master.translation(this.lang.user_lang.id, null))
       });
    }
 }

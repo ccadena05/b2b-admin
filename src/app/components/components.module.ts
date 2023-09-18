@@ -12,7 +12,7 @@ import { PieChartComponent } from './charts/pie-chart/pie-chart.component';
 import { LineChartComponent } from './charts/line-chart/line-chart.component';
 import { NumberToRomanSymbolPipe } from '../pipes/number-to-roman.pipe';
 import { KardexComponent } from './kardex/kardex.component';
-import { MatTableModule } from './mat-table/mat-table.module';
+// import { MatTableModule } from './mat-table/mat-table.module';
 import { PagosComponent } from './pagos/pagos.component';
 import { MatTableGroupComponent } from './mat-table-group/mat-table-group.component';
 import { SearchSelectComponent } from './search-select/search-select.component';
@@ -21,6 +21,8 @@ import { SnackbarComponent } from './snackbar/snackbar.component';
 import { RecursiveSelectComponent } from './recursive-select/recursive-select.component';
 import { LocationComponent } from './location/location.component';
 import { IconComponent } from './icon/icon.component';
+import { MatTableComponent } from './mat-table/mat-table.component';
+import { ChangePasswordComponent } from './change-password/change-password.component';
 
 
 let components = [
@@ -32,7 +34,8 @@ let components = [
    SearchSelectComponent,
    RecursiveSelectComponent,
    LocationComponent,
-   IconComponent
+   IconComponent,
+   MatTableComponent
 ]
 
 @NgModule({
@@ -44,12 +47,12 @@ let components = [
     LineChartComponent, 
     NumberToRomanSymbolPipe, 
     MatTableGroupComponent, 
-    SnackbarComponent, ],
+    SnackbarComponent, ChangePasswordComponent, ],
   imports: [
     CommonModule,
     RouterModule,
     MaterialModule,
-    MatTableModule,
+    // MatTableModule,
     FormsModule,
     ReactiveFormsModule
   ],

@@ -1,5 +1,5 @@
-<ng-container *ngIf="_select.children && _select.children.length > 0" class="flex">
-   <mat-form-field appearance="outline" class="w-full">
+<ng-container *ngIf="_select.children && _select.children.length > 0">
+   <mat-form-field appearance="outline" class="w-full inline-block basis-72 grow max-w-xs shrink md:shrink-0">
       <mat-label>{{ _label }}</mat-label>
       <mat-select [(ngModel)]="selectedCategory" (selectionChange)="onSelectionChange($event, _control)"
          [required]="_rq">
@@ -15,7 +15,7 @@
    </mat-form-field>
    <ng-container *ngIf="selectedCategory && hasChildren(selectedCategory)">
       <recursive-select [select]="selectedCategory.children" [label]="'Subcategoría'" [control]="_control" [rq]="_rq"
-         [generation]="_generation + 1" [value]="_value" class="w-full grow gap-x-6"
+         [generation]="_generation + 1" [value]="_value" class="w-full flex gap-x-6"
          (categorySelected)="onCategorySelected($event)"></recursive-select>
    </ng-container>
 </ng-container>

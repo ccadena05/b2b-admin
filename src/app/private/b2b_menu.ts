@@ -49,7 +49,7 @@ export const b2b_menu = [
    },
    {
       label: 'Membresías',
-      link: '/m/memberships',
+      link: '/m/membership',
       icon: 'brand-my-oppo',
       bg: 'bg-b2b-2'
    },

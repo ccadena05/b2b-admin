@@ -1,8 +1,7 @@
 <nav class="flex justify-between items-center w-full h-16 px-8 ">
    <div [ngClass]="sidenav?.mode == 'over' ? 'lg:hidden' : 'hidden'" class="cursor-pointer"
       (click)="toggleSidenav(sidenav)">
-      <mat-icon *ngIf="!sidenav?.opened"> menu </mat-icon>
-      <mat-icon *ngIf="sidenav?.opened"> close </mat-icon>
+      <icon c="#0076ef" [i]="!sidenav?.opened ? 'menu-2' : 'x'"></icon>
    </div>
 
    <img src="assets/img/{{jwtAuth.getColor() === 'dark' ? 'dark' : 'light'}}.png" class="h-10" alt="Logo" />
@@ -11,20 +10,20 @@
 
       <img *ngIf="avatar != ''" class="w-8 h-8 rounded-full cursor-pointer scale-125" [src]="avatar" alt="Perfil"
          [matMenuTriggerFor]="menu" />
-      <mat-icon *ngIf="avatar == ''"
+      <icon *ngIf="avatar == ''" i="user-circle" c="#0076ef"
          class="h-8 w-8 text-transparent bg-gradient-to-tr from-b2b-1 to-b2b-2 bg-clip-text cursor-pointer flex shrink-0 scale-125"
          [matMenuTriggerFor]="menu">
          account_circle
-      </mat-icon>
+      </icon>
       <mat-menu #menu="matMenu"
          class="w-48 !bg-white dark:!bg-dark-blue-50 !text-slate-700 dark:!text-slate-300 !rounded-lg !shadow-xl">
-         <button [routerLink]="['/perfil']" mat-menu-item class="font-medium !text-slate-700 dark:!text-slate-300">
-            <mat-icon class="!text-slate-700 dark:!text-slate-300">person</mat-icon>Perfil
+         <button [routerLink]="['/perfil']" mat-menu-item class="font-medium !text-slate-700 dark:!text-slate-300 !flex items-center gap-x-3">
+            <icon i="user" c="#334155">person</icon> Perfil
          </button>
 
          <button [routerLink]="['/login']" mat-menu-item (click)="logout()"
-            class="font-medium !text-slate-700 dark:!text-slate-300">
-            <mat-icon class="!text-slate-700 dark:!text-slate-300">logout</mat-icon>Salir
+            class="font-medium !text-slate-700 dark:!text-slate-300 !flex items-center gap-x-3">
+            <icon i="logout" c="#334155"></icon> Salir
          </button>
       </mat-menu>
    </div>

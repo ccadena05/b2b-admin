@@ -35,12 +35,12 @@ export class MatTableComponent implements OnInit, OnChanges {
    rfq: any = {
       1: {
          color: '#16a34a',
-         icon: 'check',
+         icon: 'circle-check',
          hex: '#dcfce7'
       },
       2: {
          color: '#d97706',
-         icon: 'ellipsis',
+         icon: 'dots',
          hex: '#fef3c7'
       },
       3: {
@@ -52,7 +52,7 @@ export class MatTableComponent implements OnInit, OnChanges {
 
    apd: any = {
       0: {
-         icon: 'eye-slash',
+         icon: 'eye-off',
          color: '#dc2626',
          hex: '#fee2e2'
 

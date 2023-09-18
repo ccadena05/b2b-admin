@@ -146,6 +146,10 @@ body {
       @apply flex justify-center items-center bg-[#ef0076] hover:bg-[#ff2491] disabled:bg-[#ff57ab] disabled:cursor-not-allowed text-white disabled:text-slate-300 p-3 rounded-xl shrink-0 grow-0 duration-300 cursor-pointer; 
    }
 
+   .btn-grn {
+      @apply flex justify-center items-center bg-[#00ef76] hover:bg-[#24ff91] disabled:bg-[#57ffab] disabled:cursor-not-allowed text-white disabled:text-slate-300 p-3 rounded-xl shrink-0 grow-0 duration-300 cursor-pointer; 
+   }
+
    .btn-p {
       @apply bg-[#0076ef] rounded-xl text-slate-100 py-2 px-4 cursor-pointer disabled:cursor-not-allowed disabled:bg-[#5998da]/80 disabled:text-slate-300 hover:bg-[#2491ff] duration-300;
    }
@@ -175,7 +179,7 @@ body {
    }
 
    .tag {
-      @apply bg-slate-100/20 rounded-2xl mr-2 mb-2 px-1.5 py-0.5 leading-7 cursor-pointer hover:bg-slate-100/30 duration-300;
+      @apply bg-slate-100 rounded-2xl mr-2 mb-2 px-1.5 py-0.5 leading-7 cursor-pointer hover:bg-slate-50 duration-300;
    }
 
    .r-icon {
@@ -580,6 +584,7 @@ mat-radio-button .mat-ripple-element {
    border-radius: 1rem !important;
    background: rgba(241, 245, 249, 0.33) !important;
    backdrop-filter: blur(8px) !important;
+   color: #000 !important;
 }
 
 form {
@@ -711,7 +716,7 @@ NOTE: for old browsers, will need to restart watcher after changing a variable
  input:-webkit-autofill:focus,
  input:-webkit-autofill:active {
      transition: background-color 5000s ease-in-out 0s;
-     -webkit-text-fill-color: #fff !important;
+     -webkit-text-fill-color: #000 !important;
  }
 
 
@@ -720,5 +725,16 @@ NOTE: for old browsers, will need to restart watcher after changing a variable
    width: 24px; /* Ajusta el ancho según tus necesidades */
    height: 24px; /* Ajusta la altura según tus necesidades */
    max-width: 1.5rem !important;
-   overflow: hidden;
+   // overflow: hidden;
  }
+
+icon svg {
+   width: 24px; /* Ajusta el ancho según tus necesidades */
+   height: 24px; /* Ajusta la altura según tus necesidades */
+   max-width: 1.5rem !important;
+ }
+
+ .text-xsm {
+   font-size: 0.8125rem/* 13px */;
+   line-height: 1.125rem/* 18px */;
+}

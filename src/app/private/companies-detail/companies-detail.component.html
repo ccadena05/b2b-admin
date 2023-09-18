@@ -3,7 +3,7 @@
         <span class="relative flex h-12 w-12">
             <span #ping class="absolute inline-flex h-full w-full rounded-2xl bg-b2b-2 opacity-75"></span>
             <button (click)="save()" class="btn-1 z-50">
-                <icon [i]="router.url.includes('detail') ? 'edit' : 'plus'"></icon>
+                <icon [i]="router.url.includes('detail') ? 'device-floppy' : 'plus'"></icon>
             </button>
             <!-- <span class="relative inline-flex rounded-full h-3 w-3 bg-sky-500"></span> -->
         </span>
@@ -14,7 +14,7 @@
         <mat-menu #addLang="matMenu">
             <button class="text-slate-100 disabled:text-slate-500" mat-menu-item
                 *ngFor="let lang of available_langs; let i = index" [disabled]="lang.id == tabs[i]?.id"
-                (click)="lang.id == tabs[i]?.id ? '' : addTab(lang)">
+                (click)="lang.id == tabs[i]?.id ? '' : master.add_lang_tab(tabs, lang, form)">
                 <span class="ml-2"
                     [ngClass]="lang.id == tabs[i]?.id ? 'opacity-15' : 'opacity-100'">{{lang?.emoji}}</span>
                 <span class="ml-2"
@@ -28,8 +28,8 @@
             <ng-template mat-tab-label class="w-full flex gap-x-2">
                 <span class="ml-2">{{tab?.emoji}}</span>
                 <span class="ml-2">{{tab?.name}}</span>
-                <mat-icon class="ml-4" (click)="deleteTab(i, tab.id)"
-                    *ngIf="this.tabs.length > 1 && i !== 0 && tab.id !== 1">close</mat-icon>
+                <icon class="ml-4" i="x" (click)="master.del_lang_tab(tabs, tab.id, form, i)"
+                    *ngIf="this.tabs.length > 1 && i !== 0 && tab.id !== 1">close</icon>
             </ng-template>
 
             <div class="flex flex-col gap-y-6">
@@ -38,6 +38,9 @@
                     <form [formGroup]="form">
 
                         <mat-tab label="Información General">
+                            <div class="w-full bg-red-400">
+
+                            </div>
                             <div [ngClass]="cc.offsetWidth <= 640 ? 'grid-cols-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'grid-cols-2' : 'grid-cols-3'"
                                 class="grid gap-x-6 w-full">
 
@@ -51,12 +54,12 @@
                                     <mat-slide-toggle class="mb-6 w-full"
                                         formControlName="hidden">Oculto</mat-slide-toggle>
                                     <mat-slide-toggle class="mb-6 w-full"
-                                        formControlName="validated">Validado</mat-slide-toggle>
+                                        formControlName="approved">Validado</mat-slide-toggle>
                                 </div>
 
                                 <div class="grow" formArrayName="legal_name"
                                     [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
-                                    <div *ngFor="let item of master.getterA(form.controls['legal_name']).controls; let i = index"
+                                    <div *ngFor="let item of master.array(form, 'legal_name'); let i = index"
                                         [formGroupName]="i">
                                         <mat-form-field class="w-full" appearance="outline"
                                             *ngIf="item.value.languages_id == tab.id">
@@ -73,12 +76,11 @@
                                     <mat-error>Ingresar un valor válido *</mat-error>
                                 </mat-form-field>
 
-                                <div class="flex gap-x-3">
+                                <div class="flex gap-x-3" *ngIf="i == 0">
                                     <!-- <img *ngIf="form.value.image_url" [src]="form.value.image_url" alt="" class="h-10 mt-1 rounded-lg aspect-square grow-0"> -->
-                                    <div (click)="uploadPDF(form.get('image_url'))" class="file-field" *ngIf="i == 0"
+                                    <div (click)="uploadPDF(form.get('image_url'))" class="file-field"
                                         [ngClass]="form.controls['image_url'].invalid && form.controls['image_url'].touched ? 'border-red-500 text-red-500' : ''">
-                                        <mat-icon *ngIf="!form.value.image_url"
-                                            class="text-[rgba(0,0,0,.54)]">upload_file</mat-icon>
+                                        <icon i="file-upload" c="#334155" *ngIf="!form.value.image_url"></icon>
                                         <img *ngIf="form.value.image_url" [src]="form.value.image_url" alt=""
                                             class="h-8 rounded-lg aspect-square grow-0">
                                         <div class="absolute left-11"
@@ -136,7 +138,7 @@
                                 </mat-form-field>
 
                                 <div class="w-full" formArrayName="main_activity">
-                                    <div *ngFor="let item of master.getterA(form.controls['main_activity']).controls; let i = index"
+                                    <div *ngFor="let item of master.array(form, 'main_activity'); let i = index"
                                         [formGroupName]="i">
                                         <mat-form-field class="w-full" appearance="outline"
                                             *ngIf="item.value.languages_id == tab.id">
@@ -153,21 +155,22 @@
                                     <mat-error>Ingresar un valor válido *</mat-error>
                                 </mat-form-field>
 
-                                <search-select [label]="'Giro de empresa'" [select]="sel['type_company']"
+                                <search-select *ngIf="i == 0" [label]="'Giro de empresa'" [select]="sel['type_company']"
                                     [control]="form.controls['type_company_id']" class="w-full"></search-select>
 
                                 <search-select *ngIf="i == 0" [label]="'País de origen'" [select]="sel['countries']"
                                     [control]="form.controls['country_origin']" class="w-full"></search-select>
 
-                                <search-select [label]="'Mebresía'" [select]="sel['type_company']"
-                                    [control]="form.controls['membership']" class="w-full"></search-select>
+                                <search-select *ngIf="i == 0" [label]="'Mebresía'" [select]="sel['type_company']"
+                                    [control]="form.controls['type_membership_id']" class="w-full"></search-select>
 
                                 <mat-form-field appearance="outline" class="" *ngIf="i == 0">
                                     <mat-label>Fechas de membresía</mat-label>
                                     <mat-date-range-input [rangePicker]="picker">
-                                        <input matStartDate formControlName="membership_start_date"
+                                        <input matStartDate formControlName="membership_creation_date"
                                             placeholder="Inicio">
-                                        <input matEndDate formControlName="membership_end_date" placeholder="Fin">
+                                        <input matEndDate formControlName="membership_expiration_date"
+                                            placeholder="Fin">
                                     </mat-date-range-input>
                                     <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
                                     <mat-date-range-picker #picker></mat-date-range-picker>
@@ -179,38 +182,53 @@
 
                                 <mat-form-field appearance="outline" class="w-full" *ngIf="i == 0">
                                     <mat-label>Límite de usuarios</mat-label>
-                                    <mat-icon class="text-slate-900" matPrefix
-                                        (click)="user_limit.valueAsNumber = user_limit.valueAsNumber - 1">remove</mat-icon>
+                                    <icon i="minus" c="#334155" matPrefix
+                                        (click)="limit_users.valueAsNumber = limit_users.valueAsNumber - 1"></icon>
 
-                                    <input #user_limit formControlName="user_limit" type="number" matInput [value]="0">
-                                    <mat-icon class="text-slate-900" matSuffix
-                                        (click)="user_limit.valueAsNumber = user_limit.valueAsNumber + 1">add</mat-icon>
+                                    <input #limit_users formControlName="limit_users" type="number" matInput
+                                        [value]="0">
+                                    <icon i="plus" c="#334155" matSuffix
+                                        (click)="limit_users.valueAsNumber = limit_users.valueAsNumber + 1"></icon>
                                     <mat-error>Ingresa un valor válido</mat-error>
                                 </mat-form-field>
 
                                 <mat-form-field appearance="outline" class="w-full" *ngIf="i == 0">
                                     <mat-label>Límite de productos</mat-label>
-                                    <mat-icon class="text-slate-900" matPrefix
-                                        (click)="product_limit.valueAsNumber = product_limit.valueAsNumber - 1">remove</mat-icon>
+                                    <icon i="minus" c="#334155" matPrefix
+                                        (click)="limit_products.valueAsNumber = limit_products.valueAsNumber - 1">
+                                    </icon>
 
-                                    <input #product_limit formControlName="product_limit" type="number" matInput
+                                    <input #limit_products formControlName="limit_products" type="number" matInput
                                         [value]="0">
-                                    <mat-icon class="text-slate-900" matSuffix
-                                        (click)="product_limit.valueAsNumber = product_limit.valueAsNumber + 1">add</mat-icon>
+                                    <icon i="plus" c="#334155" matSuffix
+                                        (click)="limit_products.valueAsNumber = limit_products.valueAsNumber + 1">
+                                    </icon>
                                     <mat-error>Ingresa un valor válido</mat-error>
                                 </mat-form-field>
 
                                 <mat-form-field appearance="outline" class="w-full" *ngIf="i == 0">
                                     <mat-label>Límite de usuarios activos</mat-label>
-                                    <mat-icon class="text-slate-900" matPrefix
-                                        (click)="active_user_limit.valueAsNumber = active_user_limit.valueAsNumber - 1">remove</mat-icon>
+                                    <icon i="minus" c="#334155" matPrefix
+                                        (click)="active_user_limit.valueAsNumber = active_user_limit.valueAsNumber - 1">
+                                    </icon>
 
                                     <input #active_user_limit formControlName="active_user_limit" type="number" matInput
                                         [value]="0">
-                                    <mat-icon class="text-slate-900" matSuffix
-                                        (click)="active_user_limit.valueAsNumber = active_user_limit.valueAsNumber + 1">add</mat-icon>
+                                    <icon i="plus" c="#334155" matSuffix
+                                        (click)="active_user_limit.valueAsNumber = active_user_limit.valueAsNumber + 1">
+                                    </icon>
                                     <mat-error>Ingresa un valor válido</mat-error>
                                 </mat-form-field>
+
+                                <div class="label w-full "
+                                    [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"
+                                    *ngIf="i == 0">Cluster</div>
+                                <section *ngIf="i == 0">
+                                    <mat-checkbox *ngFor="let item of clusters"
+                                        [value]="company_clusters?.includes(item.id)"
+                                        [checked]="company_clusters?.includes(item.id)"
+                                        (change)="add_cluster($event, item.id)">{{item.name}}</mat-checkbox>
+                                </section>
 
                                 <mat-divider class="title w-full"
                                     [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"
@@ -285,14 +303,44 @@
                                     Categorías
                                 </div>
 
+                                <div *ngIf="i == 0" class="flex flex-col gap-x-6 w-full"
+                                    [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                                    <recursive-select [select]="sel['category_searcher']" label="Categoría"
+                                        class="w-full flex gap-x-6" [control]="form.controls['first_category']"
+                                        [rq]="true" [generation]="0" [value]="form.value.first_categories"
+                                        (categorySelected)="onCategorySelected($event)"></recursive-select>
+
+                                    <button (click)="push_category()" class="btn-1 m-auto mb-3">Añadir
+                                        categoría</button>
+
+                                    <div *ngIf="!router.url.includes('detail')">
+                                        <span *ngFor="let item of company_categories_name; let i = index"
+                                            class="tag">{{item.name}}
+                                            <span (click)="pop_category(i)"
+                                                class="text-red-500 font-black">⨉<!-- <icon i="x"></icon> -->
+                                                <!-- CAMBIAR LA FUNCIÓN POP -->
+                                            </span>
+                                        </span>
+                                    </div>
+
+                                    <div *ngIf="router.url.includes('detail')">
+                                        <span *ngFor="let item of form.value?.categories_company; let i = index"
+                                            class="tag">{{item.categories_id}}
+                                            <span (click)="pop_category(i)"
+                                                class="text-red-500 font-black">⨉<!-- <icon i="x"></icon> -->
+                                                <!-- CAMBIAR LA FUNCIÓN POP -->
+                                            </span>
+                                        </span>
+                                    </div>
+                                </div>
+
                                 <mat-form-field appearance="outline" class="w-full" *ngIf="i == 0">
                                     <mat-label>Página web</mat-label>
                                     <input formControlName="web_page" type="text" matInput>
                                     <mat-error>Ingresa un valor válido</mat-error>
                                 </mat-form-field>
 
-                                <div (click)="uploadPDF(form.get('brochure_url'))"
-                                    class="file-field" *ngIf="i == 0">
+                                <div (click)="uploadPDF(form.get('brochure_url'))" class="file-field" *ngIf="i == 0">
                                     <icon i="file-upload" c="#334155"></icon>
                                     <div class="absolute left-11"
                                         [ngClass]="form.value.brochure_url ? 'top-0 text-xs' : ''">
@@ -322,7 +370,7 @@
                                 <div class="w-full"
                                     [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"
                                     formArrayName="description">
-                                    <div *ngFor="let item of master.getterA(form.controls['description']).controls; let i = index"
+                                    <div *ngFor="let item of master.array(form, 'description'); let i = index"
                                         [formGroupName]="i">
                                         <mat-form-field class="w-full" appearance="outline"
                                             *ngIf="item.value.languages_id == tab.id">
@@ -339,7 +387,7 @@
                                 <div class="w-full"
                                     [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"
                                     formArrayName="description_detail">
-                                    <div *ngFor="let item of master.getterA(form.controls['description_detail']).controls; let i = index"
+                                    <div *ngFor="let item of master.array(form, 'description_detail'); let i = index"
                                         [formGroupName]="i">
                                         <mat-form-field class="w-full" appearance="outline"
                                             *ngIf="item.value.languages_id == tab.id">
@@ -383,10 +431,10 @@
                                 <div class="w-full"
                                     [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"
                                     formArrayName="company_payment">
-                                    <div *ngFor="let item of master.getterA(form.controls['company_payment']).controls; let i = index"
+                                    <div *ngFor="let item of master.array(form, 'company_payment'); let i = index"
                                         [formGroupName]="i">
                                         <mat-form-field class="w-full" appearance="outline"
-                                            *ngIf="item.value.languages_id == tab.id">
+                                            *ngIf="item?.value?.languages_id == tab?.id">
                                             <mat-label>Facilidades de pago</mat-label>
                                             <textarea formControlName="text" type="text" matInput></textarea>
                                             <mat-error>Ingresa un valor válido</mat-error>
@@ -434,7 +482,7 @@
 
                                 <div class="w-full flex flex-row-reverse"
                                     [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
-                                    <mat-icon class="text-[#bbbdc3]">help</mat-icon>
+                                    <icon i="help-circle" c="#bbbdc3"></icon>
                                     <div class="title w-full"
                                         [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
                                         Procesos de la empresa
@@ -455,7 +503,7 @@
                                 </div>
 
                                 <div *ngIf="pisi.checked" class="w-full" formArrayName="main_processes">
-                                    <div *ngFor="let item of master.getterA(form.controls['main_processes']).controls; let i = index"
+                                    <div *ngFor="let item of master.array(form, 'main_processes'); let i = index"
                                         [formGroupName]="i">
                                         <mat-form-field class="w-full" appearance="outline"
                                             *ngIf="item.value.languages_id == tab.id">
@@ -467,7 +515,7 @@
                                 </div>
 
                                 <div *ngIf="pisi.checked" class="w-full" formArrayName="production_capacity">
-                                    <div *ngFor="let item of master.getterA(form.controls['production_capacity']).controls; let i = index"
+                                    <div *ngFor="let item of master.array(form, 'production_capacity'); let i = index"
                                         [formGroupName]="i">
                                         <mat-form-field class="w-full" appearance="outline"
                                             *ngIf="item.value.languages_id == tab.id">
@@ -479,7 +527,7 @@
                                 </div>
 
                                 <div *ngIf="pisi.checked" class="w-full" formArrayName="machinery">
-                                    <div *ngFor="let item of master.getterA(form.controls['machinery']).controls; let i = index"
+                                    <div *ngFor="let item of master.array(form, 'machinery'); let i = index"
                                         [formGroupName]="i">
                                         <mat-form-field class="w-full" appearance="outline"
                                             *ngIf="item.value.languages_id == tab.id">
@@ -491,7 +539,7 @@
                                 </div>
 
                                 <div *ngIf="pisi.checked" class="w-full" formArrayName="guarantees_offered">
-                                    <div *ngFor="let item of master.getterA(form.controls['guarantees_offered']).controls; let i = index"
+                                    <div *ngFor="let item of master.array(form, 'guarantees_offered'); let i = index"
                                         [formGroupName]="i">
                                         <mat-form-field class="w-full" appearance="outline"
                                             *ngIf="item.value.languages_id == tab.id">
@@ -510,29 +558,36 @@
 
                                 <mat-form-field class="w-full" appearance="outline" *ngIf="i == 0">
                                     <mat-label>Facebook</mat-label>
-                                    <mat-icon matPrefix><i class="fa-brands fa-facebook text-[#bbbdc3]"></i></mat-icon>
+                                    <mat-icon matPrefix>
+                                        <icon i="brand-facebook" c="#334155"></icon>
+                                    </mat-icon>
                                     <input formControlName="facebook" type="text" matInput>
                                     <mat-error>Ingresa un valor válido</mat-error>
                                 </mat-form-field>
 
                                 <mat-form-field class="w-full" appearance="outline" *ngIf="i == 0">
                                     <mat-label>Twitter</mat-label>
-                                    <mat-icon matPrefix><i
-                                            class="fa-brands fa-twitter text-[#bbbdc3] !mb-4"></i></mat-icon>
+                                    <mat-icon matPrefix>
+                                        <icon i="brand-twitter" c="#334155"></icon>
+                                    </mat-icon>
                                     <input formControlName="twitter" type="text" matInput>
                                     <mat-error>Ingresa un valor válido</mat-error>
                                 </mat-form-field>
 
                                 <mat-form-field class="w-full" appearance="outline" *ngIf="i == 0">
                                     <mat-label>Linkedin</mat-label>
-                                    <mat-icon matPrefix><i class="fa-brands fa-linkedin text-[#bbbdc3]"></i></mat-icon>
+                                    <mat-icon matPrefix>
+                                        <icon i="brand-linkedin" c="#334155"></icon>
+                                    </mat-icon>
                                     <input formControlName="linkedin" type="text" matInput>
                                     <mat-error>Ingresa un valor válido</mat-error>
                                 </mat-form-field>
 
                                 <mat-form-field class="w-full" appearance="outline" *ngIf="i == 0">
                                     <mat-label>Vídeo de youtube</mat-label>
-                                    <mat-icon matPrefix><i class="fa-brands fa-youtube text-[#bbbdc3]"></i></mat-icon>
+                                    <mat-icon matPrefix>
+                                        <icon i="brand-youtube" c="#334155"></icon>
+                                    </mat-icon>
                                     <input formControlName="youtube" type="text" matInput>
                                     <mat-error>Ingresa un valor válido</mat-error>
                                 </mat-form-field>
@@ -555,7 +610,7 @@
                                 </mat-form-field>
 
                                 <div class="w-full" formArrayName="specialization">
-                                    <div *ngFor="let item of master.getterA(form.controls['specialization']).controls; let i = index"
+                                    <div *ngFor="let item of master.array(form, 'specialization'); let i = index"
                                         [formGroupName]="i">
                                         <mat-form-field class="w-full" appearance="outline"
                                             *ngIf="item.value.languages_id == tab.id">
@@ -567,7 +622,7 @@
                                 </div>
 
                                 <div class="w-full" formArrayName="another_sector">
-                                    <div *ngFor="let item of master.getterA(form.controls['another_sector']).controls; let i = index"
+                                    <div *ngFor="let item of master.array(form, 'another_sector'); let i = index"
                                         [formGroupName]="i">
                                         <mat-form-field class="w-full" appearance="outline"
                                             *ngIf="item.value.languages_id == tab.id">
@@ -579,7 +634,7 @@
                                 </div>
 
                                 <div class="w-full" formArrayName="relevant_products">
-                                    <div *ngFor="let item of master.getterA(form.controls['relevant_products']).controls; let i = index"
+                                    <div *ngFor="let item of master.array(form, 'relevant_products'); let i = index"
                                         [formGroupName]="i">
                                         <mat-form-field class="w-full" appearance="outline"
                                             *ngIf="item.value.languages_id == tab.id">
@@ -616,8 +671,7 @@
 
                             <div class="w-full" formArrayName="isos" *ngIf="i == 0"
                                 [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
-                                <div *ngFor="let item of master.getterA(form.controls['isos']).controls; let i = index"
-                                    [formGroupName]="i">
+                                <div *ngFor="let item of master.array(form, 'isos'); let i = index" [formGroupName]="i">
                                     <div class="flex justify-center items-center gap-x-3 text-slate-100"
                                         *ngIf="item.value.active == '1'">
                                         <div class="basis-48 grow">
@@ -635,8 +689,9 @@
                                                 {{item.value.url ?? ''}}
                                             </div>
                                         </div>
-                                        <a href="{{item.value.url}}"
-                                            target="_blank"><icon i="external-link"></icon></a>
+                                        <a href="{{item.value.url}}" target="_blank">
+                                            <icon i="external-link"></icon>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -651,7 +706,7 @@
                             <div class="w-full flex items-end justify-end">
                                 <button (click)="addrfq()"
                                     class="bg-b2b-2 text-white h-12 w-12 shrink-0 grow-0 flex justify-center items-center rounded-xl">
-                                    <mat-icon class="m-auto">add</mat-icon>
+                                    <icon i="plus" class="m-auto"></icon>
                                 </button>
                             </div>
                             <app-mat-table [dataToDisplay]="requierements" [action]="edit"></app-mat-table>

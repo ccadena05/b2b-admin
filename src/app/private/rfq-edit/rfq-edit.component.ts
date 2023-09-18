@@ -4,11 +4,13 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CloudinaryWidgetManager } from 'ngx-cloudinary-upload-widget';
 import { Response } from 'src/app/models/response.model';
+import { LanguageService } from 'src/app/services/language.service';
 import { LocalStoreService } from 'src/app/services/local-store.service';
 import { MasterService } from 'src/app/services/master.service';
 import { OutputService } from 'src/app/services/output.service';
 import { ProviderService } from 'src/app/services/provider/provider.service';
 import { config } from 'src/config';
+import { Language } from 'src/app/models/language.model';
 
 @Component({
    selector: 'app-rfq-edit',
@@ -17,28 +19,30 @@ import { config } from 'src/config';
 })
 export class RfqEditComponent implements OnInit {
    form: FormGroup;
-   tabs: any = [{ id: '1', name: 'English', language: 'EN', emoji: '🇺🇸' }];
+   tabs: Language[] = [this.lang.user_lang];
    available_langs: any = [];
    sel: any = [];
    rfq_id: any;
 
    constructor(
       public master: MasterService,
-      private formBuilder: FormBuilder,
-      private manager: CloudinaryWidgetManager,
-      private provider: ProviderService,
-      private ls: LocalStoreService,
+
       private router: Router,
+      private ls: LocalStoreService,
+      private lang: LanguageService,
+      private output: OutputService,
+      private formBuilder: FormBuilder,
+      private provider: ProviderService,
       private activatedRoute: ActivatedRoute,
-      private output: OutputService
+      private manager: CloudinaryWidgetManager,
    ) {
       this.form = this.formBuilder.group({
          id: [null],
          approved: [null],
          profile_company_id: [null],
          rfc: [this.ls.getItem("B2B_RFC")],
-         title: this.formBuilder.array([this.master.createTranslation('1', null)]),
-         description: this.formBuilder.array([this.master.createTranslation('1', null)]),
+         title: this.formBuilder.array([this.master.translation(this.lang.user_lang.id, null)]),
+         description: this.formBuilder.array([this.master.translation(this.lang.user_lang.id, null)]),
          country: [null],
          state: [null],
          city: [null],
@@ -46,7 +50,7 @@ export class RfqEditComponent implements OnInit {
          image_url: [null],
          is_rfq: [0],
          activity: [null],
-         materials: this.formBuilder.array([this.master.createTranslation('1', null)]),
+         materials: this.formBuilder.array([this.master.translation(this.lang.user_lang.id, null)]),
          volumes: [null],
          budget: [null],
          simple_isos: [null],
@@ -74,25 +78,25 @@ export class RfqEditComponent implements OnInit {
       this.output.table_ready.next(false)
       this.provider.BD_ActionGet('general', 'get_languages').subscribe(
          (languages: Response) => {
+            console.log(languages);
+            
             if (!languages.error) {
                this.available_langs = languages.msg
                this.provider.BD_ActionGet('general', 'get_isos').subscribe(
-                  (isos: Response) => {
+                  (isos: Response) => {                     
                      if (!isos.error) {
                         this.sel['isos'] = this.master?.changeKey({ 'name_id': 'id' }, isos?.msg)
-                        this.provider.BD_ActionGet('rfq', 'get_rfq_status').subscribe(
-                           (rfq_status: Response) => {
+                        this.provider.BD_ActionAdminGet('rfq', 'get_rfq_status').subscribe(
+                           (rfq_status: Response) => {                              
                               if (!rfq_status.error) {
                                  this.sel['rfq_status'] = rfq_status.msg
                                  this.provider.BD_ActionAdminGet('companies', 'get').subscribe(
-                                    (companies: Response) => {
+                                    (companies: Response) => {                                       
                                        if (!companies.error) {
                                           this.sel['companies'] = companies.msg
-                                          this.provider.BD_ActionGet('rfq', 'get_rfq_by_id', { id: atob(this.__id) }).subscribe(
-                                             (rfq: Response) => {
-                                                if (!rfq.error) {
-                                                   console.log(rfq.msg);
-                                                   if (rfq.msg.is_rfq == 1 || rfq.msg.is_rfq == true) {
+                                          this.provider.BD_ActionAdminGet('rfq', 'get_rfq_by_id', { id: atob(this.__id) }).subscribe(
+                                             (rfq: Response) => {                                                
+                                                if (!rfq.error) {                                                   if (rfq.msg.is_rfq == 1 || rfq.msg.is_rfq == true) {
                                                       let simple_isos: any = []
                                                       rfq.msg.isos?.forEach((iso: any) => {
                                                          iso.library_isos_id = iso.library_isos_id.toString()
@@ -141,7 +145,7 @@ export class RfqEditComponent implements OnInit {
    
             Object.keys(this.form.controls).forEach(element => {
                if (this.form.controls[element] instanceof FormArray)
-                  this.master.getterA(this.form.controls[element]).push(this.master.createTranslation(language.id))
+                  this.master.getterA(this.form.controls[element]).push(this.master.translation(language.id))
             })
          }
       } */
@@ -282,7 +286,7 @@ import { config } from 'src/config';
 })
 export class RfqEditComponent implements OnInit {
   form: FormGroup;
-  tabs: any = [{ id: '1', name: 'English', language: 'EN', emoji: '🇺🇸' }];
+  tabs: Language[] = [this.lang.user_lang];
   available_langs: any = [];
   sel: any = [];
   rfq_id: any;
@@ -299,15 +303,15 @@ export class RfqEditComponent implements OnInit {
     this.form = this.formBuilder.group({
       profile_company_id: [this.ls.getItem("B2B_PROFILE_COMPANY")],
       rfc: [this.ls.getItem("COMPANY_FORM").rfc],
-      title: this.formBuilder.array([this.master.createTranslation('1')]),
-      description: this.formBuilder.array([this.master.createTranslation('1')]),
+      title: this.formBuilder.array([this.master.translation(this.lang.user_lang.id, null)]),
+      description: this.formBuilder.array([this.master.translation(this.lang.user_lang.id, null)]),
       country: [null],
       state: [null],
       city: [null],
       expiration_date: [0],
       is_rfq: [0],
       activity: [null],
-      materials: this.formBuilder.array([this.master.createTranslation('1')]),
+      materials: this.formBuilder.array([this.master.translation(this.lang.user_lang.id, null)]),
       volumes: [null],
       budget: [null],
       isos: [null],
@@ -344,7 +348,7 @@ export class RfqEditComponent implements OnInit {
                   rfq.msg?.title.forEach((element: any) => {
 
                     if (element.languages_id != 1) {
-                      this.master.createTranslation(element.languages_id)
+                      this.master.translation(element.languages_id)
                       this.master.add_lang_tab(this.tabs, this.language_index(element.languages_id), this.form)
                     }
                   });

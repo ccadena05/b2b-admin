@@ -21,7 +21,7 @@ import { EventsFormComponent } from './events-form/events-form.component';
 import { QuillModule } from 'ngx-quill';
 import { BlogFormComponent } from './blog-form/blog-form.component';
 import { CompaniesDetailComponent } from './companies-detail/companies-detail.component';
-import { MatTableModule } from 'src/app/components/mat-table/mat-table.module';
+// import { MatTableModule } from 'src/app/components/mat-table/mat-table.module';
 import { RfqFormComponent } from './rfq-form/rfq-form.component';
 import { RfqEditComponent } from './rfq-edit/rfq-edit.component';
 import { UsersFormComponent } from './users-form/users-form.component';
@@ -31,6 +31,7 @@ import { ClustersFormComponent } from './clusters-form/clusters-form.component';
 import { InvestmentsFormComponent } from './investments-form/investments-form.component';
 import { StaticFormComponent } from './static-form/static-form.component';
 import { PreviewComponent } from './static-form/preview/preview.component';
+import { PermissionsComponent } from './users-form/permissions/permissions.component';
 
 @NgModule({
   declarations: [
@@ -47,6 +48,7 @@ import { PreviewComponent } from './static-form/preview/preview.component';
     InvestmentsFormComponent,
     StaticFormComponent,
     PreviewComponent,
+    PermissionsComponent,
   ],
   imports: [
     ComponentsModule,
@@ -59,7 +61,7 @@ import { PreviewComponent } from './static-form/preview/preview.component';
     HeaderModule,
     SidebarModule,
     MasterModule,
-    MatTableModule,
+    // MatTableModule,
     QuillModule.forRoot(),
     NgxCloudinaryWidgetModule.forRoot({ cloudName: environment.cloudName }),
   ],

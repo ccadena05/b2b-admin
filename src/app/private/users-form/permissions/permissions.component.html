@@ -1,0 +1,33 @@
+<form [formGroup]="form" (ngSubmit)="save()" mat-dialog-content class="!flex flex-col gap-y-3">
+   <div
+      class="sticky top-0 right-0 left-full w-[7.5rem] z-50 justify-end text-slate-100 rounded-2xl flex gap-x-2 group">
+      <button type="submit" class="btn-1">
+         <icon i="device-floppy"></icon>
+      </button>
+   </div>
+   <div [formArrayName]="type_user" *ngFor="let type_user of permissions_user_k" class="flex flex-wrap gap-6 justify-center">
+      <div class="title capitalize basis-full" *ngIf="master.array(form, type_user).length > 0">{{type_user}}</div>
+      <div *ngFor="let item of master.array(form, type_user); let tit_i = index" [formGroupName]="tit_i" class="bg-slate-100 p-6 rounded-3xl flex flex-col gap-y-3">
+         <mat-slide-toggle formControlName="c">
+            <div class="flex gap-x-3 items-center">
+               <icon i="plus" c="#0076ef"></icon> Crear
+            </div>
+         </mat-slide-toggle>
+         <mat-slide-toggle formControlName="r">
+            <div class="flex gap-x-3 items-center">
+               <icon i="eye" c="#0076ef"></icon> Leer
+            </div>
+         </mat-slide-toggle>
+         <mat-slide-toggle formControlName="u">
+            <div class="flex gap-x-3 items-center">
+               <icon i="edit" c="#0076ef"></icon> Actualizar
+            </div>
+         </mat-slide-toggle>
+         <mat-slide-toggle formControlName="d">
+            <div class="flex gap-x-3 items-center">
+               <icon i="trash" c="#0076ef"></icon> Eliminar
+            </div>
+         </mat-slide-toggle>
+      </div>   
+   </div>
+</form>

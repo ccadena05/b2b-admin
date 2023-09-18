@@ -7,6 +7,7 @@ import { ProviderService } from 'src/app/services/provider/provider.service';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { config } from 'src/config';
 import { COMMA, ENTER, X } from '@angular/cdk/keycodes';
+import { Language } from 'src/app/models/language.model';
 
 // import 'src/assets/scripts/quill.js'
 import { LocalStoreService } from 'src/app/services/local-store.service';
@@ -22,6 +23,7 @@ import { JwtAuthService } from 'src/app/services/auth/jwt-auth.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogoConfirmacionComponent } from 'src/app/components/dialogo-confirmacion/dialogo-confirmacion.component';
 import { OutputService } from 'src/app/services/output.service';
+import { LanguageService } from 'src/app/services/language.service';
 
 @Component({
    selector: 'app-events-form',
@@ -32,7 +34,7 @@ export class EventsFormComponent implements OnInit {
    _id: any;
    sel: any = [];
    form: FormGroup;
-   tabs: any = [{ id: '1', name: 'English', language: 'EN', emoji: '🇺🇸' }];
+   tabs: Language[] = [this.lang.user_lang];
    available_langs: any = []
    readonly separatorKeysCodes = [ENTER, COMMA] as const;
    selected_all: any = [];
@@ -73,6 +75,7 @@ export class EventsFormComponent implements OnInit {
       private ls: LocalStoreService,
       private jwt: JwtAuthService,
       private dialog: MatDialog,
+      private lang: LanguageService,
       private formBuilder: FormBuilder,
       private provider: ProviderService,
       private manager: CloudinaryWidgetManager,
@@ -81,8 +84,9 @@ export class EventsFormComponent implements OnInit {
    ) {
       this.form = this.formBuilder.group({
          id: [null],
-         title: this.formBuilder.array([this.master.createTranslation('1', null)]),
-         description: this.formBuilder.array([this.master.createTranslation('1', null)]),
+         
+         title: this.formBuilder.array([this.master.translation(this.lang.user_lang.id, null)]),
+         description: this.formBuilder.array([this.master.translation(this.lang.user_lang.id, null)]),
          image_url: [null, Validators.required],
          cost: [null, Validators.required],
          coin: [null],
@@ -92,7 +96,7 @@ export class EventsFormComponent implements OnInit {
          public_gallery: [null],
          start_date: [null, Validators.required],//yyyy-mm-dd 2023-01-23
          end_date: [null, Validators.required],//yyyy-mm-dd 2023-01-23
-         event_summary: this.formBuilder.array([this.master.createTranslation('1', null)]),
+         event_summary: this.formBuilder.array([this.master.translation(this.lang.user_lang.id, null)]),
          profile_company_id: [null, Validators.required],
          blog_id: [null],
          organizer: [null, Validators.required],
@@ -103,7 +107,7 @@ export class EventsFormComponent implements OnInit {
          released: [null],
          released_date: [null],
          event_privacy: [null],
-         active: [null],
+         // active: [null],
          create_date: [null],
          last_update: [null],
          category: [null, Validators.required],
@@ -329,7 +333,7 @@ export class EventsFormComponent implements OnInit {
    empty_translations(controls: string[]){
       controls.forEach((control: string) => {
          if(JSON.stringify(this.form.value?.[control]) == '[]')
-            this.master.getterA(this.form.controls[control]).push(this.master.createTranslation('1'))
+            this.master.getterA(this.form.controls[control]).push(this.master.translation(this.lang.user_lang.id, null))
       });
    }
 

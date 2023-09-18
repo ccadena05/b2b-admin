@@ -59,7 +59,7 @@ const routes: Routes = [
         component: CategoriesFormComponent
       },
       {
-        path: 'm/memberships/add',
+        path: 'm/membership/add',
         component: MembershipsFormComponent
       },
       {
@@ -92,11 +92,15 @@ const routes: Routes = [
         component: CompaniesDetailComponent
       },
       {
+        path: 'm/users/detail/:id',
+        component: UsersFormComponent
+      },
+      {
         path: 'm/categories/detail/:id',
         component: CategoriesFormComponent
       },
       {
-        path: 'm/memberships/detail/:id',
+        path: 'm/membership/detail/:id',
         component: MembershipsFormComponent
       },
       {

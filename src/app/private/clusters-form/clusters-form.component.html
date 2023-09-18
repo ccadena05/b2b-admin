@@ -5,7 +5,7 @@
          <icon i="trash"></icon>
       </div>
       <button type="submit" class="btn-1" [disabled]="form.invalid">
-         <icon [i]="router.url.includes('detail') ? 'edit' : 'plus'"></icon>
+         <icon [i]="router.url.includes('detail') ? 'device-floppy' : 'plus'"></icon>
       </button>
       <div [matMenuTriggerFor]="addLang" class="btn-2">
          <icon i="language" c="#0076ef"></icon>
@@ -26,8 +26,8 @@
          <ng-template mat-tab-label class="w-full flex gap-x-2">
             <span>{{tab?.emoji}}</span>
             <span class="ml-2">{{tab?.name}}</span>
-            <mat-icon class="ml-4" (click)="master.del_lang_tab(tabs, tab.id, form, i)"
-               *ngIf="this.tabs.length > 1 && i !== 0 && tab.id !== 1">close</mat-icon>
+            <icon class="ml-4" i="x" (click)="master.del_lang_tab(tabs, tab.id, form, i)"
+               *ngIf="this.tabs.length > 1 && i !== 0 && tab.id !== 1">close</icon>
          </ng-template>
 
          <div class="flex flex-col gap-y-6 overflow-x-hidden">
@@ -49,38 +49,32 @@
 
                <mat-form-field appearance="outline" class="w-full" *ngIf="i == 0">
                   <mat-label>Orden</mat-label>
-                  <mat-icon class="text-slate-900" matPrefix
-                     (click)="order.valueAsNumber = order.valueAsNumber - 1">remove</mat-icon>
+                  <icon i="minus" c="#334155" matPrefix
+                     (click)="order.valueAsNumber = order.valueAsNumber - 1">remove</icon>
 
                   <input #order formControlName="order" type="number" matInput [value]="0">
-                  <mat-icon class="text-slate-900" matSuffix
-                     (click)="order.valueAsNumber = order.valueAsNumber + 1">add</mat-icon>
+                  <icon i="plus" c="#334155" matSuffix
+                     (click)="order.valueAsNumber = order.valueAsNumber + 1">add</icon>
                   <mat-error>Ingresa un valor válido</mat-error>
                </mat-form-field>
 
                <mat-form-field class="w-full" appearance="outline" *ngIf="i == 0">
                   <mat-label>Facebook</mat-label>
-                  <mat-icon matPrefix class="scale-75">
-                     <icon>facebook</icon>
-                  </mat-icon>
+                  <mat-icon matPrefix><icon i="brand-facebook" c="#334155"></icon></mat-icon>
                   <input formControlName="facebook" type="text" matInput>
                   <mat-error>Ingresa un valor válido</mat-error>
                </mat-form-field>
 
                <mat-form-field class="w-full" appearance="outline" *ngIf="i == 0">
                   <mat-label>Twitter</mat-label>
-                  <mat-icon matPrefix class="scale-75">
-                     <icon>twitter</icon>
-                  </mat-icon>
+                  <mat-icon matPrefix><icon i="brand-twitter" c="#334155"></icon></mat-icon>
                   <input formControlName="twitter" type="text" matInput>
                   <mat-error>Ingresa un valor válido</mat-error>
                </mat-form-field>
 
                <mat-form-field class="w-full" appearance="outline" *ngIf="i == 0">
                   <mat-label>Instagram</mat-label>
-                  <mat-icon matPrefix class="scale-75">
-                     <icon>instagram</icon>
-                  </mat-icon>
+                  <mat-icon matPrefix><icon i="brand-instagram" c="#334155"></icon></mat-icon>
                   <input formControlName="instagram" type="text" matInput>
                   <mat-error>Ingresa un valor válido</mat-error>
                </mat-form-field>

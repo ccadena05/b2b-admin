@@ -6,7 +6,7 @@ import { AlumnosDetailComponent } from './alumnos-detail.component';
 import { MaterialModule } from 'src/app/components/material/material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
-import { MatTableModule } from 'src/app/components/mat-table/mat-table.module';
+// import { MatTableModule } from 'src/app/components/mat-table/mat-table.module';
 import { ComponentsModule } from 'src/app/components/components.module';
 
 
@@ -20,7 +20,7 @@ import { ComponentsModule } from 'src/app/components/components.module';
     MaterialModule,
     FormsModule,
     ReactiveFormsModule,
-    MatTableModule,
+    // MatTableModule,
     ComponentsModule
   ],
   providers: [

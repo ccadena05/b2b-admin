@@ -26,19 +26,20 @@ export class MasterComponent implements OnInit {
    masterSection: any;
    b2b_menu = b2b_menu;
    url: any;
-   tabs: any = [{ id: '1', name: 'English', language: 'EN', emoji: '🇺🇸' }];
+   // tabs: Language[] = [this.lang.user_lang];
    // available_langs: any = [{ id: '1', name: 'English', language: 'EN', emoji: '🇺🇸' }, { id: '2', name: 'Español', language: 'ES', emoji: '🇲🇽' }];
    available_langs: any = []
 
    constructor(
-      private provider: ProviderService,
       public router: Router,
-      private activatedRoute: ActivatedRoute,
-      private output: OutputService,
-      private ls: LocalStoreService,
+      public master: MasterService,
+
       private dialog: MatDialog,
+      private ls: LocalStoreService,
+      private output: OutputService,
+      private provider: ProviderService,
+      private activatedRoute: ActivatedRoute,
       private manager: CloudinaryWidgetManager,
-      public master: MasterService
    ) {
       router.events.pipe(
          filter((e: Event): e is RouterEvent => e instanceof RouterEvent)
@@ -61,34 +62,26 @@ export class MasterComponent implements OnInit {
       this.output.table_ready.next(false)
 
       this.provider.BD_ActionAdminGet(this._modulo, 'get').subscribe((data: Response) => {
+         console.log(data.msg);
          if (!data.error) {
+
             switch (this._modulo) {
                case 'events':
-                  this.dataToDisplay = data.msg
-                  this.output.ready.next(true)
-                  this.output.table_ready.next(true)
-                  break
-
                case 'blogs':
+               case 'membership':
                   this.dataToDisplay = data.msg
-                  this.output.ready.next(true)
-                  this.output.table_ready.next(true)
                   break
 
                case 'rfq':
                   this.dataToDisplay = data.msg.no_rfq
                   this.dataToDisplay1 = data.msg.is_rfq
-                  this.output.ready.next(true)
-                  this.output.table_ready.next(true)
-                  break
 
+                  break
                case 'companies':
                   this.dataToDisplay = data.msg.approved
                   this.dataToDisplay1 = data.msg.no_approved
-                  this.output.ready.next(true)
-                  this.output.table_ready.next(true)
-                  break
 
+                  break
                case 'investments':
                   this.dataToDisplay = [
                      {
@@ -118,9 +111,17 @@ export class MasterComponent implements OnInit {
                   ]
                   break
 
+               case 'users':
+                  this.dataToDisplay = data.msg.is_approved
+                  this.dataToDisplay1 = data.msg.no_approved
+
+                  break
+
                default:
                   break
             }
+            this.output.ready.next(true)
+            this.output.table_ready.next(true)
          } else {
             this.dataToDisplay = []
             this.dataToDisplay1 = []

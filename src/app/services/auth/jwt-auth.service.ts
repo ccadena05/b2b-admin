@@ -77,8 +77,8 @@ export class JwtAuthService {
       const headers: HttpHeaders = new HttpHeaders({
          'Simpleauthb2b': '4170ae818f2e146c48cf824667947b25',
       })
-      console.log(`https://b2b.ptsanmiguelense.com.mx/b2b-ws/controllers/auth/_api.php?opcion=sign_in`, { email: username, password: password });
-      return this.http.post(`https://b2b.ptsanmiguelense.com.mx/b2b-ws/controllers/auth/_api.php?opcion=sign_in`, { email: username, password: password }, { headers })
+      console.log(`https://b2b.ptsanmiguelense.com.mx//b2b-ws/controllers_admin/auth/_api.php?opcion=sign_in`, { email: username, password: password });
+      return this.http.post(`https://b2b.ptsanmiguelense.com.mx//b2b-ws/controllers_admin/auth/_api.php?opcion=sign_in`, { email: username, password: password }, { headers })
          .pipe(
             map((res: any) => {
                console.log(res);
@@ -125,19 +125,20 @@ export class JwtAuthService {
    }
 
    public signout() {
-      this.setUserAndToken("null");
+      this.setUserAndToken(null);
       this.ls.clear();
 
       this.router.navigate(["/login"]);
    }
 
-   isLoggedIn(): Boolean {
-      return !!this.getJwtToken();
+   isLoggedIn(): boolean {
+      return !!this.getJwtToken() ?? false;
    }
 
    getJwtToken() {
-      return this.ls.getItem(config.APP_TOKEN);
+      return this.ls.getItem(config.APP_TOKEN) ?? '';
    }
+   
    getUser() {
       return this.ls.getItem(config.APP_USER);
    }
@@ -147,21 +148,22 @@ export class JwtAuthService {
    }
 
    setUserAndToken(user: any) {
-      const u = user.msg
-      console.log(u);
+      const u = user?.msg
       
-      this.isAuthenticated = !!user.error;
-      this.token = u.token;
+      this.isAuthenticated = !!user?.error;
+      this.token = u?.token ?? '';
       this.user = user;
       // this.user$.next(user);
-      this.ls.setItem(config.APP_TOKEN, u.token);
-      this.ls.setItem(config.APP_USER, u.user_id);
-      if (typeof u.languages == 'number')
-         this.ls.setItem(config.APP_LANG, this.ls.getItem('languages')?.find((lang: any) => lang.id == u.languages))
+      this.ls.setItem(config.APP_TOKEN, u?.token);
+      this.ls.setItem(config.APP_USER, u?.user_id);
+      
+      if (typeof u?.languages == 'number')
+         this.ls.setItem(config.APP_LANG, this.ls.getItem('languages')?.find((lang: any) => lang.id == u?.languages))
       else
-         this.ls.setItem(config.APP_LANG, u.languages)
-      this.ls.setItem(config.APP_PROFILE, u.profile_user_id);
-      this.ls.setItem(config.APP_COMPANY, u.profile_company_id);
+         this.ls.setItem(config.APP_LANG, u?.languages)
+
+      this.ls.setItem(config.APP_PROFILE, u?.profile_user_id);
+      this.ls.setItem(config.APP_COMPANY, u?.profile_company_id);
    }
 
    setUserPhoto(photo: String) {

@@ -5,8 +5,8 @@
       <mat-tab *ngFor="let item of total_req; let index_req = index">
          <ng-template mat-tab-label class="w-full flex gap-x-2">
             <span>Requerimiento {{index_req + 1}}</span>
-            <mat-icon class="ml-4" *ngIf="total_req.length > 1"
-               (click)="master.del_lang_tab_array(total_req, form, index_req, 'req')">close</mat-icon>
+            <icon i="x" class="ml-4" *ngIf="total_req.length > 1"
+               (click)="master.del_lang_tab_array(total_req, form, index_req, 'req')"></icon>
          </ng-template>
          <div
             class="sticky top-0 right-10 left-full w-[7.5rem] z-50 justify-end text-slate-100 rounded-2xl flex gap-x-2">
@@ -40,8 +40,8 @@
                <ng-template mat-tab-label class="w-full flex gap-x-2">
                   <span class="ml-2">{{tab?.emoji}}</span>
                   <span class="ml-2">{{tab?.name}}</span>
-                  <mat-icon class="ml-4" (click)="master.del_lang_tab(tabs, tab.id, master.getterG(master.getterA(form.controls['req']).at(index_req)) , i)"
-                     *ngIf="this.tabs.length > 1 && i !== 0 && tab.id !== 1">close</mat-icon>
+                  <icon i="x" class="ml-4" (click)="master.del_lang_tab(tabs, tab.id, master.getterG(master.getterA(form.controls['req']).at(index_req)) , i)"
+                     *ngIf="this.tabs.length > 1 && i !== 0 && tab.id !== 1"></icon>
                </ng-template>
 
                <div class="flex flex-col gap-y-6 w-full">
@@ -87,13 +87,13 @@
 
                               <mat-form-field appearance="outline" class="w-full" *ngIf="i == 0">
                                  <mat-label>Duration del proyecto(meses)</mat-label>
-                                 <mat-icon class="text-slate-900" matPrefix
-                                    (click)="expiration_date.valueAsNumber = expiration_date.valueAsNumber - 1">remove</mat-icon>
+                                 <icon c="#334155" i="minus" matPrefix
+                                    (click)="expiration_date.valueAsNumber = expiration_date.valueAsNumber - 1">remove</icon>
 
                                  <input #expiration_date formControlName="expiration_date" type="number" matInput
                                     [value]="0">
-                                 <mat-icon class="text-slate-900" matSuffix
-                                    (click)="expiration_date.valueAsNumber = expiration_date.valueAsNumber + 1">add</mat-icon>
+                                 <icon c="#334155" i="plus" matSuffix
+                                    (click)="expiration_date.valueAsNumber = expiration_date.valueAsNumber + 1">add</icon>
                                  <mat-error>Ingresa un valor válido</mat-error>
                               </mat-form-field>
 
@@ -105,7 +105,7 @@
                               </mat-form-field>
 
                               <div class="file-field" #field (click)="uploadPDF(requirement.get('image_url'))"  *ngIf="i == 0">
-                                 <mat-icon *ngIf="!requirement.value.image_url">image</mat-icon>
+                                 <icon i="photo-up" c="#334155" *ngIf="!requirement.value.image_url"></icon>
                                  <img *ngIf="requirement.value.image_url" [src]="requirement.value.image_url" alt=""
                                     class="h-8 rounded-lg aspect-square grow-0">
                                  <div class="absolute left-11" [ngClass]="requirement.value.image_url ? 'top-0 text-xs' : ''">
@@ -204,8 +204,8 @@
       <mat-tab *ngFor="let item of total_req; let index_req = index">
          <ng-template mat-tab-label class="w-full flex gap-x-2">
             <span>Requerimiento {{index_req + 1}}</span>
-            <mat-icon class="ml-4" *ngIf="total_req.length > 1"
-               (click)="master.del_lang_tab_array(total_req, form, index_req, 'req')">close</mat-icon>
+            <icon class="ml-4" *ngIf="total_req.length > 1"
+               (click)="master.del_lang_tab_array(total_req, form, index_req, 'req')">close</icon>
          </ng-template>
          <div
             class="sticky top-0 right-10 left-full w-[7.5rem] z-50 justify-end text-slate-900 rounded-2xl flex gap-x-2">
@@ -216,7 +216,7 @@
             <span class="relative flex h-12 w-12">
                <span #ping class="absolute inline-flex h-full w-full rounded-2xl bg-sky-400 opacity-75"></span>
                <button type="submit" class="relative rounded-2xl p-3 h-12 bg-b2b-2">
-                  <icon [i]="router.url.includes('detail') ? 'edit' : 'plus'"></icon>
+                  <icon [i]="router.url.includes('detail') ? 'device-floppy' : 'plus'"></icon>
                </button>
 
             </span>
@@ -242,8 +242,8 @@
                   <ng-template mat-tab-label class="w-full flex gap-x-2">
                      <span class="ml-2">{{tab?.emoji}}</span>
                      <span class="ml-2">{{tab?.name}}</span>
-                     <mat-icon class="ml-4" (click)="master.del_lang_tab(tabs, i, form, tab.id)"
-                        *ngIf="this.tabs.length > 1 && i !== 0 && tab.id !== 1">close</mat-icon>
+                     <icon class="ml-4" (click)="master.del_lang_tab(tabs, i, form, tab.id)"
+                        *ngIf="this.tabs.length > 1 && i !== 0 && tab.id !== 1">close</icon>
                   </ng-template>
 
                   <div class="flex flex-col gap-y-6 w-full">
@@ -283,10 +283,10 @@
 
                                  <mat-form-field appearance="outline" class="w-full" *ngIf="i == 0">
                                     <mat-label>Duration del proyecto(meses)</mat-label>
-                                    <mat-icon class="text-slate-900" matPrefix (click)="expiration_date.valueAsNumber = expiration_date.valueAsNumber - 1">remove</mat-icon>
+                                    <icon c="#334155" i="minus" matPrefix (click)="expiration_date.valueAsNumber = expiration_date.valueAsNumber - 1">remove</icon>
 
                                     <input #expiration_date formControlName="expiration_date" type="number" matInput [value]="0">
-                                    <mat-icon class="text-slate-900" matSuffix (click)="expiration_date.valueAsNumber = expiration_date.valueAsNumber + 1">add</mat-icon>
+                                    <icon c="#334155" i="plus" matSuffix (click)="expiration_date.valueAsNumber = expiration_date.valueAsNumber + 1">add</icon>
                                     <mat-error>Ingresa un valor válido</mat-error>
                                  </mat-form-field>
 

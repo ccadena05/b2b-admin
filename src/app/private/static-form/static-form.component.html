@@ -2,21 +2,19 @@
    class="bg-white rounded-2xl shadow-lg p-6 relative">
    <div
       class="sticky top-0 right-0 left-full w-[7.5rem] z-50 justify-end text-slate-100 rounded-2xl flex gap-x-2 group">
-      <div type="button" class="btn-del !bg-[#00ef76]" (click)="preview()">
+      <div type="button" class="btn-grn" (click)="preview()">
          <icon i="eye"></icon>
       </div>
 
       <div *ngIf="router.url.includes('detail')" type="button" class="btn-del" (click)="delete()">
          <icon i="trash"></icon>
       </div>
-      <button type="submit" class="btn-1" [disabled]="router.url.includes('detail') ? false : article.invalid">
-         <icon [i]="router.url.includes('detail') ? 'edit' : 'plus'"></icon>
+      <button type="submit" class="btn-1">
+         <icon [i]="router.url.includes('detail') ? 'device-floppy' : 'plus'"></icon>
       </button>
       <div [matMenuTriggerFor]="addLang" class="btn-2">
          <icon i="language" c="#0076ef"></icon>
       </div>
-
-      <div class="btn-1" (click)="delete_nulls(article.value)"></div>
 
       <mat-menu #addLang="matMenu">
          <div *ngFor="let t of tabs; let j = index">
@@ -35,8 +33,8 @@
          <ng-template mat-tab-label class="w-full flex gap-x-2">
             <span>{{tab?.emoji}}</span>
             <span class="ml-2">{{tab?.name}}</span>
-            <mat-icon class="ml-4" (click)="master.del_lang_tab(tabs, tab.id, article, tabs_i)"
-               *ngIf="this.tabs.length > 1 && tabs_i !== 0 && tab.id !== 1">close</mat-icon>
+            <icon i="x" class="ml-4" (click)="master.del_lang_tab(tabs, tab.id, article, tabs_i)"
+               *ngIf="this.tabs.length > 1 && tabs_i !== 0 && tab.id !== 1"></icon>
          </ng-template>
 
          <div [ngClass]="field_width" class="grow" formArrayName="title">
@@ -82,7 +80,7 @@
                   </div>
                   <div (click)="upload(child.get('image_url'))" class="file-field"
                      [ngClass]="child.get('image_url')?.invalid && child.get('image_url')?.touched ? 'border-red-500 text-red-500' : ''">
-                     <mat-icon *ngIf="!child.value.image_url" class="text-[rgba(0,0,0,.54)]">upload_file</mat-icon>
+                     <icon i="photo-up" c="#334155" *ngIf="!child.value.image_url"></icon>
                      <img *ngIf="child.value.image_url" [src]="child.value.image_url" alt=""
                         class="h-8 rounded-lg aspect-square grow-0">
                      <div class="absolute left-11" [ngClass]="child.value.image_url ? 'top-0 text-xs' : ''">
@@ -143,8 +141,7 @@
 
                         <div (click)="upload(carousel.get('image_url'))" class="file-field basis-full"
                            [ngClass]="carousel.get('image_url')?.invalid && carousel.get('image_url')?.touched ? 'border-red-500 text-red-500' : ''">
-                           <mat-icon *ngIf="!carousel.value.image_url"
-                              class="text-[rgba(0,0,0,.54)]">upload_file</mat-icon>
+                           <icon class="photo-up" c="#334155" *ngIf="!carousel.value.image_url">upload_file</icon>
                            <img *ngIf="carousel.value.image_url" [src]="carousel.value.image_url" alt=""
                               class="h-8 rounded-lg aspect-square grow-0">
                            <div class="absolute left-11" [ngClass]="carousel.value.image_url ? 'top-0 text-xs' : ''">
@@ -155,7 +152,7 @@
                            </div>
                         </div>
                         <button *ngIf="ult" type="button" class="btn-2 !w-auto px-3"
-                           (click)="add_carousel_item(master.arr(master.group(child), 'carousel'))">Agregar Imagen al
+                           (click)="add_item(master.arr(master.group(child), 'carousel'), 'carousel')">Agregar Imagen al
                            Carousel</button>
                      </div>
                   </div>
@@ -219,6 +216,9 @@
                            </mat-select>
                         </mat-form-field>
 
+                        <search-select [label]="'Redirreccionar a'" [select]="sel['routes']"
+                           [control]="master.group(card).controls['route']" class="basis-64 grow"></search-select>
+
                         <div class="h-14 w-8 mt-1 flex justify-center items-center"
                            (click)="delete_item(master.arr(master.group(child), 'cards'), cards_i)">
                            <icon i="x" c="#ef0076" matTooltip="Eliminar card"></icon>
@@ -234,7 +234,7 @@
                            </div>
                         </div>
                         <button *ngIf="ult" type="button" class="btn-2 !w-auto px-3"
-                           (click)="add_cards_item(master.arr(master.group(child), 'cards'))">Agregar Card</button>
+                           (click)="add_item(master.arr(master.group(child), 'cards'), 'card')">Agregar Card</button>
                      </div>
                   </div>
 
@@ -243,7 +243,7 @@
 
                <!-- NUMBER CARDS -->
 
-               <div *ngIf="child.value.type == 'number-cards'" class="p-3 bg-[#7600ef]/10 rounded-3xl w-full"
+               <div *ngIf="child.value.type == 'number_cards'" class="p-3 bg-[#7600ef]/10 rounded-3xl w-full"
                   [ngClass]="_uno ? 'mt-6' : ''">
                   <div class="title">Cards Estadísticas</div>
                   <div formArrayName="title" class="basis-64 grow shrink-0">
@@ -382,10 +382,10 @@
 
                         <div class="basis-full flex gap-6 mb-6">
                            <button type="button" class="btn-2 !w-auto px-3"
-                              (click)="add_linetime_child(acontecimiento.get('children'))">Agregar
+                              (click)="add_item(acontecimiento.get('children'), 'linetime')">Agregar
                               sub-acontecimiento</button>
                            <button type="button" class="btn-2 !w-auto px-3" *ngIf="ult"
-                              (click)="add_linetime_item(master.arr(master.group(child), 'linetime'))">Agregar
+                              (click)="add_item(master.arr(master.group(child), 'linetime'), 'linetime')">Agregar
                               acontecimiento</button>
                         </div>
 
@@ -460,20 +460,20 @@
             </div>
          </div>
 
-         <div class="flex gap-6 mt-6">
-            <button type="button" (click)="add_section()" class="btn-1 !w-auto px-3 flex gap-x-3">
+         <div class="flex flex-wrap gap-6 mt-6">
+            <button type="button" (click)="add('text')" class="btn-1 !w-auto px-3 flex gap-x-3">
                <icon i="section" class="!max-w-[1.5rem] !max-h-[1.5rem]"></icon>
                Agregar sección
             </button>
-            <button type="button" (click)="add_carousel()" class="btn-1 !w-auto px-3 flex gap-x-3">
+            <button type="button" (click)="add('carousel')" class="btn-1 !w-auto px-3 flex gap-x-3">
                <icon i="carousel-horizontal" class="!max-w-[1.5rem] !max-h-[1.5rem]"></icon>
                Agregar carousel
             </button>
-            <button type="button" (click)="add_card()" class="btn-1 !w-auto px-3 flex gap-x-3">
+            <button type="button" (click)="add('card')" class="btn-1 !w-auto px-3 flex gap-x-3">
                <icon i="rectangle-vertical" class="!max-w-[1.5rem] !max-h-[1.5rem]"></icon>
                Agregar cards
             </button>
-            <button type="button" (click)="add_linetime()" class="btn-1 !w-auto px-3 flex gap-x-3">
+            <button type="button" (click)="add('linetime')" class="btn-1 !w-auto px-3 flex gap-x-3">
                <icon i="timeline-event" class="!max-w-[1.5rem] !max-h-[1.5rem]"></icon>
                Agregar línea del tiempo
             </button>

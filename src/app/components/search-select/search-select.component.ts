@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { AbstractControl, ControlContainer, FormControl, FormGroup, FormGroupDirective } from '@angular/forms';
+import { LanguageService } from 'src/app/services/language.service';
 // import { TranslateService } from '@ngx-translate/core';
 
 
@@ -28,6 +29,7 @@ export class SearchSelectComponent implements OnInit, OnChanges, AfterViewInit {
    // @Output() response: EventEmitter<any> = new EventEmitter();
 
    constructor(
+      public lang: LanguageService
       // public translate: TranslateService,
    ) {
    }

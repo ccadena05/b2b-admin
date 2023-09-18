@@ -116,7 +116,7 @@ export class ProviderService {
 
    getJwtToken() {
       //console.log(this.ls.getItem(this.JWT_TOKEN));
-      return this.ls.getItem(config.APP_TOKEN);
+      return this.ls.getItem(config.APP_TOKEN) || '';
    }
 
    getUser() {
@@ -132,7 +132,7 @@ export class ProviderService {
    }
 
    headers() {
-      return new HttpHeaders().set('Authorization', this.jwt.getJwtToken()).set('Simpleauthb2b', '4170ae818f2e146c48cf824667947b25')
+      return new HttpHeaders().set('Authorization', this.jwt.getJwtToken() || '').set('Simpleauthb2b', '4170ae818f2e146c48cf824667947b25')
    }
 
    params(params: any) {

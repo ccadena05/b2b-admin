@@ -7,7 +7,7 @@
          <div class="h-12 w-12 flex shadow-xl rounded-xl overflow-hidden">
             <button (click)="add()"
                class="bg-b2b-2 text-white h-12 w-12 shrink-0 grow-0 flex justify-center items-center">
-               <mat-icon class="m-auto">add</mat-icon>
+               <icon i="plus" class="m-auto"></icon>
             </button>
             <!-- <button [matMenuTriggerFor]="menu"
                class="bg-white dark:!bg-dark-blue-50 text-slate-500 dark:text-slate-300 h-12 w-12 flex">
@@ -34,6 +34,67 @@
       <!-- <div *ngIf="readyT"> -->
       <div class="overflow-x-scroll">
 
+         <ng-container *ngIf="modulo =='companies' || modulo =='users'; else rfq">
+            <h1 class="title">
+               {{masterSection}} Aprobados
+            </h1>
+            <app-mat-table [dataToDisplay]="dataToDisplay" [action]="edit"></app-mat-table>
+            <h1 class="title">
+               {{masterSection}} Pendientes
+            </h1>
+            <app-mat-table [dataToDisplay]="dataToDisplay1" [action]="edit"></app-mat-table>
+         </ng-container>
+         <ng-template #rfq>
+            <ng-container *ngIf="modulo =='rfq'; else default">
+               <h1 class="title">
+                  Requerimientos
+               </h1>
+               <app-mat-table [dataToDisplay]="dataToDisplay" [action]="edit"></app-mat-table>
+               <h1 class="title">
+                  RFQ's
+               </h1>
+               <app-mat-table [dataToDisplay]="dataToDisplay1" [action]="edit"></app-mat-table>
+            </ng-container>
+         </ng-template>
+         <ng-template #default>
+            <h1 class="title">
+               {{masterSection}}
+            </h1>
+            <app-mat-table [dataToDisplay]="dataToDisplay" [action]="edit"></app-mat-table>
+         </ng-template>
+
+<!--          <div [ngSwitch]="modulo">
+            <div *ngSwitchCase="modulo =='companies' || modulo =='users'">
+               aaa
+               <h1 class="title">
+                  {{masterSection}} Aprobados
+               </h1>
+               <app-mat-table [dataToDisplay]="dataToDisplay" [action]="edit"></app-mat-table>
+               <h1 class="title">
+                  {{masterSection}} Pendientes
+               </h1>
+               <app-mat-table [dataToDisplay]="dataToDisplay1" [action]="edit"></app-mat-table>
+            </div>
+
+            <div *ngSwitchCase="modulo =='rfq'">
+               <h1 class="title">
+                  Requerimientos
+               </h1>
+               <app-mat-table [dataToDisplay]="dataToDisplay" [action]="edit"></app-mat-table>
+               <h1 class="title">
+                  RFQ's
+               </h1>
+               <app-mat-table [dataToDisplay]="dataToDisplay1" [action]="edit"></app-mat-table>
+            </div>
+
+            <div *ngSwitchDefault>
+               <h1 class="title">
+                  {{masterSection}} def
+               </h1>
+               <app-mat-table [dataToDisplay]="dataToDisplay" [action]="edit"></app-mat-table>
+            </div>
+         </div> -->
+         <!-- 
          <div *ngIf="_modulo === 'events'">
             <h1 class="title">
                Eventos
@@ -73,6 +134,17 @@
             <app-mat-table [dataToDisplay]="dataToDisplay" [action]="edit"></app-mat-table>
          </div>
 
+         <div *ngIf="_modulo === 'users'">
+            <h1 class="title">
+               Usuarios Aprobados
+            </h1>
+            <app-mat-table [dataToDisplay]="dataToDisplay" [action]="edit"></app-mat-table>
+            <h1 class="title">
+               Usuarios Pendientes
+            </h1>
+            <app-mat-table [dataToDisplay]="dataToDisplay1" [action]="edit"></app-mat-table>
+         </div>
+ -->
       </div>
       <!-- <app-mat-table [dataToDisplay]="dataToDisplay?.['is_rfq_approved']" [action]="viewCompany"></app-mat-table> -->
 

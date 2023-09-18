@@ -14,9 +14,9 @@ export class PreviewComponent implements OnInit {
     public lang: LanguageService,
 
     @Inject(MAT_BOTTOM_SHEET_DATA) public data: any
-  ) { 
+  ) {
     console.log(data);
-    
+
   }
 
   ngOnInit(): void {
@@ -25,9 +25,9 @@ export class PreviewComponent implements OnInit {
   prev() {
     this.car.nativeElement.scrollBy(-(this.car.nativeElement.scrollWidth / 4), 0)
 
- }
- next() {
+  }
+  next() {
     this.car.nativeElement.scrollBy(this.car.nativeElement.scrollWidth / 4, 0)
- }
+  }
 
 }

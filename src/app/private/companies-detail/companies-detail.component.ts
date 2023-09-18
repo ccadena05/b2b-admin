@@ -16,6 +16,8 @@ import { Response } from 'src/app/models/response.model';
 import { MatRadioButton } from '@angular/material/radio';
 import { cloneDeep } from 'lodash';
 import { ActivatedRoute, Router } from '@angular/router';
+import { LanguageService } from 'src/app/services/language.service';
+import { Language } from 'src/app/models/language.model';
 
 declare var google: any;
 
@@ -25,31 +27,90 @@ declare var google: any;
    styleUrls: ['./companies-detail.component.scss']
 })
 export class CompaniesDetailComponent implements OnInit {
-
    private typingTimer: any;
-   tabs: any = [{ id: '1', name: 'English', language: 'EN', emoji: '🇺🇸' }];
+   tabs: Language[] = [this.lang.user_lang];
    available_langs: any = [];
    all_countries: any = [];
-
+   selected_all: any = [];
+   selected_all_name: any = [];
    form: FormGroup;
    sel: any = [];
    selectedCountry: any;
    selectedState: any;
    fullLanguage: any;
+   comp: any;
    readonly separatorKeysCodes = [ENTER, COMMA] as const;
    @ViewChild('a') slide_dia!: MatSlideToggle;
    @ViewChild('consi') consi!: MatRadioButton
    @ViewChild('ping') ping!: ElementRef;
-   cat: any[] = [
-      "Components, parts and systems",
-      "Smart manufacturing and Industry 4.0",
-      "Manufacturing and fabrication processes",
-      "Original equipment assembly/manufacturing",
-      "Products",
-      "Raw Materials",
-      "Services",
-      "Levels",
-   ]
+   clusters: any = [{
+      id: '1',
+      name: 'Cluster Automotriz de San Luis Potosí'
+   },
+   {
+      id: '2',
+      name: 'Clúster Automotriz Zona Centro'
+   },
+   {
+      id: '3',
+      name: 'Cluster Automotriz de Querétaro'
+   },
+   {
+      id: '4',
+      name: 'Cluster de la Industria Automotriz de Coahuila'
+   },
+   {
+      id: '5',
+      name: 'Cluster Automotriz del Estado de México'
+   },
+   {
+      id: '6',
+      name: 'Cluster Automotriz de Nuevo León'
+   },
+   {
+      id: '7',
+      name: 'Cluster de Tecnologías de la Información Guanajuato'
+   },
+   {
+      id: '20230912103352cRmDysiSvk6oXDbEPV',
+      name: 'Cluster Automotriz de Guanajuato, A.C. (CLAUGTO)'
+   },
+   {
+      id: '9',
+      name: 'Cluster Logístico y Movilidad Guanajuato'
+   },
+   {
+      id: '10',
+      name: 'Cluster Aeroespacial del Bajío'
+   },
+   {
+      id: '11',
+      name: 'Cluster Automotriz de Jalisco'
+   },
+   {
+      id: '12',
+      name: 'Red Nacional de Clusters de la Industria Automotriz'
+   },
+   {
+      id: '13',
+      name: 'Cluster Automotriz de Chihuahua'
+   },
+   {
+      id: '14',
+      name: 'Clúster Industrial'
+   },
+   {
+      id: '15',
+      name: 'Clúster Industrial de Aguascalientes'
+   },
+   {
+      id: '16',
+      name: 'Clúster de la Industria de Manufactura Avanzada y Automotriz de la Laguna A.C'
+   },
+   {
+      id: '17',
+      name: 'Asociación de Parques Industriales Privados del Estado de Guanajuato (APIPEG).'
+   }]
 
    certifications: any = []
 
@@ -89,6 +150,10 @@ export class CompaniesDetailComponent implements OnInit {
    lat: any = 19.4326806;
    lng: any = -99.1332704;
    location: any;
+
+   company_clusters: any = [];
+   company_categories: any = [];
+   company_categories_name: any = [];
 
    products: any = [
       {
@@ -151,32 +216,36 @@ export class CompaniesDetailComponent implements OnInit {
    ];
 
    constructor(
+      public router: Router,
+      public ls: LocalStoreService,
       public master: MasterService,
       public provider: ProviderService,
-      public ls: LocalStoreService,
-      private formBuilder: FormBuilder,
+
+      private lang: LanguageService,
       private output: OutputService,
-      private manager: CloudinaryWidgetManager,
+      private formBuilder: FormBuilder,
       private activatedRoute: ActivatedRoute,
-      public router: Router
+      private manager: CloudinaryWidgetManager,
    ) {
+      console.log(this.lang.user_lang);
+
       this.form = this.formBuilder.group({
-         // profile_company_id: [this.__id],
-         id: [this.__id],
-         legal_name: this.formBuilder.array([this.master.createTranslation('1')]),
+         profile_company_id: [null],
+         id: [null],
+         legal_name: this.formBuilder.array([this.master.translation(this.lang.user_lang.id, null)]),
          friendly_name: [null],
-         rfc: [null, Validators.required], //QUITAR TRADUCCION
-         email_company: [null, [Validators.required, Validators.email]],
+         rfc: [null, Validators.required], 
+         email_company: [null, Validators.email],
          phone_code: [null],
          phone: [null],
          ext: [null],
          phone_switch: [null],
          phone_fax: [null],
-         main_activity: this.formBuilder.array([this.master.createTranslation('1')]),
+         main_activity: this.formBuilder.array([this.master.translation(this.lang.user_lang.id, null)]),
          start_year: [null],
-         type_company_id: [null],
+         type_company_id: [null, Validators.required],
          country_origin: [null],
-         country: [null],
+         country: [null, Validators.required],
          state: [null],
          city: [null],
          zip: [null],
@@ -189,8 +258,8 @@ export class CompaniesDetailComponent implements OnInit {
          tags: [null],
          brochure_name: [null],
          brochure_url: [null],
-         description: this.formBuilder.array([this.master.createTranslation('1')]),
-         description_detail: this.formBuilder.array([this.master.createTranslation('1')]),
+         description: this.formBuilder.array([this.master.translation(this.lang.user_lang.id, null)]),
+         description_detail: this.formBuilder.array([this.master.translation(this.lang.user_lang.id, null)]),
          schedule_week: this.formBuilder.group({
             sunday: [null],
             monday: [null],
@@ -210,13 +279,13 @@ export class CompaniesDetailComponent implements OnInit {
          consi: [null],
          pisi: [null],
          categories_company: this.formBuilder.array([]),
-         company_payment: this.formBuilder.array([this.master.createTranslation('1')]),
+         company_payment: this.formBuilder.array([this.master.translation(this.lang.user_lang.id, null)]),
          support_clients: [null],
          service_cluster: [null],
-         main_processes: this.formBuilder.array([this.master.createTranslation('1')]),
-         production_capacity: this.formBuilder.array([this.master.createTranslation('1')]),
-         machinery: this.formBuilder.array([this.master.createTranslation('1')]),
-         guarantees_offered: this.formBuilder.array([this.master.createTranslation('1')]),
+         main_processes: this.formBuilder.array([this.master.translation(this.lang.user_lang.id, null)]),
+         production_capacity: this.formBuilder.array([this.master.translation(this.lang.user_lang.id, null)]),
+         machinery: this.formBuilder.array([this.master.translation(this.lang.user_lang.id, null)]),
+         guarantees_offered: this.formBuilder.array([this.master.translation(this.lang.user_lang.id, null)]),
          quality_awards: [null],
          cert: [],
          isos: this.formBuilder.array([]),
@@ -226,18 +295,24 @@ export class CompaniesDetailComponent implements OnInit {
          youtube: [null, Validators.pattern(/^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtube\.com\/embed\/|youtu\.be\/)[a-zA-Z0-9_-]+(\/)?(\?[\w=&]*)?(#([\w-]+))?$/i)],
          number_employees: [null],
          turnover: [null],
-         specialization: this.formBuilder.array([this.master.createTranslation('1')]),
-         another_sector: this.formBuilder.array([this.master.createTranslation('1')]),
-         relevant_products: this.formBuilder.array([this.master.createTranslation('1')]),
+         specialization: this.formBuilder.array([this.master.translation(this.lang.user_lang.id, null)]),
+         another_sector: this.formBuilder.array([this.master.translation(this.lang.user_lang.id, null)]),
+         relevant_products: this.formBuilder.array([this.master.translation(this.lang.user_lang.id, null)]),
          image_url: [null],
          hidden: [null],
-         validated: [null],
-         membership: [null],
-         membership_start_date: [null],
-         membership_end_date: [null],
-         user_limit: [0],
-         product_limit: [0],
+         approved: [null],
+         type_membership_id: [null, Validators.required],
+         membership_creation_date: [null],
+         membership_expiration_date: [null],
+         limit_users: [0, Validators.required],
+         limit_products: [0],
          active_user_limit: [0],
+         clusters: this.formBuilder.array([]),
+         approved_from_db: [null],
+         first_category: [null],
+         first_categories: [null],
+         first_sub_categories: [null],
+         user_create: [this.ls.getItem(config.APP_USER)]
       })
 
 
@@ -254,6 +329,7 @@ export class CompaniesDetailComponent implements OnInit {
    }
 
    ngOnInit(): void {
+
    }
 
    ngAfterViewInit() {
@@ -272,7 +348,7 @@ export class CompaniesDetailComponent implements OnInit {
       if (_cert.length > _isos.length) { // Se añadió un nuevo ISO
          for (const iso of _cert) {
             if (!_isos.includes(iso))  // No estaba antes, hacer push
-               isos_array.push(this.createCertificate(iso, this.findCert(iso).name))
+               isos_array.push(this.master.certificate(iso, this.findCert(iso).name))
 
          }
       } else if ((_cert.length < _isos.length)) { // Se quitó un ISO
@@ -308,81 +384,105 @@ export class CompaniesDetailComponent implements OnInit {
       this.countries();
       this.provider.BD_ActionGet('general', 'get_languages').subscribe(
          (languages: Response) => {
-            // console.log(languages.msg);
             this.available_langs = languages.msg
 
             this.provider.BD_ActionGet('general', 'get_isos').subscribe(
                (isos: Response) => {
-                  // console.log(isos);
                   this.cert = this.certifications = isos?.msg
 
                   this.provider.BD_ActionGet('general', 'get_type_company').subscribe(
                      (type_company: Response) => {
-                        // console.log(type_company);
 
-                        if (!type_company.error)
+                        if (!type_company.error) {
                            this.sel['type_company'] = type_company.msg
+                           this.provider.BD_ActionGet('searcher', 'get_category_searcher', { tree_size: 0 }).subscribe(
+                              (category_searcher: Response) => {
+                                 console.log(category_searcher.msg);
+                                 this.sel['category_searcher'] = category_searcher.msg
 
-                        this.provider.BD_ActionAdminGet('companies', 'get_company_by_id', { id: atob(this.__id) }).subscribe(
-                           (company: Response) => {
-                              console.log('Viene de DB', company);
-                              if (!company.error) {
-                                 let comp = company?.msg;
-                                 comp.state = comp.state.toString()
-                                 comp.city = comp.city.toString()
-                                 // comp = this.ls.getItem('COMPANY_FORM');
-                                 let _isos: any = []
-                                 comp?.isos?.forEach((element: any) => {
-                                    _isos?.push(element?.name_id.toString())
-                                    let qawards = this.master.getterA(this.form.controls['isos']);
-                                    qawards.push(this.createCertificate(null))
-                                 })
-                                 // console.log();
+                                 if (this.router.url.includes('detail')) {
+                                    this.provider.BD_ActionAdminGet('companies', 'get_company_by_id', { profile_company_id: atob(this.__id) }).subscribe(
+                                       (company: Response) => {
+                                          console.log('Viene de DB', company);
+                                          if (!company.error) {
+                                             this.comp = company?.msg;
+                                             this.comp.state = this.comp?.state?.toString()
+                                             this.comp.city = this.comp?.city?.toString()
+                                             this.comp.type_company_id = this.comp?.type_company_id?.toString()
+                                             // comp = this.ls.getItem('COMPANY_FORM');
+                                             let _isos: any = []
+                                             this.comp?.isos?.forEach((element: any) => {
+                                                _isos?.push(element?.name_id.toString())
+                                                let qawards = this.master.getterA(this.form.controls['isos']);
+                                                qawards.push(this.master.certificate(null))
+                                             })
 
-                                 // comp.tags = comp.tags.split(',')
+                                             this.form.get('cert')?.patchValue(_isos)
+                                             this.comp?.categories_company?.forEach((element: any) => {
+                                                this.master.getterA(this.form.controls['categories_company']).push(this.master.createSimpleTranslation())
+                                             });
 
-                                 this.form.get('cert')?.patchValue(_isos)
-                                 /* comp?.legal_name?.forEach((element: any) => {
+                                             /*  if (this.ls.getItem('COMPANY_FORM'))
+                                                 this.master.patch(this.master.compare_object(comp, this.ls.getItem('COMPANY_FORM')), this.form, this.tabs)
+                                              else */
+                                             this.master.patch(this.comp, this.form, this.tabs)
 
-                                    if (element.languages_id != 1) {
-                                       this.master.createTranslation(element.languages_id)
-                                       this.addTab(this.language_index(element.languages_id))
-                                    }
-                                 }); */
+                                             console.log(this.form.value);
 
-                                 comp?.categories_company?.forEach((element: any) => {
-                                    this.master.getterA(this.form.controls['categories_company']).push(this.master.createSimpleTranslation())
-                                 });
+                                             // console.log('FORM VALUE', this.form.value);
 
-                                /*  if (this.ls.getItem('COMPANY_FORM'))
-                                    this.master.patch(this.master.compare_object(comp, this.ls.getItem('COMPANY_FORM')), this.form, this.tabs)
-                                 else */
-                                    this.master.patch(comp, this.form, this.tabs)
+                                             this.createPIN((this.comp.latitude || this.lat), (this.comp.longitude || this.lng))
+                                             Object.keys(this.master.getterG(this.form.controls['schedule_week']).controls).forEach(element => {
+                                                this.slideHasValue('schedule_week', element)
+                                             });
 
-                                 console.log(this.form.value);
+                                             this.comp.clusters?.forEach((cluster: any) => {
+                                                if (cluster.active == 1)
+                                                   this.company_clusters.push(cluster.cluster_id)
+                                             });
 
-                                 // console.log('FORM VALUE', this.form.value);
-
-                                 this.createPIN((comp.latitude || this.lat), (comp.longitude || this.lng))
-                                 Object.keys(this.master.getterG(this.form.controls['schedule_week']).controls).forEach(element => {
-                                    this.slideHasValue('schedule_week', element)
-                                 });
-
-                                 // this.form.controls['consi']?.patchValue(this.master.turn_check([this.master.getterC(this.form.controls['support_clients']), this.master.getterC(this.form.controls['service_cluster'])]) || this.ls.getItem('COMPANY_FORM')?.consi)
-                                 // this.form.controls['pisi']?.patchValue(this.master.turn_check_array([this.master.getterA(this.form.controls['main_processes']), this.master.getterA(this.form.controls['production_capacity'])]) || this.ls.getItem('COMPANY_FORM')?.pisi)
-
-                                 this.output.ready.next(true)
-                                 this.output.table_ready.next(true)
-                              }
-                           }
-                        )
+                                             // this.form.controls['consi']?.patchValue(this.master.turn_check([this.master.getterC(this.form.controls['support_clients']), this.master.getterC(this.form.controls['service_cluster'])]) || this.ls.getItem('COMPANY_FORM')?.consi)
+                                             // this.form.controls['pisi']?.patchValue(this.master.turn_check_array([this.master.getterA(this.form.controls['main_processes']), this.master.getterA(this.form.controls['production_capacity'])]) || this.ls.getItem('COMPANY_FORM')?.pisi)
+                                             this.ls.update('bc', [
+                                                {
+                                                   item: 'Empresas',
+                                                   link: '/m/companies'
+                                                },
+                                                {
+                                                   item: this.comp.friendly_name,
+                                                   link: null
+                                                }
+                                             ])
+                                             this.output.ready.next(true)
+                                             this.output.table_ready.next(true)
+                                          }
+                                       }
+                                    )
+                                 } else {
+                                    this.ls.update('bc', [
+                                       {
+                                          item: 'Empresas',
+                                          link: '/m/companies'
+                                       },
+                                       {
+                                          item: 'Agregar',
+                                          link: null
+                                       }
+                                    ])
+                                 }
+                              })
+                        }
                      }
                   )
                }
 
             )
+      console.log(this.form.value);
+
          }
+
       )
+      
    }
 
    countries() {
@@ -396,6 +496,52 @@ export class CompaniesDetailComponent implements OnInit {
       )
    }
 
+   onCategorySelected(category: any): void {
+      if (this.form.value['first_categories']?.[category.generation] != category.id) {
+         this.selected_all[category.generation] = category.id;
+         this.selected_all_name[category.generation] = category['ES'] ?? category['EN'];
+         while (this.selected_all[category.generation + 1])
+            this.selected_all.pop()
+            // this.selected_all_name.pop()
+
+         this.form.controls['first_categories'].patchValue(this.selected_all)
+      }
+
+      // this.form.controls['parent_id'].patchValue(this.selected_all[this.selected_all.length - 1])
+      this.form.controls['first_category'].patchValue(this.selected_all[0])
+      this.form.controls['first_sub_categories'].patchValue(this.selected_all[this.selected_all.length - 1])
+
+      const categoryId = category.id;
+
+      this.provider.BD_ActionGet('searcher', 'get_category_searcher', { tree_size: 0, id_category: categoryId })
+         .subscribe((category_blogs: Response) => {
+
+            category.children = category_blogs.msg;
+         });
+      // console.log(this.form.value);
+   }
+
+   push_category() {
+      if (this.router.url.includes('detail')){
+         this.master.arr(this.form, 'categories_company').push(this.master.category(atob(this.__id), this.selected_all[this.selected_all.length - 1]))
+      }
+      else{
+         this.company_categories.push(this.selected_all[this.selected_all.length - 1]);
+         this.company_categories_name.push({id: this.selected_all[this.selected_all.length - 1], name: this.selected_all_name[this.selected_all_name.length - 1]})
+         this.selected_all_name = []
+      }
+   }
+
+   pop_category(i: any) {
+      if (this.router.url.includes('detail')){
+         this.master.arr(this.form, 'categories_company').removeAt(i)
+      }
+      else{
+         this.company_categories.splice(i, 1)
+         this.company_categories_name.splice(i, 1)
+      }
+   }
+
    language_index(language_id: string) {
       return this.available_langs[this.available_langs.findIndex((obj: any) => obj.id == language_id)]
    }
@@ -407,93 +553,23 @@ export class CompaniesDetailComponent implements OnInit {
          slide.setValue(true)
    }
 
-   addTab(language: any) {
-      if (!this.tabs.some((item: any) => item.id == language.id) && (language.id != '1' || language.id != 1)) {
-         this.tabs.push(language);
-         Object.keys(this.form.controls).forEach(element => {
-            if (this.form.controls[element] instanceof FormArray && element !== 'isos' && element !== 'schedule_week' && element != 'categories_company')
-               this.master.getterA(this.form.controls[element]).push(this.master.createTranslation(language.id))
-         })
-      }
-   }
-
-   deleteTab(index: any, languages_id: any) {
-      if (this.tabs.length > 1) {
-         this.tabs.splice(index, 1)
-
-         Object.keys(this.form.controls).forEach(element => {
-            if (this.form.controls[element] instanceof FormArray && element !== 'isos' && element !== 'schedule_week' && element != 'categories_company') {
-               const formArray = this.master.getterA(this.form.controls[element]);
-               const indexToRemove = formArray.controls.findIndex(
-                  control => control.value.languages_id == languages_id
-               )
-               if (indexToRemove >= 0) {
-                  formArray.at(indexToRemove).get('active')?.patchValue('0')
-               }
-               // formArray.removeAt(indexToRemove)
-            }
-         });
-      }
-   }
-
    save() {
       // console.log(this.form.value.tags.toString());
 
       this.ping.nativeElement.classList.remove('animate-ping');
-      this.form.value.schedule_week = JSON.stringify(this.form.value.schedule_week)
-
-      if (this.form.valid) {
-         this.provider.BD_ActionAdminPut('companies', 'update_company', this.form.value).subscribe(
-            (data: Response) => {
-               console.log(data);
-
-               if (!data.error) {
-                  this.ls.setItem('COMPANY_FORM', this.form.value)
-                  setTimeout(() => {
-                     this.form.reset()
-                     setTimeout(() => {
-                        this.master.snack(2)
-                        this.get()
-                     }, 500);
-                  }, 500);
-
-               }
-               else
-                  this.master.snack(0)
-
-            }
-         )
-      } else {
-         this.master.invalid_form('company-form')
+      this.form.value.schedule_week = JSON.stringify(this.form.value?.schedule_week)
+      this.form.value.approved_from_db = this.form.value?.approved
+      if(this.router.url.includes('detail'))
+         this.form.value.profile_company_id = atob(this.__id);
+      else{
+         this.form.value.categories_company = this.company_categories;
+         this.form.value.clusters = this.company_clusters;
       }
-      // this.form.value.tags = this.form.value.tags.toString()
-      // console.log(this.form.value);
-      /*  
- 
-       ) */
+      console.log(this.form.value);
+      
+      // this.master.save('companies', 'update_company', this.form.value, true)
+
    }
-
-   /*    createTranslation(languages_id: any): FormGroup {
-         return this.formBuilder.group({
-            id: [null, Validators.required],
-            identifier: [null, Validators.required],
-            languages_id: [languages_id, Validators.required],
-            text: [null, Validators.required],
-            active: ['1', Validators.required],
-         });
-      } */
-
-   createCertificate(name_id: any, name?: any): FormGroup {
-      return this.formBuilder.group({
-         id: [null],
-         name: [name, Validators.required],
-         name_id: [name_id, Validators.required],
-         // file_name: [''],
-         url: [null, Validators.required],
-         active: ['1', Validators.required]
-      });
-   }
-
 
    order(object: any) {
       return object.sort((a: any, b: any) => a.name < b.name ? -1 : a.name > b.name ? 1 : 0);
@@ -582,25 +658,6 @@ export class CompaniesDetailComponent implements OnInit {
       }
    }
 
-   /* 
-      toggleCertification(event: any, name: any) {
-         let qawards = this.master.getterA(this.form.controls['isos']);
-   
-         if (event.source._selected) {
-            qawards.push(this.createCertificate(name))
-         } else {
-            let qawards = this.master.getterA(this.form.controls['isos']);
-   
-            const indexToRemove = qawards.controls.findIndex(
-               control => control.value.name == name
-            )
-            // qawards.removeAt(indexToRemove)
-               console.log(name, indexToRemove);
-            
-               qawards.at(indexToRemove).get('active')?.patchValue('0')
-         }
-      } */
-
    findCert(name_id: string) {
       return this.certifications.find((cert: any) => cert.name_id == name_id)
    }
@@ -614,11 +671,6 @@ export class CompaniesDetailComponent implements OnInit {
          this.form.controls[control].updateValueAndValidity()
       });
    }
-   /* 
-      filterSelect(v: any) {
-         console.log(v);
-         this.cert = this.certifications.filter((row: any) => (row.name).toLowerCase().includes(v.toLowerCase()))
-      } */
 
    @HostListener('document:keyup', ['$event'])
    backup_form(event: KeyboardEvent) {
@@ -654,5 +706,25 @@ export class CompaniesDetailComponent implements OnInit {
 
    addrfq() {
       this.router.navigate(['/m/rfq', 'add'])
+   }
+
+   add_cluster(event: any, c_id: any) {
+      if (event.checked) { // Se añadió un cluster
+         if (this.router.url.includes('detail')){
+            this.master.arr(this.form, 'clusters').push(this.master.create_cluster(c_id, atob(this.__id)))
+         } else {
+            this.company_clusters.push(c_id);
+         }
+      } else { // Se quitó un cluster
+         let index = this.form.value.clusters.findIndex((cluster: any) => cluster.cluster_id == c_id)
+
+         if (index != -1) {
+            if (this.master.arr(this.form, 'clusters').at(index).value.id) // Ya existía en DB
+               this.master.arr(this.form, 'clusters').at(index).get('active')?.patchValue('0')
+            else //Se seleccionó y desseleccionó
+               this.master.arr(this.form, 'clusters').removeAt(index)
+         }
+      }
+      console.log(this.form.value.clusters);
    }
 }

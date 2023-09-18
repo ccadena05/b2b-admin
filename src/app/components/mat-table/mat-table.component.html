@@ -26,13 +26,13 @@
             <span *ngIf="!column?.header?.includes('00') && !values?.includes(column?.cell(row))" [innerHTML]="match_date(column?.cell(row)) ? (column?.cell(row) | date) : column?.cell(row)">
             </span>
             <p class="h-6 w-6 rounded-full flex justify-center items-center" [ngStyle]="{'background': rfq[column?.cell(row)]?.hex}" *ngIf="column?.header?.includes('RFQ')">
-               <i class="fa-solid fa-{{rfq[column?.cell(row)]?.icon}}" [ngStyle]="{'color': rfq[column?.cell(row)]?.color}"></i>
+               <icon [i]="rfq[column?.cell(row)]?.icon" [c]="rfq[column?.cell(row)]?.color" class="scale-75"></icon>
             </p>
             <p class="h-6 w-6 rounded-full flex justify-center items-center" [ngStyle]="{'background': apd[column?.cell(row)]?.hex}" *ngIf="column?.header?.includes('APPROVED')">
-               <i class="fa-solid fa-{{apd[column?.cell(row)]?.icon}}"  [ngStyle]="{'color': apd[column?.cell(row)]?.color}"></i>
+               <icon [i]="apd[column?.cell(row)]?.icon" [c]="apd[column?.cell(row)]?.color" class="scale-75"></icon>
             </p>
             <img *ngIf="column?.header?.includes('00') && column?.cell(row) && column?.cell(row) != null" (error)="img[column?.cell(row)] = true" [ngClass]="img[column?.cell(row)] == true ? 'hidden' : ''" [src]="column?.cell(row)" alt="" class="h-8 w-6 object-cover rounded-lg scale-110">
-            <mat-icon class="text-slate-400" *ngIf="column?.header?.includes('00') && (column?.cell(row) == 'null' || column?.cell(row) == null)">image</mat-icon>
+            <icon c="#334155" i="photo" *ngIf="column?.header?.includes('00') && (column?.cell(row) == 'null' || column?.cell(row) == null)"></icon>
          </td>
       </div>
    </ng-container>

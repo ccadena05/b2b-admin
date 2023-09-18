@@ -913,7 +913,7 @@
 }
 .ql-snow .ql-tooltip a.ql-action::after {
   border-right: 1px solid #ccc;
-  content: 'Edit';
+  content: 'device-floppy';
   margin-left: 16px;
   padding-right: 8px;
 }

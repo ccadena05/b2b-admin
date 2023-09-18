@@ -5,7 +5,7 @@
          <icon i="trash"></icon>
       </div>
       <button type="submit" class="btn-1">
-         <icon [i]="router.url.includes('detail') ? 'edit' : 'plus'"></icon>
+         <icon [i]="router.url.includes('detail') ? 'device-floppy' : 'plus'"></icon>
       </button>
       <div [matMenuTriggerFor]="addLang" class="btn-2">
          <icon i="language" c="#0076ef"></icon>
@@ -26,8 +26,8 @@
          <ng-template mat-tab-label class="w-full flex gap-x-2">
             <span>{{tab?.emoji}}</span>
             <span class="ml-2">{{tab?.name}}</span>
-            <mat-icon class="ml-4" (click)="master.del_lang_tab(tabs, tab.id, form, i)"
-               *ngIf="this.tabs.length > 1 && i !== 0 && tab.id !== 1">close</mat-icon>
+            <icon class="ml-4" i="x" (click)="master.del_lang_tab(tabs, tab.id, form, i)"
+               *ngIf="this.tabs.length > 1 && i !== 0 && tab.id !== 1">close</icon>
          </ng-template>
 
          <div class="flex flex-col gap-y-6 overflow-x-hidden">
@@ -188,7 +188,7 @@
                   [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
                   <div class="flex gap-x-3 justify-between items-center w-full file-field">
                      <div class="flex gap-x-3">
-                        <mat-icon class="text-[rgba(0,0,0,.54)]">video_library</mat-icon>
+                        <icon i="video-plus" c="#334155">video_library</icon>
                         Agregar nuevo enlace para galería de vídeo
                      </div>
                      <div class="btn-1"
@@ -220,7 +220,7 @@
                <div class="flex basis-full" *ngIf="i == 0 && router.url.includes('detail')"
                   [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
                   <div (click)="uploadGallery(form.controls['image_gallery'])" class="file-field !w-full !h-20">
-                     <mat-icon class="text-[rgba(0,0,0,.54)]">photo_library</mat-icon>
+                     <icon i="slideshow" c="#334155"></icon>
                      <div class="absolute left-11 duration-300"
                         [ngClass]="form.value?.image_gallery?.length > 0 ? 'top-0 text-xs' : ''">
                         Galería de imágenes

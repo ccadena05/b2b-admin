@@ -10,6 +10,8 @@ import { ProviderService } from 'src/app/services/provider/provider.service';
 import { _icons } from 'src/assets/icons/_icons';
 import { config } from 'src/config';
 import { PreviewComponent } from './preview/preview.component';
+import { routes } from '../routes';
+import { Language } from 'src/app/models/language.model';
 
 @Component({
    selector: 'app-static-form',
@@ -21,12 +23,13 @@ export class StaticFormComponent implements OnInit {
    // carousel: FormGroup;
    // card: FormGroup;
    available_langs: any = []
-   tabs: any = [this.lang.user_lang];
+   tabs: Language[] = [this.lang.user_lang];
    i_section = 0;
    filtered_icons = _icons.slice(0, 50);
    _icons = _icons;
    id = 'our-valu';
    @ViewChild('cc') cc!: ElementRef;
+   sel: any = [];
 
    constructor(
       public router: Router,
@@ -40,12 +43,12 @@ export class StaticFormComponent implements OnInit {
 
    ) {
       this.article = this.formBuilder.group({
-         title: this.formBuilder.array([master.createTranslation(lang.user_lang.id, null)]),
-         description: this.formBuilder.array([master.createTranslation(lang.user_lang.id, null)]),
+         title: this.formBuilder.array([this.master.translation(this.lang.user_lang.id, null)]),
+         description: this.formBuilder.array([this.master.translation(this.lang.user_lang.id, null)]),
          children: this.formBuilder.array([])
       })
 
-
+      this.sel['routes'] = routes;
 
    }
 
@@ -71,6 +74,8 @@ export class StaticFormComponent implements OnInit {
    }
 
    save() {
+      this.delete_nulls(this.article.value)
+      
 
    }
 
@@ -78,45 +83,14 @@ export class StaticFormComponent implements OnInit {
 
    }
 
-   add_section() {
-      this.master.arr(this.article, 'children').push(this.master.text_section(this.tabs))
+   add(type: string) {
+      this.master.arr(this.article, 'children').push(this.master[(type += '_section') as keyof MasterService](this.tabs))
       console.log(this.article.value);
-
+      
    }
 
-   add_carousel() {
-      this.master.arr(this.article, 'children').push(this.master.carousel_section(this.tabs))
-      console.log(this.article.value);
-   }
-
-   add_card() {
-      this.master.arr(this.article, 'children').push(this.master.card_section(this.tabs))
-      console.log(this.article.value);
-   }
-
-   add_carousel_item(carousel: FormArray) {
-      carousel.push(this.master.carousel_item(this.tabs))
-   }
-
-   add_cards_item(cards: FormArray) {
-      cards.push(this.master.card_item(this.tabs))
-   }
-
-   add_linetime() {
-      this.master.arr(this.article, 'children').push(this.master.linetime_section(this.tabs))
-      console.log(this.article.value.children);
-   }
-
-   add_linetime_item(line: FormArray) {
-      line.push(this.master.linetime_item(this.tabs))
-   }
-
-   add_linetime_child(item: any) {
-      console.log(item.value);
-      let group = this.master.linetime_child(this.tabs)
-      item.push(group)
-      console.log(this.article.value);
-
+   add_item(array: any, type: string) {
+      array.push(this.master[(type += '_item') as keyof MasterService](this.tabs))
    }
 
    delete_section(index: any) {
@@ -139,7 +113,7 @@ export class StaticFormComponent implements OnInit {
    get field_width() {
       if (this.cc?.nativeElement?.offsetWidth <= 640)
          return 'col-span-1'
-      else if (this.cc?.nativeElement?.offsetWidth > 640 && this.cc?.nativeElement?.offsetWidth < 768)
+      else if (this.cc?.nativeElement?.offsetWidth > 640 && this.cc?.nativeElement?.offsetWidth <= 768)
          return 'col-span-2'
       return 'col-span-3'
    }
@@ -160,20 +134,17 @@ export class StaticFormComponent implements OnInit {
    }
 
    delete_nulls(form: any) {
-      // console.log(form);
+      let form_2 = form;
+      for (const key in form_2) {
+         if ((!form_2[key] || form_2[key].length == 0 || key == 'active') && key != 'text' && key != 'languages_id')
+            delete form_2[key]
+         if (Array.isArray(form_2[key]))
+            form_2[key].forEach((sub_key: any) => {
+               this.delete_nulls(sub_key)
+            });
+      }
+      console.log(form_2);
       
-      setTimeout(() => {
-         Object.keys(form).forEach((element: any, index: any) => {
-            if ((!form[element] || form[element].length == 0 || element == 'active') && element != 'text' && element != 'languages_id')
-               delete form[element]
-            if (Array.isArray(form[element]))
-               form[element].forEach((sub_element: any) => {
-                  this.delete_nulls(sub_element)
-               });
-         });
-         
-      }, 1000);
-      console.log(form);
    }
 
 }

@@ -11,6 +11,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfigDialogComponent } from '../../config-dialog/config-dialog.component';
 import { LocalStoreService } from 'src/app/services/local-store.service';
+import { Response } from 'src/app/models/response.model';
+import { MasterService } from 'src/app/services/master.service';
 
 
 @Component({
@@ -24,10 +26,12 @@ export class LoginComponent implements OnInit {
    signinForm: FormGroup;
    constructor(
       public jwtAuth: JwtAuthService,
+
       private router: Router,
-      private _snackBar: MatSnackBar,
       private dialog: MatDialog,
+      private master: MasterService,
       private ls: LocalStoreService,
+      private _snackBar: MatSnackBar,
       private formBuilder: FormBuilder,
 
    ) {
@@ -96,21 +100,17 @@ export class LoginComponent implements OnInit {
       // console.log(signinData.password);
       this.jwtAuth.signin(signinData.email, signinData.password).subscribe(
          {
-            next: (response) => {
+            next: (response: Response) => {
                console.log(response);
-               if (response['auth'] === '0') {
-                  this._snackBar.open('Revise su contraseña e intentelo de nuevo.', '', {
-                     duration: 5000
-                  });
+               if (response.error) {
+                  this.master.snack(1, 'Puede que tu contraseña sea incorrecta o no tengas acceso a este sitio.')
                } else {
                   this.router.navigateByUrl(this.jwtAuth.return);
                   //this._snackBar.dismiss();
                }
             },
             error: (err) => {
-               this._snackBar.open('Error de comunicación.', 'Cerrar', {
-                  duration: 5000
-               });
+               this.master.snack(1, 'Error de comunicación.')
                console.log(err);
             },
          }
