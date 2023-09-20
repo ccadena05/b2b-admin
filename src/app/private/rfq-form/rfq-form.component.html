@@ -51,11 +51,11 @@
                            *ngFor="let requirement of master.getterA(form.controls['req']).controls; let req_i = index"
                            [formGroupName]="req_i">
                            <div
-                              [ngClass]="cc.offsetWidth <= 640 ? 'grid-cols-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'grid-cols-2' : 'grid-cols-3'"
+                              [ngClass]="layout.grid(cc)"
                               class="grid gap-x-6 w-full" *ngIf="index_req == req_i">
 
                               <div
-                                 [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"
+                                 [ngClass]="layout.full(cc)"
                                  formArrayName="title">
                                  <div [formGroupName]="i"
                                     *ngFor="let item of master.getterA(master.getterG(requirement).controls['title']).controls; let i = index">
@@ -69,7 +69,7 @@
                               </div>
 
                               <div
-                                 [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"
+                                 [ngClass]="layout.full(cc)"
                                  formArrayName="description">
                                  <div [formGroupName]="i"
                                     *ngFor="let item of master.getterA(master.getterG(requirement).controls['description']).controls; let i = index">
@@ -82,7 +82,7 @@
                                  </div>
                               </div>
 
-                              <location  *ngIf="i == 0" [form]="master.getterG(requirement)" [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"></location>
+                              <location  *ngIf="i == 0" [form]="master.getterG(requirement)" [ngClass]="layout.full(cc)"></location>
                               
 
                               <mat-form-field appearance="outline" class="w-full" *ngIf="i == 0">
@@ -117,14 +117,14 @@
                               </div>
 
                               <div class="text-slate-900 mb-3 flex justify-center"
-                                 [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                                 [ngClass]="layout.full(cc)">
                                  <mat-slide-toggle #is_rfq formControlName="is_rfq" [(ngModel)]="_is_rfq" >Convertir en RFQ</mat-slide-toggle>
                               </div>
 
                               <div *ngIf="is_rfq.checked"
-                                 [ngClass]="cc.offsetWidth <= 640 ? 'grid-cols-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'grid-cols-2' : 'grid-cols-3'"
+                                 [ngClass]="layout.grid(cc)"
                                  class="grid gap-x-6 w-full"
-                                 [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                                 [ngClass]="layout.full(cc)">
                                  <mat-form-field appearance="outline" class="w-full" *ngIf="i == 0">
                                     <mat-label>Giro</mat-label>
                                     <input formControlName="activity" type="text" matInput [required]="requirement.value.is_rfq">
@@ -184,7 +184,7 @@
                                  </div>
 
                                  <div class="text-slate-900 mb-3 flex justify-center"
-                                    [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                                    [ngClass]="layout.full(cc)">
                                     <mat-slide-toggle #is_public formControlName="is_public" [(ngModel)]="_is_public">RFQ público</mat-slide-toggle>
                                  </div>
                               </div>
@@ -252,10 +252,10 @@
                            <div #cc
                               *ngFor="let requirement of master.getterA(form.controls['req']).controls; let req_i = index"
                               [formGroupName]="req_i">
-                              <div [ngClass]="cc.offsetWidth <= 640 ? 'grid-cols-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'grid-cols-2' : 'grid-cols-3'"
+                              <div [ngClass]="layout.grid(cc)"
                                  class="grid gap-x-6 w-full" *ngIf="index_req == req_i">
                                  
-                                 <div [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"formArrayName="title">
+                                 <div [ngClass]="layout.full(cc)"formArrayName="title">
                                     <div [formGroupName]="i"
                                        *ngFor="let item of master.getterA(master.getterG(requirement).controls['title']).controls; let i = index">
                                        <mat-form-field class="w-full" appearance="outline"
@@ -267,7 +267,7 @@
                                     </div>
                                  </div>
 
-                                 <div [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'" formArrayName="description">
+                                 <div [ngClass]="layout.full(cc)" formArrayName="description">
                                     <div [formGroupName]="i"
                                        *ngFor="let item of master.getterA(master.getterG(requirement).controls['description']).controls; let i = index">
                                        <mat-form-field class="w-full" appearance="outline"
@@ -279,7 +279,7 @@
                                     </div>
                                  </div>
                                  
-                                 <location  *ngIf="i == 0" [form]="master.getterG(requirement)" [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"></location>
+                                 <location  *ngIf="i == 0" [form]="master.getterG(requirement)" [ngClass]="layout.full(cc)"></location>
 
                                  <mat-form-field appearance="outline" class="w-full" *ngIf="i == 0">
                                     <mat-label>Duration del proyecto(meses)</mat-label>
@@ -297,11 +297,11 @@
                                     </mat-select>
                                  </mat-form-field>
 
-                                 <div class="text-slate-900 mb-3 flex justify-center" [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                                 <div class="text-slate-900 mb-3 flex justify-center" [ngClass]="layout.full(cc)">
                                     <mat-slide-toggle #rfq formControlName="is_rfq">Convertir en RFQ</mat-slide-toggle>
                                  </div>
-                                 <div *ngIf="rfq.checked" [ngClass]="cc.offsetWidth <= 640 ? 'grid-cols-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'grid-cols-2' : 'grid-cols-3'"
-                                    class="grid gap-x-6 w-full" [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                                 <div *ngIf="rfq.checked" [ngClass]="layout.grid(cc)"
+                                    class="grid gap-x-6 w-full" [ngClass]="layout.full(cc)">
                                     <mat-form-field appearance="outline" class="w-full" *ngIf="i == 0">
                                        <mat-label>Giro</mat-label>
                                        <input formControlName="activity" type="text" matInput>
@@ -355,7 +355,7 @@
                                        </div>
                                        {{form.value.url ?? ''}}
                                     </div>
-                                    <div class="text-slate-900 mb-3 flex justify-center" [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                                    <div class="text-slate-900 mb-3 flex justify-center" [ngClass]="layout.full(cc)">
                                        <mat-slide-toggle #rfq formControlName="is_public">RFQ público</mat-slide-toggle>
                                     </div>
                                  </div>

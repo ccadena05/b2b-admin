@@ -41,24 +41,20 @@
                             <div class="w-full bg-red-400">
 
                             </div>
-                            <div [ngClass]="cc.offsetWidth <= 640 ? 'grid-cols-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'grid-cols-2' : 'grid-cols-3'"
-                                class="grid gap-x-6 w-full">
+                            <div [ngClass]="layout.grid(cc)">
 
-                                <div class="title w-full"
-                                    [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                                <div class="title w-full" [ngClass]="layout.full(cc)">
                                     Información de la empresa
                                 </div>
 
-                                <div class="flex gap-x-6"
-                                    [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                                <div class="flex gap-x-6" [ngClass]="layout.full(cc)">
                                     <mat-slide-toggle class="mb-6 w-full"
                                         formControlName="hidden">Oculto</mat-slide-toggle>
                                     <mat-slide-toggle class="mb-6 w-full"
                                         formControlName="approved">Validado</mat-slide-toggle>
                                 </div>
 
-                                <div class="grow" formArrayName="legal_name"
-                                    [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                                <div class="grow" formArrayName="legal_name" [ngClass]="layout.full(cc)">
                                     <div *ngFor="let item of master.array(form, 'legal_name'); let i = index"
                                         [formGroupName]="i">
                                         <mat-form-field class="w-full" appearance="outline"
@@ -79,12 +75,11 @@
                                 <div class="flex gap-x-3" *ngIf="i == 0">
                                     <!-- <img *ngIf="form.value.image_url" [src]="form.value.image_url" alt="" class="h-10 mt-1 rounded-lg aspect-square grow-0"> -->
                                     <div (click)="uploadPDF(form.get('image_url'))" class="file-field"
-                                        [ngClass]="form.controls['image_url'].invalid && form.controls['image_url'].touched ? 'border-red-500 text-red-500' : ''">
+                                        [ngClass]="layout.invalid(form, 'image_url')">
                                         <icon i="file-upload" c="#334155" *ngIf="!form.value.image_url"></icon>
                                         <img *ngIf="form.value.image_url" [src]="form.value.image_url" alt=""
                                             class="h-8 rounded-lg aspect-square grow-0">
-                                        <div class="absolute left-11"
-                                            [ngClass]="form.value.image_url ? 'top-0 text-xs' : ''">
+                                        <div class="absolute left-11" [ngClass]="layout.label(form, 'image_url')">
                                             Logo
                                         </div>
                                         <div class="max-w-[12rem] overflow-hidden whitespace-nowrap">
@@ -220,9 +215,7 @@
                                     <mat-error>Ingresa un valor válido</mat-error>
                                 </mat-form-field>
 
-                                <div class="label w-full "
-                                    [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"
-                                    *ngIf="i == 0">Cluster</div>
+                                <div class="label w-full " [ngClass]="layout.full(cc)" *ngIf="i == 0">Cluster</div>
                                 <section *ngIf="i == 0">
                                     <mat-checkbox *ngFor="let item of clusters"
                                         [value]="company_clusters?.includes(item.id)"
@@ -230,29 +223,44 @@
                                         (change)="add_cluster($event, item.id)">{{item.name}}</mat-checkbox>
                                 </section>
 
-                                <mat-divider class="title w-full"
-                                    [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"
+                                <div class="flex basis-full" [ngClass]="layout.full(cc)">
+                                    <div (click)="uploadGallery(form.controls['image_gallery'])"
+                                        class="file-field w-full !h-20" *ngIf="i == 0">
+                                        <icon i="slideshow" c="#334155"></icon>
+                                        <div class="absolute left-11 duration-300"
+                                            [ngClass]="form.value.image_gallery?.length > 0 ? 'top-0 text-xs' : ''">
+                                            Galería de imágenes
+                                        </div>
+
+                                        <div cdkDropList class="flex gap-x-3 mt-3" (cdkDropListDropped)="drop($event)">
+                                            <div class="cursor-move" *ngFor="let item of form?.value?.image_gallery"
+                                                cdkDrag>
+                                                <div class="example-custom-placeholder" *cdkDragPlaceholder></div>
+                                                <img class="h-10 aspect-square object-cover rounded-lg"
+                                                    [src]="item?.url" alt="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- <div *ngIf="form.value.image_gallery.length > 0" class="text-xs text-[#bbbdc3] ml-2">Coloca la imagen que quieras como portada al principio</div> -->
+                                </div>
+
+                                <mat-divider class="title w-full" [ngClass]="layout.full(cc)"
                                     *ngIf="i == 0"></mat-divider>
 
-                                <div class="title" class="title w-full"
-                                    [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"
-                                    *ngIf="i == 0">
+                                <div class="title" class="title w-full" [ngClass]="layout.full(cc)" *ngIf="i == 0">
                                     Ubicación
                                 </div>
 
-                                <div *ngIf="i == 0" class="title w-full"
-                                    [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"
-                                    id="map" #map class="aspect-[3/1] basis-full mb-4 rounded-2xl"></div>
-                                <div *ngIf="i == 0" class="title w-full"
-                                    [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"
+                                <div *ngIf="i == 0" class="title w-full" [ngClass]="layout.full(cc)" id="map" #map
+                                    class="aspect-[3/1] basis-full mb-4 rounded-2xl"></div>
+                                <div *ngIf="i == 0" class="title w-full" [ngClass]="layout.full(cc)"
                                     class="flex justify-center items-center mb-6">
                                     <div class="btn-p mx-auto" (click)="getLocation()">
                                         Obtener Información
                                     </div>
                                 </div>
 
-                                <location [form]="form" *ngIf="i == 0"
-                                    [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                                <location [form]="form" *ngIf="i == 0" [ngClass]="layout.full(cc)">
                                 </location>
 
                                 <mat-form-field appearance="outline" class="w-full" *ngIf="i == 0">
@@ -277,8 +285,7 @@
                                     <mat-error>Ingresar un valor válido *</mat-error>
                                 </mat-form-field>
 
-                                <mat-form-field appearance="outline" class="w-full"
-                                    [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"
+                                <mat-form-field appearance="outline" class="w-full" [ngClass]="layout.full(cc)"
                                     *ngIf="i == 0">
                                     <mat-label>Calle</mat-label>
                                     <textarea formControlName="address_1" type="text" matInput></textarea>
@@ -290,21 +297,16 @@
                         </mat-tab>
 
                         <mat-tab label="Detalles De La Empresa">
-                            <div [ngClass]="cc.offsetWidth <= 640 ? 'grid-cols-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'grid-cols-2' : 'grid-cols-3'"
-                                class="grid gap-x-6 w-full">
+                            <div [ngClass]="layout.grid(cc)">
 
-                                <div class="title" class="title w-full"
-                                    [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"
-                                    *ngIf="i == 0">Detalles de la empresa</div>
+                                <div class="title" class="title w-full" [ngClass]="layout.full(cc)" *ngIf="i == 0">
+                                    Detalles de la empresa</div>
 
-                                <div class="label w-full"
-                                    [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"
-                                    *ngIf="i == 0">
+                                <div class="label w-full" [ngClass]="layout.full(cc)" *ngIf="i == 0">
                                     Categorías
                                 </div>
 
-                                <div *ngIf="i == 0" class="flex flex-col gap-x-6 w-full"
-                                    [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                                <div *ngIf="i == 0" class="flex flex-col gap-x-6 w-full" [ngClass]="layout.full(cc)">
                                     <recursive-select [select]="sel['category_searcher']" label="Categoría"
                                         class="w-full flex gap-x-6" [control]="form.controls['first_category']"
                                         [rq]="true" [generation]="0" [value]="form.value.first_categories"
@@ -340,18 +342,17 @@
                                     <mat-error>Ingresa un valor válido</mat-error>
                                 </mat-form-field>
 
-                                <div (click)="uploadPDF(form.get('brochure_url'))" class="file-field" *ngIf="i == 0">
+                                <div (click)="uploadPDF(form.get('brochure_url'))" class="file-field"
+                                    [ngClass]="layout.invalid(form, 'brochure_url')" *ngIf="i == 0">
                                     <icon i="file-upload" c="#334155"></icon>
-                                    <div class="absolute left-11"
-                                        [ngClass]="form.value.brochure_url ? 'top-0 text-xs' : ''">
+                                    <div class="absolute left-11" [ngClass]="layout.label(form, 'image_url')">
                                         Brochure
                                     </div>
                                     {{form.value.brochure ?? ''}}
                                 </div>
 
-                                <mat-form-field class="w-full"
-                                    [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"
-                                    appearance="outline" *ngIf="i == 0">
+                                <mat-form-field class="w-full" [ngClass]="layout.full(cc)" appearance="outline"
+                                    *ngIf="i == 0">
                                     <mat-label>Etiquetas</mat-label>
                                     <mat-chip-list #chipList formControlName="tags">
                                         <!-- <mat-chip *ngFor="let tag of form.value.tags?.split(',')"
@@ -367,9 +368,7 @@
                                     </mat-chip-list>
                                 </mat-form-field>
 
-                                <div class="w-full"
-                                    [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"
-                                    formArrayName="description">
+                                <div class="w-full" [ngClass]="layout.full(cc)" formArrayName="description">
                                     <div *ngFor="let item of master.array(form, 'description'); let i = index"
                                         [formGroupName]="i">
                                         <mat-form-field class="w-full" appearance="outline"
@@ -384,9 +383,7 @@
                                     </div>
                                 </div>
 
-                                <div class="w-full"
-                                    [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"
-                                    formArrayName="description_detail">
+                                <div class="w-full" [ngClass]="layout.full(cc)" formArrayName="description_detail">
                                     <div *ngFor="let item of master.array(form, 'description_detail'); let i = index"
                                         [formGroupName]="i">
                                         <mat-form-field class="w-full" appearance="outline"
@@ -399,16 +396,12 @@
                                 </div>
 
 
-                                <div class="title" class="title w-full"
-                                    [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"
-                                    *ngIf="i == 0">General</div>
+                                <div class="title" class="title w-full" [ngClass]="layout.full(cc)" *ngIf="i == 0">
+                                    General</div>
 
-                                <div class="label w-full"
-                                    [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"
-                                    *ngIf="i == 0">Horario</div>
+                                <div class="label w-full" [ngClass]="layout.full(cc)" *ngIf="i == 0">Horario</div>
                                 <div formGroupName="schedule_week" class="flex flex-wrap mb-3 w-full"
-                                    [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"
-                                    *ngIf="i == 0">
+                                    [ngClass]="layout.full(cc)" *ngIf="i == 0">
 
                                     <div *ngFor="let day of days" class="basis-full flex gap-x-3 items-center">
                                         <div class="flex basis-1/4 gap-x-6 mb-3 text-slate-900">
@@ -428,9 +421,7 @@
 
                                 </div>
 
-                                <div class="w-full"
-                                    [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"
-                                    formArrayName="company_payment">
+                                <div class="w-full" [ngClass]="layout.full(cc)" formArrayName="company_payment">
                                     <div *ngFor="let item of master.array(form, 'company_payment'); let i = index"
                                         [formGroupName]="i">
                                         <mat-form-field class="w-full" appearance="outline"
@@ -442,9 +433,7 @@
                                     </div>
                                 </div>
 
-                                <div class="w-full"
-                                    [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"
-                                    *ngIf="i == 0">
+                                <div class="w-full" [ngClass]="layout.full(cc)" *ngIf="i == 0">
                                     <div class="basis-full flex flex-col mb-3">
                                         <div class="label w-full">
                                             ¿Te gustaría que Cluster Industrial te apoye contactando empresas?
@@ -460,18 +449,14 @@
 
                                     <div class="basis-full grow flex flex-col duration-300"
                                         [ngClass]="consi.checked ? 'h-[11rem]' : 'h-0 overflow-hidden'">
-                                        <mat-form-field class="w-full"
-                                            [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"
-                                            appearance="outline">
+                                        <mat-form-field class="w-full" [ngClass]="layout.full(cc)" appearance="outline">
                                             <mat-label>¿Con qué clientes y empresas le gustaria que le apoyaramos para
                                                 contactar?</mat-label>
                                             <input formControlName="support_clients" type="text" matInput>
                                             <mat-error>Ingresa un valor válido</mat-error>
                                         </mat-form-field>
 
-                                        <mat-form-field class="w-full"
-                                            [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"
-                                            appearance="outline">
+                                        <mat-form-field class="w-full" [ngClass]="layout.full(cc)" appearance="outline">
                                             <mat-label>¿Qué tipo de servicio le gustaría recibir por parte de Cluster
                                                 Industrial?</mat-label>
                                             <input formControlName="service_cluster" type="text" matInput>
@@ -480,17 +465,14 @@
                                     </div>
                                 </div>
 
-                                <div class="w-full flex flex-row-reverse"
-                                    [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                                <div class="w-full flex flex-row-reverse" [ngClass]="layout.full(cc)">
                                     <icon i="help-circle" c="#bbbdc3"></icon>
-                                    <div class="title w-full"
-                                        [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                                    <div class="title w-full" [ngClass]="layout.full(cc)">
                                         Procesos de la empresa
                                     </div>
                                 </div>
 
-                                <div class="flex flex-col mb-3 w-full"
-                                    [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                                <div class="flex flex-col mb-3 w-full" [ngClass]="layout.full(cc)">
                                     <div class="label w-full">
                                         ¿Tu empresa cuenta con procesos industriales?
                                     </div>
@@ -550,9 +532,7 @@
                                     </div>
                                 </div>
 
-                                <div class="title" class="title w-full"
-                                    [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"
-                                    *ngIf="i == 0">
+                                <div class="title" class="title w-full" [ngClass]="layout.full(cc)" *ngIf="i == 0">
                                     Redes sociales
                                 </div>
 
@@ -592,8 +572,7 @@
                                     <mat-error>Ingresa un valor válido</mat-error>
                                 </mat-form-field>
 
-                                <div class="title w-full"
-                                    [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                                <div class="title w-full" [ngClass]="layout.full(cc)">
                                     Información estadística de la empresa
                                 </div>
 
@@ -647,21 +626,19 @@
                             </div>
                         </mat-tab>
                         <mat-tab label="Capacidades Y Certificaciones">
-                            <div class="title" class="title w-full"
-                                [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"
-                                *ngIf="i == 0">
+                            <div class="title" class="title w-full" [ngClass]="layout.full(cc)" *ngIf="i == 0">
                                 Capacidades y certificaciones
                             </div>
 
                             <mat-form-field class="w-full" appearance="outline" *ngIf="i == 0"
-                                [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                                [ngClass]="layout.full(cc)">
                                 <mat-label>Premios de calidad obtenidos, reconocimientos</mat-label>
                                 <input formControlName="quality_awards" type="text" matInput>
                                 <mat-error>Ingresa un valor válido.</mat-error>
                             </mat-form-field>
 
                             <mat-form-field class="w-full" appearance="outline" *ngIf="i == 0"
-                                [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                                [ngClass]="layout.full(cc)">
                                 <mat-label>Certificaciones</mat-label>
                                 <mat-select (selectionChange)="toggle_iso($event)" formControlName="cert" multiple>
                                     <mat-option *ngFor="let _ce of cert"
@@ -669,8 +646,7 @@
                                 </mat-select>
                             </mat-form-field>
 
-                            <div class="w-full" formArrayName="isos" *ngIf="i == 0"
-                                [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                            <div class="w-full" formArrayName="isos" *ngIf="i == 0" [ngClass]="layout.full(cc)">
                                 <div *ngFor="let item of master.array(form, 'isos'); let i = index" [formGroupName]="i">
                                     <div class="flex justify-center items-center gap-x-3 text-slate-100"
                                         *ngIf="item.value.active == '1'">
@@ -678,10 +654,10 @@
                                             {{item.value.name}}
                                         </div>
                                         <div class="file-field" #filefield
+                                            [ngClass]="layout.invalid(master.group(master.getterA(form.controls['isos']).at(i)), 'url')"
                                             (click)="uploadPDF(master.getterA(form.controls['isos']).at(i).get('url'))">
                                             <icon i="file-upload" c="#334155"></icon>
-                                            <div class="absolute left-11"
-                                                [ngClass]="item.value.url ? 'top-0 text-xs' : ''">
+                                            <div class="absolute left-11" [ngClass]="layout.label(form, 'url')">
                                                 Comprobante
                                             </div>
                                             <div [ngStyle]="{'max-width.px' : filefield.offsetWidth - 92}"

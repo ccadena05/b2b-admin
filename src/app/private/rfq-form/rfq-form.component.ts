@@ -10,6 +10,7 @@ import { OutputService } from 'src/app/services/output.service';
 import { ProviderService } from 'src/app/services/provider/provider.service';
 import { config } from 'src/config';
 import { Language } from 'src/app/models/language.model';
+import { LayoutService } from 'src/app/services/layout.service';
 
 @Component({
    selector: 'app-rfq-form',
@@ -27,6 +28,7 @@ export class RfqFormComponent implements OnInit {
 
    constructor(
       public master: MasterService,
+      public layout: LayoutService,
 
       private router: Router,
       private ls: LocalStoreService,

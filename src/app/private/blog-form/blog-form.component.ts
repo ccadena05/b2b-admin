@@ -14,6 +14,7 @@ import { COMMA, ENTER, X } from '@angular/cdk/keycodes';
 import { OutputService } from 'src/app/services/output.service';
 import { LanguageService } from 'src/app/services/language.service';
 import { Language } from 'src/app/models/language.model';
+import { LayoutService } from 'src/app/services/layout.service';
 
 declare var Quill: any;
 
@@ -52,8 +53,10 @@ export class BlogFormComponent implements OnInit {
    ]
 
    constructor(
-      public master: MasterService,
       public router: Router,
+      public master: MasterService,
+      public layout: LayoutService,
+
       private formBuilder: FormBuilder,
       private manager: CloudinaryWidgetManager,
       private ls: LocalStoreService,

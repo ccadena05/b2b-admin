@@ -44,9 +44,9 @@ export class LocalStoreService {
    }
 
    public clear() {
-      const openDialog = this.getItem('openDialog');
+      const languages = this.getItem('languages');
       this.ls.clear();
-      this.setItem('openDialog', openDialog)
+      this.setItem('languages', languages)
    }
    public remove(key: any) {
       this.ls.removeItem(key);

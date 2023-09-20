@@ -125,12 +125,12 @@
                <div class="flex gap-x-3" *ngIf="i == 0">
                   <!-- <img *ngIf="form.value.image_url" [src]="form.value.image_url" alt="" class="h-10 mt-1 rounded-lg aspect-square grow-0"> -->
                   <div (click)="uploadPDF(form.get('image_url'))" class="file-field"
-                      [ngClass]="form.controls['image_url'].invalid && form.controls['image_url'].touched ? 'border-red-500 text-red-500' : ''">
+                      [ngClass]="layout.invalid(form, 'image_url')">
                       <icon i="photo-up" c="#334155" *ngIf="!form.value.image_url"></icon>
                       <img *ngIf="form.value.image_url" [src]="form.value.image_url" alt=""
                           class="h-8 rounded-lg aspect-square grow-0">
                       <div class="absolute left-11"
-                          [ngClass]="form.value.image_url ? 'top-0 text-xs' : ''">
+                          [ngClass]="layout.label(form, 'image_url')">
                           Imagen
                       </div>
                       <div class="max-w-[12rem] overflow-hidden whitespace-nowrap">

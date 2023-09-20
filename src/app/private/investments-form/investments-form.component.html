@@ -40,15 +40,15 @@
                 <div class="flex flex-col gap-y-6 overflow-x-hidden">
 
                     <div class="grid gap-x-6 w-full"
-                        [ngClass]="cc.offsetWidth <= 640 ? 'grid-cols-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'grid-cols-2' : 'grid-cols-3'">
+                        [ngClass]="layout.grid(cc)">
 
                         <div class="title w-full"
-                            [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                            [ngClass]="layout.full(cc)">
                             Informacion De La Inversión
                         </div>
 
                         <location [form]="form" *ngIf="i == 0"
-                            [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                            [ngClass]="layout.full(cc)">
                         </location>
 
                         <mat-form-field appearance="outline" class="w-full duration-300" *ngIf="i == 0">
@@ -70,7 +70,7 @@
                         </mat-form-field>
 
                         <div class="mb-6"
-                            [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                            [ngClass]="layout.full(cc)">
                             <div formArrayName="description"
                                 *ngFor="let item of master.getterA(form.controls['description']).controls; let i = index;">
                                 <div [formGroupName]="i">
@@ -81,7 +81,7 @@
                         </div>
 
                         <mat-form-field class="w-full" appearance="outline"
-                            [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"
+                            [ngClass]="layout.full(cc)"
                             *ngIf="i == 0">
                             <mat-label>Etiquetas</mat-label>
                             <mat-chip-list #chipList formControlName="categories">

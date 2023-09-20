@@ -6,6 +6,7 @@ import { LanguageService } from 'src/app/services/language.service';
 import { MasterService } from 'src/app/services/master.service';
 import { ProviderService } from 'src/app/services/provider/provider.service';
 import { Language } from 'src/app/models/language.model';
+import { LayoutService } from 'src/app/services/layout.service';
 
 @Component({
   selector: 'app-clusters-form',
@@ -21,6 +22,7 @@ export class ClustersFormComponent implements OnInit {
   constructor(
      public router: Router,
      public master: MasterService,
+     public layout: LayoutService,
      
      private lang: LanguageService,
      private formBuilder: FormBuilder,

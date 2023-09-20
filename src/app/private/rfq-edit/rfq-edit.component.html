@@ -1,19 +1,18 @@
-<form (ngSubmit)="save()" [formGroup]="form"
-class="bg-white rounded-2xl shadow-lg p-6">
+<form (ngSubmit)="save()" [formGroup]="form" class="bg-white rounded-2xl shadow-lg p-6">
 
    <div class="sticky top-0 right-10 left-full w-[7.5rem] z-50 justify-end text-slate-100 rounded-2xl flex gap-x-2">
       <div type="button" class="btn-del" (click)="delete()">
          <icon i="trash"></icon>
-      </div>  
+      </div>
       <div (click)="approved_rfq()" class="btn-1">
          <icon [i]="form.value.approved == 1  ? 'device-floppy' : 'plus'"></icon>
       </div>
       <button type="submit" class="btn-1" [disabled]="form.invalid">
          <icon i="edit"></icon>
-     </button>
+      </button>
       <div [matMenuTriggerFor]="addLang" class="btn-2">
          <icon i="language" c="#0076ef"></icon>
-     </div>
+      </div>
 
       <mat-menu #addLang="matMenu">
          <div class="text-slate-100 disabled:text-slate-500" mat-menu-item
@@ -38,18 +37,13 @@ class="bg-white rounded-2xl shadow-lg p-6">
          <div class="flex flex-col gap-y-6 w-full">
 
             <div #cc>
-               <div
-                  [ngClass]="cc.offsetWidth <= 640 ? 'grid-cols-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'grid-cols-2' : 'grid-cols-3'"
-                  class="grid gap-x-6 w-full">
+               <div [ngClass]="layout.grid(cc)" class="grid gap-x-6 w-full">
 
-                  <div class="title w-full"
-                  [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
-                  Información del requerimiento
-               </div>
+                  <div class="title w-full" [ngClass]="layout.full(cc)">
+                     Información del requerimiento
+                  </div>
 
-                  <div
-                     [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"
-                     class="grow" formArrayName="title">
+                  <div [ngClass]="layout.full(cc)" class="grow" formArrayName="title">
                      <div *ngFor="let item of master.getterA(form.controls['title']).controls; let i = index"
                         [formGroupName]="i">
                         <mat-form-field class="w-full" appearance="outline" *ngIf="item.value.languages_id == tab.id">
@@ -60,9 +54,7 @@ class="bg-white rounded-2xl shadow-lg p-6">
                      </div>
                   </div>
 
-                  <div
-                     [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"
-                     formArrayName="description">
+                  <div [ngClass]="layout.full(cc)" formArrayName="description">
                      <div [formGroupName]="i"
                         *ngFor="let item of master.getterA(form.controls['description']).controls; let i = index">
                         <mat-form-field class="w-full" appearance="outline" *ngIf="item.value.languages_id == tab.id">
@@ -73,8 +65,7 @@ class="bg-white rounded-2xl shadow-lg p-6">
                      </div>
                   </div>
 
-                  <location *ngIf="i == 0 && !rfq_id" [form]="form"
-                     [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                  <location *ngIf="i == 0 && !rfq_id" [form]="form" [ngClass]="layout.full(cc)">
                   </location>
 
                   <mat-form-field appearance="outline" class="w-full" *ngIf="i == 0">
@@ -88,16 +79,16 @@ class="bg-white rounded-2xl shadow-lg p-6">
                      <mat-error>Ingresa un valor válido</mat-error>
                   </mat-form-field>
 
-                  <search-select [label]="'Status'" [select]="sel['rfq_status']" [rq]="true"
-                     *ngIf="i == 0" [control]="form.controls['rfq_status_id']" class="w-full"></search-select>
-                  
-                     
+                  <search-select [label]="'Status'" [select]="sel['rfq_status']" [rq]="true" *ngIf="i == 0"
+                     [control]="form.controls['rfq_status_id']" class="w-full"></search-select>
+
+
 
                   <div class="file-field" #field (click)="uploadPDF(form.get('image_url'))" *ngIf="i == 0">
                      <icon i="photo-plus" c="#334155" *ngIf="!form.value.image_url"></icon>
                      <img *ngIf="form.value.image_url" [src]="form.value.image_url" alt=""
                         class="h-8 rounded-lg aspect-square grow-0">
-                     <div class="absolute left-11" [ngClass]="form.value.image_url ? 'top-0 text-xs' : ''">
+                     <div class="absolute left-11" [ngClass]="layout.label(form, 'image_url')">
                         Portada
                      </div>
                      <div [ngStyle]="{'max-width.px' : field.offsetWidth - 92}" class=" truncate">
@@ -105,73 +96,73 @@ class="bg-white rounded-2xl shadow-lg p-6">
                      </div>
                   </div>
 
-                  <div class="text-slate-900 mb-3 flex justify-center"
-                     [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                  <div class="text-slate-900 mb-3 flex justify-center" [ngClass]="layout.full(cc)">
                      <mat-slide-toggle #is_rfq formControlName="is_rfq"
                         (change)="master.toogle_validators(form.value.is_rfq, ['activity','materials','volumes','budget','isos','date','url','is_public'], form)">Convertir
                         en RFQ</mat-slide-toggle>
                   </div>
                   <!-- <div *ngIf="rfq.checked"
-                     [ngClass]="cc.offsetWidth <= 640 ? 'grid-cols-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'grid-cols-2' : 'grid-cols-3'"
+                     [ngClass]="layout.grid(cc)"
                      class="grid gap-x-6 w-full"
-                     [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"> -->
-                     <mat-form-field appearance="outline" class="w-full" *ngIf="i == 0 && is_rfq.checked">
-                        <mat-label>Giro</mat-label>
-                        <input formControlName="activity" type="text" matInput>
-                        <mat-error>Ingresa un valor válido</mat-error>
-                     </mat-form-field>
+                     [ngClass]="layout.full(cc)"> -->
+                  <mat-form-field appearance="outline" class="w-full" *ngIf="i == 0 && is_rfq.checked">
+                     <mat-label>Giro</mat-label>
+                     <input formControlName="activity" type="text" matInput>
+                     <mat-error>Ingresa un valor válido</mat-error>
+                  </mat-form-field>
 
 
-                     <div class="w-full" formArrayName="materials" *ngIf="is_rfq.checked">
-                        <div [formGroupName]="i"
-                           *ngFor="let item of master.getterA(form.controls['materials']).controls; let i = index">
-                           <mat-form-field class="w-full" appearance="outline"
-                              *ngIf="item.value.languages_id == tab.id">
-                              <mat-label>Material</mat-label>
-                              <input formControlName="text" type="text" matInput>
-                              <mat-error>Ingresa un valor válido</mat-error>
-                           </mat-form-field>
-                        </div>
+                  <div class="w-full" formArrayName="materials" *ngIf="is_rfq.checked">
+                     <div [formGroupName]="i"
+                        *ngFor="let item of master.getterA(form.controls['materials']).controls; let i = index">
+                        <mat-form-field class="w-full" appearance="outline" *ngIf="item.value.languages_id == tab.id">
+                           <mat-label>Material</mat-label>
+                           <input formControlName="text" type="text" matInput>
+                           <mat-error>Ingresa un valor válido</mat-error>
+                        </mat-form-field>
                      </div>
+                  </div>
 
-                     <mat-form-field appearance="outline" class="w-full" *ngIf="i == 0 && is_rfq.checked">
-                        <mat-label>Volúmenes</mat-label>
-                        <input formControlName="volumes" type="text" matInput>
-                        <mat-error>Ingresa un valor válido</mat-error>
-                     </mat-form-field>
+                  <mat-form-field appearance="outline" class="w-full" *ngIf="i == 0 && is_rfq.checked">
+                     <mat-label>Volúmenes</mat-label>
+                     <input formControlName="volumes" type="text" matInput>
+                     <mat-error>Ingresa un valor válido</mat-error>
+                  </mat-form-field>
 
-                     <mat-form-field appearance="outline" class="w-full" *ngIf="i == 0 && is_rfq.checked">
-                        <mat-label>Presupuesto / precio objetivo</mat-label>
-                        <input formControlName="budget" type="text" matInput>
-                        <mat-error>Ingresa un valor válido</mat-error>
-                     </mat-form-field>
+                  <mat-form-field appearance="outline" class="w-full" *ngIf="i == 0 && is_rfq.checked">
+                     <mat-label>Presupuesto / precio objetivo</mat-label>
+                     <input formControlName="budget" type="text" matInput>
+                     <mat-error>Ingresa un valor válido</mat-error>
+                  </mat-form-field>
 
-                     <mat-form-field class="w-full" appearance="outline" *ngIf="i == 0 && is_rfq.checked">
-                        <mat-label>Certificaciones</mat-label>
-                        <mat-select (selectionChange)="toggle_iso($event)" formControlName="simple_isos" multiple [required]="form.value.is_rfq">
-                           <mat-option  *ngFor="let _ce of sel['isos']" value="{{_ce.name_id.toString()}}">{{_ce.name}}</mat-option>
-                        </mat-select>
-                     </mat-form-field>
+                  <mat-form-field class="w-full" appearance="outline" *ngIf="i == 0 && is_rfq.checked">
+                     <mat-label>Certificaciones</mat-label>
+                     <mat-select (selectionChange)="toggle_iso($event)" formControlName="simple_isos" multiple
+                        [required]="form.value.is_rfq">
+                        <mat-option *ngFor="let _ce of sel['isos']"
+                           value="{{_ce.name_id.toString()}}">{{_ce.name}}</mat-option>
+                     </mat-select>
+                  </mat-form-field>
 
-                     <mat-form-field appearance="outline" class="w-full" *ngIf="i == 0 && is_rfq.checked">
-                        <mat-label>Fechas del proyecto</mat-label>
-                        <input formControlName="date" type="text" matInput>
-                        <mat-error>Ingresa un valor válido</mat-error>
-                     </mat-form-field>
+                  <mat-form-field appearance="outline" class="w-full" *ngIf="i == 0 && is_rfq.checked">
+                     <mat-label>Fechas del proyecto</mat-label>
+                     <input formControlName="date" type="text" matInput>
+                     <mat-error>Ingresa un valor válido</mat-error>
+                  </mat-form-field>
 
-                     <div class="file-field" #field (click)="uploadPDF(form.get('url'))" *ngIf="i == 0 && is_rfq.checked">
-                        <icon i="file-upload" c="#334155"></icon>
-                        <div class="absolute left-11" [ngClass]="form.value.url ? 'top-0 text-xs' : ''">
-                           Archivo
-                        </div>
-                        <div [ngStyle]="{'max-width.px' : field.offsetWidth - 92}" class=" truncate">
-                           {{form.value.url ?? ''}}
-                        </div>
+                  <div class="file-field" #field (click)="uploadPDF(form.get('url'))" *ngIf="i == 0 && is_rfq.checked">
+                     <icon i="file-upload" c="#334155"></icon>
+                     <div class="absolute left-11" [ngClass]="form.value.url ? 'top-0 text-xs' : ''">
+                        Archivo
                      </div>
-                     <div *ngIf="is_rfq.checked" class="text-slate-900 mb-3 flex justify-center"
-                        [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
-                        <mat-slide-toggle #is_public formControlName="is_public">RFQ público</mat-slide-toggle>
+                     <div [ngStyle]="{'max-width.px' : field.offsetWidth - 92}" class=" truncate">
+                        {{form.value.url ?? ''}}
                      </div>
+                  </div>
+                  <div *ngIf="is_rfq.checked" class="text-slate-900 mb-3 flex justify-center"
+                     [ngClass]="layout.full(cc)">
+                     <mat-slide-toggle #is_public formControlName="is_public">RFQ público</mat-slide-toggle>
+                  </div>
                   <!-- </div> -->
                </div>
             </div>
@@ -219,11 +210,11 @@ class="h-full !max-h-[80vh] w-full overflow-scroll rfq relative bg-white p-6 rou
 
             <div #cc>
                <div
-                  [ngClass]="cc.offsetWidth <= 640 ? 'grid-cols-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'grid-cols-2' : 'grid-cols-3'"
+                  [ngClass]="layout.grid(cc)"
                   class="grid gap-x-6 w-full">
 
                   <div
-                     [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"
+                     [ngClass]="layout.full(cc)"
                      class="grow" formArrayName="title">
                      <div *ngFor="let item of master.getterA(form.controls['title']).controls; let i = index"
                         [formGroupName]="i">
@@ -236,7 +227,7 @@ class="h-full !max-h-[80vh] w-full overflow-scroll rfq relative bg-white p-6 rou
                   </div>
 
                   <div
-                     [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"
+                     [ngClass]="layout.full(cc)"
                      formArrayName="description">
                      <div [formGroupName]="i"
                         *ngFor="let item of master.getterA(form.controls['description']).controls; let i = index">
@@ -249,7 +240,7 @@ class="h-full !max-h-[80vh] w-full overflow-scroll rfq relative bg-white p-6 rou
                   </div>
 
                   <location *ngIf="i == 0 && !rfq_id" [form]="form"
-                     [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                     [ngClass]="layout.full(cc)">
                   </location>
 
                   <mat-form-field appearance="outline" class="w-full" *ngIf="i == 0">
@@ -264,13 +255,13 @@ class="h-full !max-h-[80vh] w-full overflow-scroll rfq relative bg-white p-6 rou
                         </mat-form-field>
 
                   <div class="text-slate-900 mb-3 flex justify-center"
-                     [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                     [ngClass]="layout.full(cc)">
                      <mat-slide-toggle #rfq formControlName="is_rfq">Convertir en RFQ</mat-slide-toggle>
                   </div>
                   <div *ngIf="rfq.checked"
-                     [ngClass]="cc.offsetWidth <= 640 ? 'grid-cols-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'grid-cols-2' : 'grid-cols-3'"
+                     [ngClass]="layout.grid(cc)"
                      class="grid gap-x-6 w-full"
-                     [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                     [ngClass]="layout.full(cc)">
                      <mat-form-field appearance="outline" class="w-full" *ngIf="i == 0">
                         <mat-label>Giro</mat-label>
                         <input formControlName="activity" type="text" matInput>
@@ -319,7 +310,7 @@ class="h-full !max-h-[80vh] w-full overflow-scroll rfq relative bg-white p-6 rou
                         {{form.value.url ?? ''}}
                      </div>
                      <div class="text-slate-900 mb-3 flex justify-center"
-                        [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                        [ngClass]="layout.full(cc)">
                         <mat-slide-toggle #rfq formControlName="is_public">RFQ público</mat-slide-toggle>
                      </div>
                   </div>

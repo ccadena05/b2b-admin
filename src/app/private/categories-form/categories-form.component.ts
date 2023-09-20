@@ -8,6 +8,7 @@ import { MasterService } from 'src/app/services/master.service';
 import { ProviderService } from 'src/app/services/provider/provider.service';
 import { config } from 'src/config';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { LayoutService } from 'src/app/services/layout.service';
 
 @Component({
    selector: 'app-categories-form',
@@ -24,6 +25,8 @@ export class CategoriesFormComponent implements OnInit {
    constructor(
       public router: Router,
       public master: MasterService,
+      public layout: LayoutService,
+
       private formBuilder: FormBuilder,
       private provider: ProviderService,
       private manager: CloudinaryWidgetManager

@@ -24,6 +24,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { DialogoConfirmacionComponent } from 'src/app/components/dialogo-confirmacion/dialogo-confirmacion.component';
 import { OutputService } from 'src/app/services/output.service';
 import { LanguageService } from 'src/app/services/language.service';
+import { LayoutService } from 'src/app/services/layout.service';
 
 @Component({
    selector: 'app-events-form',
@@ -70,8 +71,10 @@ export class EventsFormComponent implements OnInit {
 
 
    constructor(
-      public master: MasterService,
       public router: Router,
+      public master: MasterService,
+      public layout: LayoutService,
+
       private ls: LocalStoreService,
       private jwt: JwtAuthService,
       private dialog: MatDialog,

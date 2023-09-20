@@ -14,10 +14,10 @@
    <div class="flex flex-col gap-y-6 overflow-x-hidden">
 
       <div class="grid gap-x-6 w-full"
-         [ngClass]="cc.offsetWidth <= 640 ? 'grid-cols-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'grid-cols-2' : 'grid-cols-3'">
+         [ngClass]="layout.grid(cc)">
 
          <div class="title w-full"
-            [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+            [ngClass]="layout.full(cc)">
             Información de la categoría
          </div>
 
@@ -38,7 +38,7 @@
             <icon *ngIf="!form.value.image_url" i="photo-up" c="#334155"></icon>
             <img *ngIf="form.value.image_url" [src]="form.value.image_url" alt=""
                class="h-8 rounded-lg aspect-square grow-0 object-contain">
-            <div class="absolute left-11" [ngClass]="form.value.image_url ? 'top-0 text-xs' : ''">
+            <div class="absolute left-11" [ngClass]="layout.label(form, 'image_url')">
                Portada
             </div>
             <div class="max-w-[12rem] overflow-hidden whitespace-nowrap">
@@ -46,14 +46,14 @@
             </div>
          </div>
 
-         <div class="flex gap-x-3 items-start justify-between" [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+         <div class="flex gap-x-3 items-start justify-between" [ngClass]="layout.full(cc)">
             <recursive-select [select]="sel['category']" label="Categoría" class="!w-full flex flex-wrap gap-x-6"
                [control]="form.controls['parent_id']" [rq]="true" [generation]="0"
                (categorySelected)="onCategorySelected($event)" [value]="form.value.category"></recursive-select>
          </div>
 
          <mat-form-field class="w-full" appearance="outline"
-            [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+            [ngClass]="layout.full(cc)">
             <mat-label>Etiquetas</mat-label>
             <mat-chip-list #chipList formControlName="tags">
                <mat-chip *ngFor="let tag of form.value.tags?.split(',')" (removed)="removeTag(tag)">

@@ -9,6 +9,7 @@ import { ProviderService } from 'src/app/services/provider/provider.service';
 import { PermissionsComponent } from './permissions/permissions.component';
 import { LocalStoreService } from 'src/app/services/local-store.service';
 import { ChangePasswordComponent } from 'src/app/components/change-password/change-password.component';
+import { LayoutService } from 'src/app/services/layout.service';
 
 @Component({
    selector: 'app-users-form',
@@ -22,6 +23,7 @@ export class UsersFormComponent implements OnInit {
    constructor(
       public router: Router,
       public master: MasterService,
+      public layout: LayoutService,
 
       private dialog: MatDialog,
       private ls: LocalStoreService,

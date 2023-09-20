@@ -36,15 +36,15 @@
 
                     <div class="flex flex-col gap-y-6">
 
-                        <div [ngClass]="cc.offsetWidth <= 640 ? 'grid-cols-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'grid-cols-2' : 'grid-cols-3'"
+                        <div [ngClass]="layout.grid(cc)"
                             class="grid gap-x-6 w-full">
 
                             <div class="title w-full"
-                                [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                                [ngClass]="layout.full(cc)">
                                 Información Del Blog
                             </div>
 
-                            <div [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"
+                            <div [ngClass]="layout.full(cc)"
                                 class="grow" formArrayName="title">
                                 <div *ngFor="let item of master.getterA(form.controls['title']).controls; let i = index"
                                     [formGroupName]="i">
@@ -57,7 +57,7 @@
                                 </div>
                             </div>
 
-                            <div [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"
+                            <div [ngClass]="layout.full(cc)"
                                 class="grow" formArrayName="summary">
                                 <div *ngFor="let item of master.getterA(form.controls['summary']).controls; let i = index"
                                     [formGroupName]="i">
@@ -72,7 +72,7 @@
                             </div>
 
                             <div class="mb-6"
-                                [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                                [ngClass]="layout.full(cc)">
                                 <div formArrayName="description"
                                     *ngFor="let item of master.getterA(form.controls['description']).controls; let i = index;">
                                     <div [formGroupName]="i">
@@ -88,12 +88,12 @@
                             <div class="flex gap-x-3">
                                 <!-- <img *ngIf="form.value.image_url" [src]="form.value.image_url" alt="" class="h-10 mt-1 rounded-lg aspect-square grow-0"> -->
                                 <div (click)="uploadPDF(form.get('image_url'))" class="file-field" *ngIf="i == 0"
-                                    [ngClass]="form.controls['image_url'].invalid && form.controls['image_url'].touched ? 'border-red-500 text-red-500' : ''">
+                                    [ngClass]="layout.invalid(form, 'image_url')">
                                     <icon i="photo-up" *ngIf="!form.value.image_url" c="#334155"></icon>
                                     <img *ngIf="form.value.image_url" [src]="form.value.image_url" alt=""
                                         class="h-8 rounded-lg aspect-square grow-0">
                                     <div class="absolute left-11"
-                                        [ngClass]="form.value.image_url ? 'top-0 text-xs' : ''">
+                                        [ngClass]="layout.label(form, 'image_url')">
                                         Portada
                                     </div>
                                     <div class="max-w-[12rem] overflow-hidden whitespace-nowrap">
@@ -103,7 +103,7 @@
                             </div>
 
                             <div *ngIf="i == 0" class="flex gap-x-6 w-full"
-                                [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                                [ngClass]="layout.full(cc)">
                                 <recursive-select [select]="sel['category_blogs']" label="Categoría"
                                     class="w-full flex basis-1/3 gap-x-6" [control]="form.controls['category']"
                                     [rq]="true" [generation]="0" [value]="form.value.categories"
@@ -111,7 +111,7 @@
                             </div>
 
                             <mat-form-field class="w-full"
-                                [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"
+                                [ngClass]="layout.full(cc)"
                                 appearance="outline" *ngIf="i == 0">
                                 <mat-label>Etiquetas</mat-label>
                                 <mat-chip-list #chipList formControlName="tags">
@@ -129,7 +129,7 @@
                             </mat-form-field>
 
                             <div class="flex basis-full"
-                                [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                                [ngClass]="layout.full(cc)">
                                 <div (click)="uploadGallery(form.controls['image_gallery'])"
                                     class="file-field w-full !h-20" *ngIf="i == 0">
                                     <icon i="slideshow" c="#334155"></icon>
@@ -157,7 +157,7 @@
 
                             <div (click)="uploadPDF(form.get('file_url'))" class="file-field"
                                 *ngIf="form.value['category'] == 640"
-                                [ngClass]="form.controls['file_url'].invalid && form.controls['file_url'].touched ? 'border-red-500 text-red-500' : ''">
+                                [ngClass]="layout.invalid(form, 'file_url')">
                                 <icon i="file-upload" c="#334155">upload_file</icon>
                                 <div class="absolute left-11" [ngClass]="form.value.file_url ? 'top-0 text-xs' : ''">
                                     Archivo

@@ -18,6 +18,8 @@ import { cloneDeep } from 'lodash';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LanguageService } from 'src/app/services/language.service';
 import { Language } from 'src/app/models/language.model';
+import { LayoutService } from 'src/app/services/layout.service';
+import { moveItemInArray } from '@angular/cdk/drag-drop';
 
 declare var google: any;
 
@@ -219,6 +221,7 @@ export class CompaniesDetailComponent implements OnInit {
       public router: Router,
       public ls: LocalStoreService,
       public master: MasterService,
+      public layout: LayoutService,
       public provider: ProviderService,
 
       private lang: LanguageService,
@@ -308,6 +311,7 @@ export class CompaniesDetailComponent implements OnInit {
          limit_products: [0],
          active_user_limit: [0],
          clusters: this.formBuilder.array([]),
+         image_gallery: this.formBuilder.array([]),
          approved_from_db: [null],
          first_category: [null],
          first_categories: [null],
@@ -670,6 +674,19 @@ export class CompaniesDetailComponent implements OnInit {
             this.form.controls[control].removeValidators(Validators.required)
          this.form.controls[control].updateValueAndValidity()
       });
+   }
+
+   uploadGallery(control: any) {
+      this.manager.open(config.upload_config).subscribe(
+         data => {
+            if (data.event == 'success')
+               this.master.arr(this.form,'image_gallery').push(this.master.createGallery(data.info.secure_url, this.form.value?.['image_gallery']?.[0]?.['identifier'] ?? null))
+         }
+      )
+   }
+
+   drop(event: any) {
+      moveItemInArray(this.form.value.img, event.previousIndex, event.currentIndex);
    }
 
    @HostListener('document:keyup', ['$event'])

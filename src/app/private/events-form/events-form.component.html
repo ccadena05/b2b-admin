@@ -33,15 +33,15 @@
          <div class="flex flex-col gap-y-6 overflow-x-hidden">
 
             <div
-               [ngClass]="cc.offsetWidth <= 640 ? 'grid-cols-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'grid-cols-2' : 'grid-cols-3'"
+               [ngClass]="layout.grid(cc)"
                class="grid gap-x-6 w-full">
 
                <div class="title w-full"
-                  [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                  [ngClass]="layout.full(cc)">
                   Información del evento
                </div>
                <div
-                  [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"
+                  [ngClass]="layout.full(cc)"
                   class="grow" formArrayName="title">
                   <div *ngFor="let item of master.getterA(form.controls['title']).controls; let i = index"
                      [formGroupName]="i">
@@ -58,7 +58,7 @@
                   <icon *ngIf="!form.value.image_url" i="photo-up" c="#334155"></icon>
                   <img *ngIf="form.value.image_url" [src]="form.value.image_url" alt=""
                      class="h-8 rounded-lg aspect-square grow-0 object-contain">
-                  <div class="absolute left-11" [ngClass]="form.value.image_url ? 'top-0 text-xs' : ''">
+                  <div class="absolute left-11" [ngClass]="layout.label(form, 'image_url')">
                      Portada
                   </div>
                   <div class="max-w-[12rem] overflow-hidden whitespace-nowrap">
@@ -113,7 +113,7 @@
                </mat-form-field>
 
                <div *ngIf="i == 0" class="flex gap-x-6 w-full"
-                  [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                  [ngClass]="layout.full(cc)">
                   <recursive-select [select]="sel['category_events']" label="Categoría"
                      class="w-full flex basis-1/3 gap-x-6" [control]="form.controls['category']" [rq]="true"
                      [generation]="0" [value]="form.value.categories"
@@ -121,7 +121,7 @@
                </div>
 
                <div *ngIf="i == 0"
-                  [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                  [ngClass]="layout.full(cc)">
                   <div class="flex flex-col mb-6 file-field !justify-start">
                      <mat-radio-group formControlName="form" class="flex gap-x-3">
                         <mat-radio-button #external class="!text-slate-800" [value]="1"
@@ -138,7 +138,7 @@
                </div>
 
                <div class="mb-6"
-                  [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                  [ngClass]="layout.full(cc)">
                   <div formArrayName="description"
                      *ngFor="let item of master.getterA(form.controls['description']).controls; let i = index;">
                      <div [formGroupName]="i">
@@ -147,14 +147,14 @@
                   </div>
                </div>
 
-               <!--                <mat-form-field appearance="outline" *ngIf="router.url.includes('detail')" [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+               <!--                <mat-form-field appearance="outline" *ngIf="router.url.includes('detail')" [ngClass]="layout.full(cc)">
                   <mat-label>Resumen</mat-label>
                   <textarea matInput formControlName="event_summary"></textarea>
                   <mat-error>Ingresa un valor válido.</mat-error>
                </mat-form-field> -->
 
                <div
-                  [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'"
+                  [ngClass]="layout.full(cc)"
                   class="grow" formArrayName="event_summary" *ngIf="router.url.includes('detail')">
                   <div *ngFor="let item of master.getterA(form.controls['event_summary'])?.controls; let i = index"
                      [formGroupName]="i">
@@ -169,7 +169,7 @@
                </div>
 
                <mat-form-field class="w-full" appearance="outline" *ngIf="i == 0"
-                  [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                  [ngClass]="layout.full(cc)">
                   <mat-label>Etiquetas</mat-label>
                   <mat-chip-list #chipList formControlName="tags">
                      <mat-chip *ngFor="let tag of form.value.tags?.split(',')" (removed)="removeTag(tag)">
@@ -185,7 +185,7 @@
 
 
                <div *ngIf="router.url.includes('detail') && i == 0"
-                  [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                  [ngClass]="layout.full(cc)">
                   <div class="flex gap-x-3 justify-between items-center w-full file-field">
                      <div class="flex gap-x-3">
                         <icon i="video-plus" c="#334155">video_library</icon>
@@ -218,7 +218,7 @@
 
 
                <div class="flex basis-full" *ngIf="i == 0 && router.url.includes('detail')"
-                  [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                  [ngClass]="layout.full(cc)">
                   <div (click)="uploadGallery(form.controls['image_gallery'])" class="file-field !w-full !h-20">
                      <icon i="slideshow" c="#334155"></icon>
                      <div class="absolute left-11 duration-300"

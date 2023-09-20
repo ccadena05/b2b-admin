@@ -9,6 +9,7 @@ import { OutputService } from 'src/app/services/output.service';
 import { Router } from '@angular/router';
 import { LanguageService } from 'src/app/services/language.service';
 import { Language } from 'src/app/models/language.model';
+import { LayoutService } from 'src/app/services/layout.service';
 
 @Component({
   selector: 'app-investments-form',
@@ -24,6 +25,8 @@ export class InvestmentsFormComponent implements OnInit {
   constructor(
     public router: Router,
     public master: MasterService,
+    public layout: LayoutService,
+
 
     private lang: LanguageService,
     private output: OutputService,

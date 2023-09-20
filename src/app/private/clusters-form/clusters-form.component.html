@@ -33,11 +33,11 @@
          <div class="flex flex-col gap-y-6 overflow-x-hidden">
 
             <div
-               [ngClass]="cc.offsetWidth <= 640 ? 'grid-cols-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'grid-cols-2' : 'grid-cols-3'"
+               [ngClass]="layout.grid(cc)"
                class="grid gap-x-6 w-full">
 
                <div class="title w-full"
-                  [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                  [ngClass]="layout.full(cc)">
                   Información del cluster
                </div>
 
@@ -108,10 +108,10 @@
                
 
                <div class="label"
-                  [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                  [ngClass]="layout.full(cc)">
                   Descripción</div>
                <div class="mb-6"
-                  [ngClass]="cc.offsetWidth <= 640 ? 'col-span-1' : cc.offsetWidth > 640 && cc.offsetWidth < 768 ? 'col-span-2' : 'col-span-3'">
+                  [ngClass]="layout.full(cc)">
                   <div formArrayName="description"
                      *ngFor="let item of master.getterA(form.controls['description']).controls; let i = index;">
                      <div [formGroupName]="i">
