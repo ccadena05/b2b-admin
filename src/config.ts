@@ -67,30 +67,7 @@ export const config = {
          }
       }
    },
-   langs: [
-      { //Abreviación del idioma que estará en la librería ngx-translate
-         id: 1,
-         name: 'English', // Nombre del idioma (preferiblemente, en su propio idioma)
-         flag: 'us', // Código de la bandera, de acuerdo a https://flagicons.lipis.dev/
-         abbr: 'en'
-      },
-      {
-         id: 2,
-         name: 'Español',
-         flag: 'mx',
-         abbr: 'es'
-      },
-      {
-         id: 3,
-         name: 'Deutsch',
-         flag: 'de',
-         abbr: 'de'
-      },
-      {
-         id: 4,
-         name: 'Français',
-         flag: 'fr',
-         abbr: 'fr'
-      }
-   ]
+   algolia: {
+      
+   }
 }

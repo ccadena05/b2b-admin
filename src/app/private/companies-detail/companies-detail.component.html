@@ -72,9 +72,9 @@
                                     <mat-error>Ingresar un valor válido *</mat-error>
                                 </mat-form-field>
 
-                                <div class="flex gap-x-3" *ngIf="i == 0">
+                                <div class="flex flex-col gap-y-1.5" *ngIf="i == 0">
                                     <!-- <img *ngIf="form.value.image_url" [src]="form.value.image_url" alt="" class="h-10 mt-1 rounded-lg aspect-square grow-0"> -->
-                                    <div (click)="uploadPDF(form.get('image_url'))" class="file-field"
+                                    <div (click)="uploadPDF(form.get('image_url'))" class="file-field !basis-0 !mb-0"
                                         [ngClass]="layout.invalid(form, 'image_url')">
                                         <icon i="file-upload" c="#334155" *ngIf="!form.value.image_url"></icon>
                                         <img *ngIf="form.value.image_url" [src]="form.value.image_url" alt=""
@@ -85,6 +85,9 @@
                                         <div class="max-w-[12rem] overflow-hidden whitespace-nowrap">
                                             {{form.value.image_url ?? ''}}
                                         </div>
+                                    </div>
+                                    <div class="text-slate-500 text-xs ml-3">
+                                        Fotografía en fondo blanco. Relación de aspecto 1:1
                                     </div>
                                 </div>
 

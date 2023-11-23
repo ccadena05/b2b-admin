@@ -237,7 +237,7 @@ export class CompaniesDetailComponent implements OnInit {
          id: [null],
          legal_name: this.formBuilder.array([this.master.translation(this.lang.user_lang.id, null)]),
          friendly_name: [null],
-         rfc: [null, Validators.required], 
+         rfc: [null, Validators.required],
          email_company: [null, Validators.email],
          phone_code: [null],
          phone: [null],
@@ -333,7 +333,6 @@ export class CompaniesDetailComponent implements OnInit {
    }
 
    ngOnInit(): void {
-
    }
 
    ngAfterViewInit() {
@@ -453,7 +452,7 @@ export class CompaniesDetailComponent implements OnInit {
                                                    link: '/m/companies'
                                                 },
                                                 {
-                                                   item: this.comp.friendly_name,
+                                                   item: this.comp?.friendly_name ?? this.comp?.legal_name?.[0].text,
                                                    link: null
                                                 }
                                              ])
@@ -481,12 +480,12 @@ export class CompaniesDetailComponent implements OnInit {
                }
 
             )
-      console.log(this.form.value);
+            console.log(this.form.value);
 
          }
 
       )
-      
+
    }
 
    countries() {
@@ -506,7 +505,7 @@ export class CompaniesDetailComponent implements OnInit {
          this.selected_all_name[category.generation] = category['ES'] ?? category['EN'];
          while (this.selected_all[category.generation + 1])
             this.selected_all.pop()
-            // this.selected_all_name.pop()
+         // this.selected_all_name.pop()
 
          this.form.controls['first_categories'].patchValue(this.selected_all)
       }
@@ -526,21 +525,21 @@ export class CompaniesDetailComponent implements OnInit {
    }
 
    push_category() {
-      if (this.router.url.includes('detail')){
+      if (this.router.url.includes('detail')) {
          this.master.arr(this.form, 'categories_company').push(this.master.category(atob(this.__id), this.selected_all[this.selected_all.length - 1]))
       }
-      else{
+      else {
          this.company_categories.push(this.selected_all[this.selected_all.length - 1]);
-         this.company_categories_name.push({id: this.selected_all[this.selected_all.length - 1], name: this.selected_all_name[this.selected_all_name.length - 1]})
+         this.company_categories_name.push({ id: this.selected_all[this.selected_all.length - 1], name: this.selected_all_name[this.selected_all_name.length - 1] })
          this.selected_all_name = []
       }
    }
 
    pop_category(i: any) {
-      if (this.router.url.includes('detail')){
+      if (this.router.url.includes('detail')) {
          this.master.arr(this.form, 'categories_company').removeAt(i)
       }
-      else{
+      else {
          this.company_categories.splice(i, 1)
          this.company_categories_name.splice(i, 1)
       }
@@ -563,14 +562,19 @@ export class CompaniesDetailComponent implements OnInit {
       this.ping.nativeElement.classList.remove('animate-ping');
       this.form.value.schedule_week = JSON.stringify(this.form.value?.schedule_week)
       this.form.value.approved_from_db = this.form.value?.approved
-      if(this.router.url.includes('detail'))
+      if (this.router.url.includes('detail')) {
          this.form.value.profile_company_id = atob(this.__id);
-      else{
+         this.master.save('companies', 'update_company', this.form.value, true)
+
+      }
+      else {
          this.form.value.categories_company = this.company_categories;
          this.form.value.clusters = this.company_clusters;
+         this.master.save('companies', 'insert_company', this.form.value)
+
       }
       console.log(this.form.value);
-      
+
       // this.master.save('companies', 'update_company', this.form.value, true)
 
    }
@@ -680,7 +684,7 @@ export class CompaniesDetailComponent implements OnInit {
       this.manager.open(config.upload_config).subscribe(
          data => {
             if (data.event == 'success')
-               this.master.arr(this.form,'image_gallery').push(this.master.createGallery(data.info.secure_url, this.form.value?.['image_gallery']?.[0]?.['identifier'] ?? null))
+               this.master.arr(this.form, 'image_gallery').push(this.master.createGallery(data.info.secure_url, this.form.value?.['image_gallery']?.[0]?.['identifier'] ?? null))
          }
       )
    }
@@ -727,7 +731,7 @@ export class CompaniesDetailComponent implements OnInit {
 
    add_cluster(event: any, c_id: any) {
       if (event.checked) { // Se añadió un cluster
-         if (this.router.url.includes('detail')){
+         if (this.router.url.includes('detail')) {
             this.master.arr(this.form, 'clusters').push(this.master.create_cluster(c_id, atob(this.__id)))
          } else {
             this.company_clusters.push(c_id);
